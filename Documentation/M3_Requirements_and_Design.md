@@ -201,9 +201,8 @@
 4. **Notifications**
     - **Purpose**: Sends reminders to users when pets need to be fed and alerts them when a feeding is logged, also users to send requests to other users. Implementing notifications with users directly would bloat the user component and unnecessarily tie mass notifications to individual users.
     - **Interfaces**: 
-        1. ...
-            - **Purpose**: ...
-        2. ...
+        1. sendNotifcations(senderID, recipient)
+            - **Purpose**: //interacts with the notification service
 
 
 ### **4.2. Databases**  
