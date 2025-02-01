@@ -69,7 +69,8 @@
 
 3. **Managing The Household** 
     - **Overview**:
-        1. Household Manager must be able to set up and edit the household, including managing members and pets, and setting feeding schedules.
+        1. Household Manager must be able to set up and edit the household users
+        2. Household Manager must be abe to manage the pets and set their feeding schedules.
 
     - **Detailed Flow for Each Independent Scenario**: 
         1. **Add Users**:
