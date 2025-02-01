@@ -189,9 +189,12 @@
 2. **Pet Management Service**
     - **Purpose**: Tracks pets in a household and their feeding schedules. Keeping pet data separate from user management allows for future expansions like health tracking. Merging it with user management would complicate database queries.
     - **Interfaces**: 
-        1. ...
-            - **Purpose**: ...
-        2. ...
+        1. Pet addPet(String householdId, String petName, String species, String feedingSchedule);
+            - **Purpose**: Adds a pet to a household.
+        2. boolean removePet(String petId);
+            - **Purpose**: Removes a pet from a household.
+       3. List<Pet> getPetsByHousehold(String householdId);
+            - **Purpose**:  Retrieves all pets for a given household.
 3. **Logging**
     - **Purpose**: Records and retrieves feeding history, ensuring users can check when and who last fed a pet. Keeping a dedicated feeding log service prevents bloating the pet management component. Embedding it in pet service would create unnecessary dependencies between pet data and feeding logs, and may lead to complications like calculations tied to the household rather than a specific pet.
     - **Interfaces**: 
