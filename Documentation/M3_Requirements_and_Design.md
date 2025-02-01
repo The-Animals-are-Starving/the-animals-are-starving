@@ -368,4 +368,4 @@ The app will support multiple languages, clear navigation, large readable fonts,
 - Tjammie Ko: Sequence Diagrams, Formatting, Other (14h)
 - Dean McCarthy: Functional Requirements, Actors, Other (7h)
 - Aidan Cotsakis: Presentation, Reflections, Other (7h)
-- Matthew Fung: MD File, Everything Else (a lot), Other (15h)
+- Matthew Fung: MD File, Everything Else (a lot), Other (16h)
