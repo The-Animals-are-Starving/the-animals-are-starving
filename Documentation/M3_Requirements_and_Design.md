@@ -183,11 +183,35 @@
 1. **User & Household Management Service**
     - **Purpose**: Manages user authentication (via Google API), household creation, and user roles. Ensures that users belong to a household before accessing pets and feeding logs. Separating user management from pet and feeding history ensures scalability and maintainability. Alternative being embedding user management in pet tracking would lead to tight coupling and harder role-based access control.
     - **Interfaces**: 
-        1. ```User loginWithGoogle(String email); ```
-            - **Purpose**: Verifies Google login token and returns user and household details.
-        2. 
+        1. ```User login(String email);```
+           - **Purpose**: Verifies email and returns user details.
+        
+        2. ```Household createHousehold(String householdName, String ownerUserId);```
+           - **Purpose**: Creates a new household with an owner.
+        
+        3. ```boolean addUser(String email);```
+           - **Purpose**: Adds an existing user to a household. Returns `true` on success.
+        
+        4. ```boolean removeUserFromHousehold(String householdId, String userId);```
+           - **Purpose**: Removes a user from a household. Returns `true` on success.
+        
+        5. ```List<User> getUnrestrictedUsers();```
+           - **Purpose**: Gets all the users that are not in restricted mode.
+
 2. **Pet Management Service**
     - **Purpose**: Tracks pets in a household and their feeding schedules. Keeping pet data separate from user management allows for future expansions like health tracking. Merging it with user management would complicate database queries.
+    - **Interfaces**: 
+        1. ```Pet addPet(String householdId, String petName, String species, String feedingSchedule);```
+           - **Purpose**: Adds a pet to a household.
+        
+        2. ```boolean removePet(String petId);```
+           - **Purpose**: Removes a pet from the system. Returns `true` on success.
+        
+        3. ```List<Pet> getPetsByHousehold(String householdId);```
+           - **Purpose**: Retrieves all pets for a given household.
+
+3. **Logging**
+    - **Purpose**: Records and retrieves feeding history, ensuring users can check when and who last fed a pet. Keeping a dedicated feeding log service prevents bloating the pet management component. Embedding it in pet service would create unnecessary dependencies between pet data and feeding logs, and may lead to complications like calculations tied to the household rather than a specific pet.
     - **Interfaces**: 
         1. Pet addPet(String householdId, String petName, String species, String feedingSchedule);
             - **Purpose**: Adds a pet to a household.
@@ -195,19 +219,15 @@
             - **Purpose**: Removes a pet from a household.
        3. List<Pet> getPetsByHousehold(String householdId);
             - **Purpose**:  Retrieves all pets for a given household.
-3. **Logging**
-    - **Purpose**: Records and retrieves feeding history, ensuring users can check when and who last fed a pet. Keeping a dedicated feeding log service prevents bloating the pet management component. Embedding it in pet service would create unnecessary dependencies between pet data and feeding logs, and may lead to complications like calculations tied to the household rather than a specific pet.
-    - **Interfaces**: 
-        1. ...
-            - **Purpose**: ...
-        2. ..
+
 4. **Notifications**
     - **Purpose**: Sends reminders to users when pets need to be fed and alerts them when a feeding is logged, also users to send requests to other users. Implementing notifications with users directly would bloat the user component and unnecessarily tie mass notifications to individual users.
     - **Interfaces**: 
-        1. sendNotifcations(message, recipients[])
+         1. sendNotifcations(message, recipients[])
             - **Purpose**: interacts with the notification service. Sent by application
         2. sendNotifcations(message, senderID, recipients[])
             - **Purpose**: interacts with the notification service. Used when sending request to feed.
+
 
 
 ### **4.2. Databases**  
@@ -372,4 +392,4 @@ The app will support multiple languages, clear navigation, large readable fonts,
 - Tjammie Ko: Sequence Diagrams, Formatting, Other (14h)
 - Dean McCarthy: Functional Requirements, Actors, Other (7h)
 - Aidan Cotsakis: Presentation, Reflections, Other (8h)
-- Matthew Fung: MD File, Everything Else (a lot), Other (16h)
+- Matthew Fung: MD File, Functional Requirements, Dependency Diagram, Other (16h)
