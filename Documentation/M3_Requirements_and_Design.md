@@ -8,7 +8,7 @@
 
 ## 3. Requirements Specification
 ### **3.1. Use-Case Diagram**
-![Use_Case_Diagram](/images/usecase.png)
+![Use_Case_Diagram](Documentation/images/usecase.png)
 
 ### **3.2. Actors Description**
 1. **Household Manager**:
@@ -242,21 +242,21 @@
 
 
 ### **4.5. Dependencies Diagram**
-![Dependency_Diagram](/images/CPEN_321_Dependency_Diagram.png)
+![Dependency_Diagram](Documentation/images/CPEN_321_Dependency_Diagram.png)
 
 ### **4.6. Functional Requirements Sequence Diagram**
 1. [**Log Feeding**](#fr1)\
-    ![Log_Feeding_Sequence_Diagram](/images/sequence-log-feeding.png)
+    ![Log_Feeding_Sequence_Diagram](Documentation/images/sequence-Log-Feeding.png)
 2. [**Requesting Others to do Feeding**](#fr2)\
-    ![Request_Notification_Sequence_Diagram](/images/sequence-Request-Feed.png)
+    ![Request_Notification_Sequence_Diagram](Documentation/images/sequence-Request-Feed.png)
 3. [**Manage Household**](#fr3)\
     ![Manage_Household_Sequence_Diagram](/images/)
 4. [**History Managment**](#fr4)\
-    ![History_Management_Sequence_Diagram](/images/sequence-View-History.png)
+    ![History_Management_Sequence_Diagram](Documentation/images/sequence-View-History.png)
 5. [**Feeding Time Notification**](#fr5)\
-    ![Feeding_Time_Notification_Sequence_Diagram](/images/sequence-Auto-Notifications.png)
+    ![Feeding_Time_Notification_Sequence_Diagram](Documentation/images/sequence-Auto-Notifications.png)
 6. [**Login Authentication**](#fr6)\
-    ![Login_Sequence_Diagram](/images/sequence-Login.png)
+    ![Login_Sequence_Diagram](Documentation/images/sequence-Login.png)
 
 
 ### **4.7. Non-Functional Requirements Design**
