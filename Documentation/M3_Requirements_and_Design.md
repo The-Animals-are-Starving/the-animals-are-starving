@@ -8,7 +8,7 @@
 
 ## 3. Requirements Specification
 ### **3.1. Use-Case Diagram**
-
+![Use_Case_Diagram](/images/usecase.png)
 
 ### **3.2. Actors Description**
 1. **Household Manager**:
@@ -78,7 +78,7 @@
             - **Primary actor(s)**: Household Manager
             - **Main success scenario**:
                 1. Manager clicks the "Manage Household" button on the top of the page and is directed to a page with the "Add User" button
-                2. Manager is prompted to enter the userID of the person they are inviting
+                2. Manager is prompted to enter the email of the person they are inviting, with the corresponding restriction level
                 3. Manger clicks "ok" 
                 4. The server adds the user to the household 
                 5. A toast message is displayed confirming that the user has been added
@@ -183,7 +183,7 @@
 1. **User & Household Management Service**
     - **Purpose**: Manages user authentication (via Google API), household creation, and user roles. Ensures that users belong to a household before accessing pets and feeding logs. Separating user management from pet and feeding history ensures scalability and maintainability. Alternative being embedding user management in pet tracking would lead to tight coupling and harder role-based access control.
     - **Interfaces**: 
-        1. ```User loginWithGoogle(String googleToken); ```
+        1. ```User loginWithGoogle(String email); ```
             - **Purpose**: Verifies Google login token and returns user and household details.
         2. 
 2. **Pet Management Service**
@@ -242,21 +242,21 @@
 
 
 ### **4.5. Dependencies Diagram**
-
+![Dependency_Diagram](/images/CPEN_321_Dependency_Diagram.png)
 
 ### **4.6. Functional Requirements Sequence Diagram**
-1. [**[WRITE_NAME_HERE]**](#fr1)\
-    ![SEQUENCE_DIAGRAM_HERE]()
-2. [**[WRITE_NAME_HERE]**](#fr2)\
-    ![SEQUENCE_DIAGRAM_HERE]()
-3. [**[WRITE_NAME_HERE]**](#fr3)\
-    ![SEQUENCE_DIAGRAM_HERE]()
-4. [**[WRITE_NAME_HERE]**](#fr4)\
-    ![SEQUENCE_DIAGRAM_HERE]()
-5. [**[WRITE_NAME_HERE]**](#fr5)\
-    ![SEQUENCE_DIAGRAM_HERE]()
-6. [**[WRITE_NAME_HERE]**](#fr6)\
-    ![SEQUENCE_DIAGRAM_HERE]()
+1. [**Log Feeding**](#fr1)\
+    ![Log_Feeding_Sequence_Diagram](/images/sequence-log-feeding.png)
+2. [**Requesting Others to do Feeding**](#fr2)\
+    ![Request_Notification_Sequence_Diagram](/images/sequence-Request-Feed.png)
+3. [**Manage Household**](#fr3)\
+    ![Manage_Household_Sequence_Diagram](/images/)
+4. [**History Managment**](#fr4)\
+    ![History_Management_Sequence_Diagram](/images/sequence-View-History.png)
+5. [**Feeding Time Notification**](#fr5)\
+    ![Feeding_Time_Notification_Sequence_Diagram](/images/sequence-Auto-Notifications.png)
+6. [**Login Authentication**](#fr6)\
+    ![Login_Sequence_Diagram](/images/sequence-Login.png)
 
 
 ### **4.7. Non-Functional Requirements Design**
