@@ -13,6 +13,10 @@
         android:theme="@style/Theme.TheAnimalsAreStarving"
         tools:targetApi="31">
         <activity
+            android:name=".ManageHouseholdActivity"
+            android:exported="false"
+            android:label="@string/title_activity_manage_household" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
