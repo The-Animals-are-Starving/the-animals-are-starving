@@ -1,16 +1,17 @@
-import { Int32, IntegerType } from "mongodb";
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Document, Schema, Types } from "mongoose";
 
 export interface IPet extends Document {
-    petId: IntegerType;
+    petId: number;
     name: string;
-    householdId?: string;
+    householdId?: Types.ObjectId;
+    fed: boolean;
 }
 
-const UserSchema = new Schema<IPet>({
-    petId: { type: Int32, required: true },
+const PetSchema = new Schema<IPet>({
+    petId: { type: Number, required: true, unique: true },
     name: { type: String, required: true },
-    householdId: { type: String }
+    householdId: { type: Schema.Types.ObjectId, ref: "Household" },
+    fed: { type: Boolean, default: false }
 });
 
-export default mongoose.model<IPet>("User", UserSchema);
+export default mongoose.model<IPet>("Pet", PetSchema);
