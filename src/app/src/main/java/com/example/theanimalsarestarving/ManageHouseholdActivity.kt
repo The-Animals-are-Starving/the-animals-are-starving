@@ -2,6 +2,7 @@ package com.example.theanimalsarestarving
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Patterns
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
@@ -37,20 +38,38 @@ class ManageHouseholdActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Add New User")
 
-        val dialog = builder.create()
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(50, 20, 50, 20)
+        }
 
-        val input = EditText(this).apply {
+        val nameIn = EditText(this).apply {
             hint = "Enter new user"
             setSingleLine(true)
             imeOptions = EditorInfo.IME_ACTION_DONE
         }
-        builder.setView(input)
+        layout.addView(nameIn)
+
+        val emailIn = EditText(this).apply {
+            hint = "Enter user email"
+            setSingleLine(true)
+            imeOptions = EditorInfo.IME_ACTION_DONE
+        }
+        layout.addView(emailIn)
+        builder.setView(layout)
 
         // Submit
         builder.setPositiveButton("Add") { _, _ ->
-            val userName = input.text.toString().trim().replace("\n", "")
-            if (userName.isNotEmpty()) {
-                addUser(userName, container)
+            val userName = nameIn.text.toString().trim().replace("\n", "")
+            val email = emailIn.text.toString().trim().replace("\n", "")
+
+
+            if (!isValidEmail(email)) {
+                alertMessage("Please Enter a Valid Email", container)
+            } else if (userName.isNotEmpty() && email.isNotEmpty()) {
+                addUser(userName, email, container)
+            } else {
+                alertMessage("Please Enter all User Info", container)
             }
         }
 
@@ -61,7 +80,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
         builder.show()
     }
 
-    private fun addUser(name: String, container: LinearLayout) {
+    private fun addUser(name: String, email: String, container: LinearLayout) {
         if (!userExists(name, container)) {
             val switch = SwitchCompat(this).apply {
                 text = name
@@ -71,11 +90,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
 
             //TODO: Also send user to backend
         } else {
-            AlertDialog.Builder(this)
-                .setMessage("User Already Exists!")
-                .setPositiveButton("OK") { dialog, _ ->
-                    dialog.dismiss()
-                }
+            alertMessage("The User Already Exists!", container)
         }
     }
 
@@ -89,20 +104,35 @@ class ManageHouseholdActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Add New Pet")
 
-        val dialog = builder.create()
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(50, 20, 50, 20)
+        }
 
-        val input = EditText(this).apply {
-            hint = "Enter new pet"
+
+        val nameIn = EditText(this).apply {
+            hint = "Enter pet name"
             setSingleLine(true)
             imeOptions = EditorInfo.IME_ACTION_DONE
         }
-        builder.setView(input)
+        layout.addView(nameIn)
 
+        val typeIn = EditText(this).apply {
+            hint = "Enter pet type (dog, cat, etc.)"
+            setSingleLine(true)
+            imeOptions = EditorInfo.IME_ACTION_DONE
+        }
+        layout.addView(typeIn)
+
+        builder.setView(layout)
         // Submit
         builder.setPositiveButton("Add") { _, _ ->
-            val petName = input.text.toString().trim().replace("\n", "")
-            if (petName.isNotEmpty()) {
+            val petName = nameIn.text.toString().trim().replace("\n", "")
+            val petType = typeIn.text.toString().trim().replace("\n", "")
+            if (petName.isNotEmpty() || petType.isNotEmpty()) {
                 addPet(petName, container)
+            } else {
+                alertMessage("Please Enter all Pet Info", container)
             }
         }
 
@@ -124,16 +154,24 @@ class ManageHouseholdActivity : AppCompatActivity() {
 
             //TODO: Also send pet to backend
         } else {
-            AlertDialog.Builder(this)
-                .setMessage("Pet Already Exists!")
-                .setPositiveButton("OK") { dialog, _ ->
-                    dialog.dismiss()
-                }
+            alertMessage("Pet Already Exists!", container)
         }
     }
 
     private fun petExists(name: String, container: LinearLayout): Boolean {
         //TODO: Check pet list to see if pet already exists
         return false
+    }
+
+    private fun alertMessage(message: String, container: LinearLayout) {
+        val warning = AlertDialog.Builder(this)
+        warning.setTitle("Error")
+        warning.setMessage(message)
+        warning.setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+        warning.show()
+    }
+
+    private fun isValidEmail(email: String): Boolean {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 }
