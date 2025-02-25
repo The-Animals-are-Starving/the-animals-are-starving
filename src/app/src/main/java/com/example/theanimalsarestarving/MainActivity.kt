@@ -25,5 +25,12 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, ManageHouseholdActivity::class.java)
             startActivity(intent)
         }
+
+        val restrictedViewButton = findViewById<Button>(R.id.restricted_view_button)
+
+        restrictedViewButton.setOnClickListener {
+            val intent = Intent(this, RestrictedActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

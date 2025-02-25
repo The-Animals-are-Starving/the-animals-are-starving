@@ -27,7 +27,7 @@
         android:layout_marginTop="15sp"
         android:layout_marginBottom="15sp"
         android:background="@drawable/rounded_corners"
-        android:backgroundTint="#b1ddc9">
+        android:backgroundTint="@color/base_green">
 
         <TextView
             android:layout_width="wrap_content"
@@ -60,7 +60,7 @@
             android:layout_width="294dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:backgroundTint="#A35F997F"
+            android:backgroundTint="@color/dark_green"
             android:backgroundTintMode="add"
             android:text="New User"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -78,8 +78,7 @@
         android:layout_marginTop="15sp"
         android:layout_marginBottom="15sp"
         android:background="@drawable/rounded_corners"
-        android:backgroundTint="#fbceb1
-">
+        android:backgroundTint="@color/base_orange">
 
         <LinearLayout
             android:id="@+id/petListContainer"
@@ -93,7 +92,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.434" >
+            app:layout_constraintVertical_bias="0.434">
 
         </LinearLayout>
 
@@ -102,7 +101,7 @@
             android:layout_width="294dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:backgroundTint="#9B694A"
+            android:backgroundTint="@color/dark_orange"
             android:backgroundTintMode="add"
             android:text="New Pet"
             app:layout_constraintBottom_toBottomOf="parent"
