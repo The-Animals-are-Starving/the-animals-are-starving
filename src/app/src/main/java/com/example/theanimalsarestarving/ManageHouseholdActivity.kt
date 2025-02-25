@@ -5,13 +5,18 @@ import android.os.Bundle
 import android.util.Patterns
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.Switch
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.contains
+import androidx.core.view.setPadding
+import org.w3c.dom.Text
 import java.security.Key
 
 class ManageHouseholdActivity : AppCompatActivity() {
@@ -117,19 +122,18 @@ class ManageHouseholdActivity : AppCompatActivity() {
         }
         layout.addView(nameIn)
 
-        val typeIn = EditText(this).apply {
-            hint = "Enter pet type (dog, cat, etc.)"
-            setSingleLine(true)
-            imeOptions = EditorInfo.IME_ACTION_DONE
-        }
+        val typeIn = Spinner(this)
+        val petTypeOptions = arrayOf("Select Pet Type","Dog", "Cat", "Rabbit", "Hamster", "Fish", "Lizard", "Bird", "Other")
+        typeIn.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, petTypeOptions)
+
         layout.addView(typeIn)
 
         builder.setView(layout)
         // Submit
         builder.setPositiveButton("Add") { _, _ ->
             val petName = nameIn.text.toString().trim().replace("\n", "")
-            val petType = typeIn.text.toString().trim().replace("\n", "")
-            if (petName.isNotEmpty() || petType.isNotEmpty()) {
+            val petType = typeIn.selectedItem.toString()
+            if (petName.isNotEmpty() || petType != "Select Pet Type") {
                 addPet(petName, container)
             } else {
                 alertMessage("Please Enter all Pet Info", container)
@@ -146,11 +150,34 @@ class ManageHouseholdActivity : AppCompatActivity() {
     private fun addPet(name: String, container: LinearLayout) {
         if (!petExists(name, container)) {
             //TODO: modify this for the needs of a pet
-            val switch = SwitchCompat(this).apply {
-                text = name
-                isChecked = false
+
+            val petRow = LinearLayout(this).apply {
+                orientation = LinearLayout.HORIZONTAL
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                setPadding(10, 10, 10, 10)
             }
-            container.addView(switch)
+            val petNameView = TextView(this).apply {
+                text = name
+                layoutParams = LinearLayout.LayoutParams(
+                    0,
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    1f)
+
+            }
+            val editButton = Button(this).apply {
+                text = "Edit"
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                setOnClickListener { showEditPopup(petNameView) }
+            }
+            petRow.addView(petNameView)
+            petRow.addView(editButton)
+            container.addView(petRow)
 
             //TODO: Also send pet to backend
         } else {
@@ -158,8 +185,26 @@ class ManageHouseholdActivity : AppCompatActivity() {
         }
     }
 
+    private fun showEditPopup(petTextView: TextView) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Edit Pet")
+
+        val editName = EditText(this).apply { //TODO: Change this to edit pet params
+            hint = "Pet Name"
+            setText(petTextView.text)
+            setSingleLine(true)
+        }
+        builder.setView(editName)
+
+        builder.setPositiveButton("Save"){_, _ ->
+            petTextView.text = editName.text.toString()
+        }
+
+        builder.show()
+    }
+
     private fun petExists(name: String, container: LinearLayout): Boolean {
-        //TODO: Check pet list to see if pet already exists
+        //TODO: Check pet list to see if pet already exists in backend
         return false
     }
 
