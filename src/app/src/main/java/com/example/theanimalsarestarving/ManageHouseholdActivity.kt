@@ -1,6 +1,9 @@
 package com.example.theanimalsarestarving
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.app.TimePickerDialog
+import android.icu.util.Calendar
 import android.os.Bundle
 import android.util.Patterns
 import android.view.KeyEvent
@@ -16,6 +19,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.contains
 import androidx.core.view.setPadding
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import org.w3c.dom.Text
 import java.security.Key
 
@@ -122,6 +127,13 @@ class ManageHouseholdActivity : AppCompatActivity() {
         }
         layout.addView(nameIn)
 
+        val feedingTime = EditText(this).apply {
+            hint = "Feeding Time"
+            isFocusable = false
+            setOnClickListener{ showTimePicker(this) }
+        }
+        layout.addView(feedingTime)
+
         val typeIn = Spinner(this)
         val petTypeOptions = arrayOf("Select Pet Type","Dog", "Cat", "Rabbit", "Hamster", "Fish", "Lizard", "Bird", "Other")
         typeIn.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, petTypeOptions)
@@ -147,6 +159,9 @@ class ManageHouseholdActivity : AppCompatActivity() {
         builder.show()
     }
 
+    /**
+     * Shows addPet popup for entering pet data
+     */
     private fun addPet(name: String, container: LinearLayout) {
         if (!petExists(name, container)) {
             //TODO: modify this for the needs of a pet
@@ -175,6 +190,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
                 )
                 setOnClickListener { showEditPopup(petNameView) }
             }
+
             petRow.addView(petNameView)
             petRow.addView(editButton)
             container.addView(petRow)
@@ -182,6 +198,26 @@ class ManageHouseholdActivity : AppCompatActivity() {
             //TODO: Also send pet to backend
         } else {
             alertMessage("Pet Already Exists!", container)
+        }
+    }
+
+    /**
+     * Shows clock popup for selecting feeding time
+     */
+    @SuppressLint("DefaultLocale")
+    private fun showTimePicker(editText: EditText) {
+        val timePicker = MaterialTimePicker.Builder()
+            .setTimeFormat(TimeFormat.CLOCK_12H)
+            .setHour(12)
+            .setMinute(0)
+            .setTitleText("Select Feeding Time")
+            .build()
+
+        timePicker.show(supportFragmentManager, "time_picker")
+
+        timePicker.addOnPositiveButtonClickListener{
+            val formattedTime = String.format("%02d:%02d", timePicker.hour, timePicker.minute)
+            editText.setText(formattedTime)
         }
     }
 
