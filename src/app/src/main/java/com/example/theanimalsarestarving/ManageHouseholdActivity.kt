@@ -225,15 +225,29 @@ class ManageHouseholdActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Edit Pet")
 
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(50, 20, 50, 20)
+        }
+
         val editName = EditText(this).apply { //TODO: Change this to edit pet params
             hint = "Pet Name"
             setText(petTextView.text)
             setSingleLine(true)
         }
-        builder.setView(editName)
+        layout.addView(editName)
+
+        val editTime = EditText(this).apply {
+            hint = "Change Feeding Time"
+            isFocusable = false
+            setOnClickListener{ showTimePicker(this) }
+        }
+        layout.addView(editTime)
+        builder.setView(layout)
 
         builder.setPositiveButton("Save"){_, _ ->
             petTextView.text = editName.text.toString()
+            //TODO: Change this to send to backend
         }
 
         builder.show()

@@ -3,7 +3,10 @@ package com.example.theanimalsarestarving
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -32,5 +35,54 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, RestrictedActivity::class.java)
             startActivity(intent)
         }
+
+        val notificationButton = findViewById<Button>(R.id.notif_button)
+
+        notificationButton.setOnClickListener{showNotifSend()}
+    }
+
+    private fun showNotifSend() {
+        val builder = AlertDialog.Builder(this)
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(50, 20, 50, 20)
+        }
+
+        val users = arrayOf("U1", "U2") //TODO: Get list of users from backend and query if they're restricted
+
+        for (user in users) {
+            val userRow = LinearLayout(this).apply {
+                orientation = LinearLayout.HORIZONTAL
+            }
+            val userNameView = TextView(this).apply {
+                text = user
+                layoutParams = LinearLayout.LayoutParams(
+                    0,
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    1f)
+
+            }
+            val notifyUserButton = Button(this).apply {
+                text = "Notify"
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                setOnClickListener { sendNotif(user) }
+            }
+            userRow.addView(userNameView)
+            userRow.addView(notifyUserButton)
+
+            layout.addView(userRow)
+        }
+
+
+        builder.setView(layout)
+        builder.setPositiveButton("Done") { dialog, _ -> dialog.dismiss() }
+        builder.show()
+    }
+
+    private fun sendNotif(user: String) { // May pass user as object instead
+        //TODO: Implement Firebase api call
     }
 }
