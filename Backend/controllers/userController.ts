@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import User from "../models/User";
+import User, { UserRole } from "../models/User";
 
-// Create a new user
+// Create a new user (defaults to "normal" role)
 export const createUser = async (req: Request, res: Response): Promise<void> => {
     try {
         const { email, name } = req.body;
@@ -10,11 +10,11 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             res.status(400).json({ message: "User already exists" });
-            return
+            return;
         }
 
-        // Create new user
-        const user = new User({ email, name });
+        // Create new user with default role "normal"
+        const user = new User({ email, name, role: "normal" });
         await user.save();
 
         res.status(201).json({ message: "User created successfully", user });
@@ -31,7 +31,7 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
 
         if (!user) {
             res.status(404).json({ message: "User not found" });
-            return
+            return;
         }
 
         res.json(user);
@@ -40,11 +40,18 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-// Update user details
-export const updateUser = async (req: Request, res: Response): Promise<void> => {
+// Update user details (including role)
+export const updateUserRole = async (req: Request, res: Response): Promise<void> => {
     try {
         const { email } = req.params;
         const updates = req.body;
+
+        // Validate role if updating it
+        const validRoles: UserRole[] = ["restricted", "normal", "manager"];
+        if (updates.role && !validRoles.includes(updates.role)) {
+            res.status(400).json({ message: "Invalid role provided" });
+            return;
+        }
 
         const user = await User.findOneAndUpdate({ email }, updates, { new: true });
 
