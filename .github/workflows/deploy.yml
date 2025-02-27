@@ -2,6 +2,8 @@ name: Deploy to EC2
 
 on:
   push:
+    paths:
+      - 'Backend/**' 
     branches:
       - main
 
@@ -22,7 +24,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
-          source: "."
+          source: "Backend/*"
           target: "/home/ubuntu/the-animals-are-starving"
       
       - name: Rebuild and Deploy
