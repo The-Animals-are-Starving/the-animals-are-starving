@@ -31,24 +31,13 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
           script: |
-            # Change to the backend directory
-            cd /home/ubuntu/the-animals-are-starving/Backend
-            
-            # Debug: Verify current directory and list files
-            echo "Current directory: $(pwd)"
-            ls -al
-
-            # Write secrets into .env 
+            cd /home/ubuntu/the-animals-are-starving/Backend && \
+            echo "Current directory: $(pwd)" && ls -al && \
             cat > .env << EOF
             PORT=${{ secrets.PROD_PORT }}
             DB_URI=${{ secrets.PROD_DB_URI }}
-            EOF
-
-            # Set proper permissions for .env
-            chmod 600 .env
-
-            # Use absolute paths for docker-compose
-            docker-compose -f /home/ubuntu/the-animals-are-starving/Backend/docker-compose.yml down
-            docker-compose -f /home/ubuntu/the-animals-are-starving/Backend/docker-compose.yml --env-file /home/ubuntu/the-animals-are-starving/Backend/.env build
-            docker-compose -f /home/ubuntu/the-animals-are-starving/Backend/docker-compose.yml --env-file /home/ubuntu/the-animals-are-starving/Backend/.env up -d
-            
+            EOF && \
+            chmod 600 .env && \
+            docker-compose -f docker-compose.yml down && \
+            docker-compose -f docker-compose.yml --env-file .env build && \
+            docker-compose -f docker-compose.yml --env-file .env up -d
