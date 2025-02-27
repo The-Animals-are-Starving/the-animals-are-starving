@@ -31,7 +31,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
           script: |
-            cd /home/ubuntu/the-animals-are-starving
+            cd /home/ubuntu/the-animals-are-starving/Backend
 
             # Write secrets into .env 
             cat > .env << EOF
