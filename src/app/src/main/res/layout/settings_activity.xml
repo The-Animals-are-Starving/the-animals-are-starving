@@ -18,10 +18,17 @@
         android:layout_gravity="center_horizontal"
         android:text="MANAGE HOUSEHOLD"
         android:textSize="30sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:id="@+id/title"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/paw_font"
+        android:textAlignment="center"
+        android:textColor="@color/dark_pink"
+        android:letterSpacing="0.15"
+        android:lineSpacingExtra="-30sp" />/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/colo"
+        android:id="@+id/colo_household_members"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15sp"
@@ -33,6 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Household Members"
+            android:textColor="#264638"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/userListContainer"
@@ -72,7 +80,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/colo"
+        android:id="@+id/colo_pet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15sp"
@@ -115,6 +123,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Pets"
+            android:textColor="#5D2907"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/petListContainer"

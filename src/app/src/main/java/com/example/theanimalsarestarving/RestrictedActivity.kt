@@ -1,17 +1,22 @@
 package com.example.theanimalsarestarving
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.FrameLayout
+import androidx.core.content.ContextCompat
 
 class RestrictedActivity : AppCompatActivity() {
 
     private lateinit var petContainer: LinearLayout
+
+    //TODO: Undo button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,13 +25,21 @@ class RestrictedActivity : AppCompatActivity() {
         // Get the container where pet items will be added
         petContainer = findViewById(R.id.petContainer)
 
-        // Add a default pet when the activity is created
-        addPet("Stinky Dog", "by PERSON at TIME", R.drawable.dog_default_icon)
+
+        //TODO: FETCH THIS INFO FROM BACKEND
+        val petName = "stinky dog"
+        val feedingInfo = "by PERSON at TIME"
+        val petImage = R.drawable.dog_default_icon
+        val isFed = false
+
+        //Example (Static)
+
+        loadPet(petName, feedingInfo, petImage, isFed)
 
     }
 
     // Method to add a pet to the container dynamically
-    private fun addPet(petName: String, feedingInfo: String, petImageResId: Int) {
+    private fun loadPet(petName: String, feedingInfo: String, petImageResId: Int, isFed: Boolean) {
         // Inflate the pet_item layout
         val petLayout = LayoutInflater.from(this).inflate(R.layout.pet_item, petContainer, false)
 
@@ -38,13 +51,35 @@ class RestrictedActivity : AppCompatActivity() {
         val petNameText: TextView = petLayout.findViewById(R.id.pet_name)
         petNameText.text = petName
 
-        // Set feeding info
-        val feedingInfoText: TextView = petLayout.findViewById(R.id.feeding_info)
-        feedingInfoText.text = feedingInfo
-
-        // Set fed status (this can be dynamic too)
+        val petCircle: ImageView = petLayout.findViewById(R.id.pet_circle)
         val fedStatusText: TextView = petLayout.findViewById(R.id.fed_status)
-        fedStatusText.text = "FED"
+        val feedingButton: Button = petLayout.findViewById(R.id.feeding_button)
+        val feedingInfo: TextView = petLayout.findViewById(R.id.feeding_info)
+
+
+        if(isFed == false){
+            // Set fed status (this can be dynamic too)
+            fedStatusText.text = "NOT FED"
+            petCircle.setColorFilter(ContextCompat.getColor(this, R.color.dark_pink))
+            feedingButton.visibility = View.VISIBLE
+            feedingInfo.visibility = View.GONE
+        } else {
+            fedStatusText.text = "FED"
+            petCircle.setColorFilter(ContextCompat.getColor(this, R.color.base_green))
+            feedingButton.visibility = View.GONE
+            feedingInfo.visibility = View.VISIBLE
+        }
+
+        //TODO: I dont think this is dynamic? Send this to backend
+
+        feedingButton.setOnClickListener {
+            fedStatusText.text = "FED"
+            petCircle.setColorFilter(ContextCompat.getColor(this, R.color.base_green))
+            feedingButton.visibility = View.GONE
+            feedingInfo.visibility = View.VISIBLE
+            //TODO: isFed = true; update backend
+
+        }
 
         // Add the new pet layout to the container
         petContainer.addView(petLayout)

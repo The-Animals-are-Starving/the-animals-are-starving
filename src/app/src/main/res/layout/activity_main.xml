@@ -1,65 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:fontFamily="sans-serif-smallcaps"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="[PET NAME] HAS (NOT) BEEN FED"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/paw_font"
+            android:text="The Animals Are Starving!"
+            android:textAlignment="center"
+            android:textColor="@color/dark_pink"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.15"
+            android:lineSpacingExtra="-30sp" />
 
-    <Button
-        android:id="@+id/log_feed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Feed Da Dawg"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.685" />
+        <TextView
+            android:id="@+id/subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/paw_font"
+            android:text="Home Page"
+            android:textAlignment="center"
+            android:textColor="@color/base_pink"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.15"
+            android:lineSpacingExtra="-30sp" />
+        <Button
+            android:id="@+id/log_feed"
+            android:layout_width="256dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/base_green"
+            android:text="Feed Da Dawg"
+            android:fontFamily="sans-serif-medium"
+            android:textSize="19sp" />
 
-    <Button
-        android:id="@+id/ManageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Manage Household"
-        app:layout_constraintBottom_toTopOf="@+id/log_feed"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.276" />
+        <Button
+            android:id="@+id/ManageButton"
+            android:layout_width="256dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/dark_blue"
+            android:text="Manage Household"
+            android:fontFamily="sans-serif-medium"
+            android:textSize="19sp" />
 
-    <Button
-        android:id="@+id/restricted_view_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Switch To Restricted View"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.256" />
+        <Button
+            android:id="@+id/notif_button"
+            android:layout_width="256dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/base_blue"
+            android:text="Notify Other Users"
+            android:fontFamily="sans-serif-medium"
+            android:textSize="19sp" />
 
-    <Button
-        android:id="@+id/notif_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Notify Other Users"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.574" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/restricted_view_button"
+            android:layout_width="256dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/dark_grey"
+            android:text="Switch To Restricted View"
+            android:fontFamily="sans-serif-medium"
+            android:textSize="19sp" />
+</LinearLayout>
