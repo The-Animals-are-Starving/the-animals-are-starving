@@ -4,7 +4,7 @@ import passport from "passport";
 import connectDB from "./config/db";
 import authRoutes from "./routes/authRoutes";
 import userHouseholdRoutes from "./routes/userHouseholdRoutes";
-import logRoute from "./routes/logRoutes";
+import logRoutes from "./routes/logRoutes";
 import analyticsRoutes from "./routes/analyticsRoutes";
 
 const app = express();
@@ -21,7 +21,7 @@ app.use(passport.session());
 // Routes
 app.use("/auth", authRoutes);
 app.use("/household", userHouseholdRoutes);
-app.use("/log", logRoute);
+app.use("/log", logRoutes);
 app.use("/analytics", analyticsRoutes);
 
 const PORT = process.env.PORT || 5000;
