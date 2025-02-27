@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    >
 
     <!-- One Pet FrameLayout -->
     <FrameLayout
@@ -18,11 +19,11 @@
 
         <!-- Pet Image in the Circle -->
         <ImageView
-            android:id="@+id/circleImageView"
+            android:id="@+id/pet_circle"
             android:layout_width="319dp"
             android:layout_height="310dp"
             android:src="@drawable/circle"
-            app:tint="@color/base_green" />
+            app:tint="@color/dark_pink" />
 
         <!-- Pet Info Layout -->
         <LinearLayout
@@ -47,16 +48,29 @@
                 android:layout_marginTop="8dp"
                 android:text="Stinky Dog"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/fed_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="FED"
+                android:text="NOT FED"
                 android:textSize="34sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                />
+
+
+            <Button
+                android:id="@+id/feeding_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FEED PET"
+                android:backgroundTint="@color/black"
+                android:visibility="visible"
+                />
 
             <TextView
                 android:id="@+id/feeding_info"
@@ -64,7 +78,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="by PERSON at TIME"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:visibility="gone"
+                android:textColor="@color/black"
+                />
 
         </LinearLayout>
     </FrameLayout>

@@ -3,9 +3,14 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name='base_green'>#b1ddc9</color>
-    <color name='dark_green'>#A35F997F</color>
+    <color name='dark_green'>#A33C6F58</color>
     <color name='base_orange'>#fbceb1</color>
     <color name='dark_orange'>#9B694A</color>
-    <color name='grey'>#d8d0c6</color>
+    <color name='base_pink'>#DCAAB9</color>
+    <color name='dark_pink'>#A85B73</color>
+    <color name='base_blue'>#6cd0d0</color>
+    <color name='dark_blue'>#0E4E4E</color>
 
+    <color name='grey'>#d8d0c6</color>
+    <color name='dark_grey'>#686564</color>
 </resources>
