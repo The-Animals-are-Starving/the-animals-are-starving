@@ -2,6 +2,7 @@ package com.example.theanimalsarestarving
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -22,24 +23,53 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val manageHouseholdButton = findViewById<Button>(R.id.ManageButton)
+        val notifyButton = findViewById<Button>(R.id.notify_button)
+        val manageButton = findViewById<Button>(R.id.manage_button)
 
-        manageHouseholdButton.setOnClickListener {
+        UserSession.currentUserRole = UserRole.ADMIN
+        val role = UserSession.currentUserRole
+        when (role) {
+            UserRole.ADMIN -> {
+                notifyButton.visibility = View.VISIBLE
+                manageButton.visibility = View.VISIBLE
+            }
+            UserRole.REGULAR -> {
+                notifyButton.visibility = View.VISIBLE
+                manageButton.visibility = View.INVISIBLE
+            }
+            UserRole.RESTRICTED -> {
+                notifyButton.visibility = View.INVISIBLE
+                manageButton.visibility = View.INVISIBLE
+            }
+        }
+
+
+
+
+        notifyButton.setOnClickListener{showNotifSend()}
+        manageButton.setOnClickListener {
             val intent = Intent(this, ManageHouseholdActivity::class.java)
             startActivity(intent)
         }
 
-        val restrictedViewButton = findViewById<Button>(R.id.restricted_view_button)
 
+        val adminViewButton = findViewById<Button>(R.id.admin_view_button)
+        adminViewButton.setOnClickListener {
+            UserSession.currentUserRole = UserRole.ADMIN
+        }
+        val regularViewButton = findViewById<Button>(R.id.regular_view_button)
+        regularViewButton.setOnClickListener {
+            UserSession.currentUserRole = UserRole.REGULAR
+        }
+        val restrictedViewButton = findViewById<Button>(R.id.restricted_view_button)
         restrictedViewButton.setOnClickListener {
+            UserSession.currentUserRole = UserRole.RESTRICTED
             val intent = Intent(this, RestrictedActivity::class.java)
             startActivity(intent)
         }
 
-        val notificationButton = findViewById<Button>(R.id.notif_button)
-
-        notificationButton.setOnClickListener{showNotifSend()}
     }
+
 
     private fun showNotifSend() {
         val builder = AlertDialog.Builder(this)
