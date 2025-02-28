@@ -1,7 +1,9 @@
 package com.example.theanimalsarestarving
 
+import UserRoleViewModel
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
@@ -11,23 +13,76 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.activity.viewModels
+import androidx.lifecycle.Observer
+
 
 class MainActivity : AppCompatActivity() {
+
+
+    private val TAG = "MainActivity"
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+        Log.d(TAG, "onCreate")
+
+        val feedingButton: Button = findViewById<Button>(R.id.feed_button)
+        val notifyButton: Button = findViewById<Button>(R.id.notify_button)
+        val manageButton: Button = findViewById<Button>(R.id.manage_button)
+        val userRoleViewModel: UserRoleViewModel by viewModels()
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        val notifyButton = findViewById<Button>(R.id.notify_button)
-        val manageButton = findViewById<Button>(R.id.manage_button)
+        userRoleViewModel.userRole.observe(this, Observer { role ->
+            updateRoleBasedUI(role)
+        })
+        userRoleViewModel.setUserRole(UserRole.ADMIN)
 
-        UserSession.currentUserRole = UserRole.ADMIN
-        val role = UserSession.currentUserRole
+
+
+        feedingButton.setOnClickListener{
+            val intent = Intent(this, FeedingActivity::class.java)
+            startActivity(intent)
+        }
+        notifyButton.setOnClickListener{
+            showNotifSend()
+        }
+        manageButton.setOnClickListener {
+            val intent = Intent(this, ManageHouseholdActivity::class.java)
+            startActivity(intent)
+        }
+
+
+        val adminViewButton = findViewById<Button>(R.id.admin_view_button)
+        adminViewButton.setOnClickListener {
+            userRoleViewModel.setUserRole(UserRole.ADMIN)
+            Log.d(TAG, "adminViewButton clicked")
+        }
+
+        val regularViewButton = findViewById<Button>(R.id.regular_view_button)
+        regularViewButton.setOnClickListener {
+            userRoleViewModel.setUserRole(UserRole.REGULAR)
+            Log.d(TAG, "regularViewButton clicked")
+
+        }
+
+        val restrictedViewButton = findViewById<Button>(R.id.restricted_view_button)
+        restrictedViewButton.setOnClickListener {
+            userRoleViewModel.setUserRole(UserRole.RESTRICTED)
+            Log.d(TAG, "restrictedViewButton clicked")
+        }
+    }
+
+    private fun updateRoleBasedUI(role: UserRole) {
+        val notifyButton: Button = findViewById<Button>(R.id.notify_button) //TODO: make this global
+        val manageButton: Button = findViewById<Button>(R.id.manage_button)
         when (role) {
             UserRole.ADMIN -> {
                 notifyButton.visibility = View.VISIBLE
@@ -42,34 +97,7 @@ class MainActivity : AppCompatActivity() {
                 manageButton.visibility = View.INVISIBLE
             }
         }
-
-
-
-
-        notifyButton.setOnClickListener{showNotifSend()}
-        manageButton.setOnClickListener {
-            val intent = Intent(this, ManageHouseholdActivity::class.java)
-            startActivity(intent)
-        }
-
-
-        val adminViewButton = findViewById<Button>(R.id.admin_view_button)
-        adminViewButton.setOnClickListener {
-            UserSession.currentUserRole = UserRole.ADMIN
-        }
-        val regularViewButton = findViewById<Button>(R.id.regular_view_button)
-        regularViewButton.setOnClickListener {
-            UserSession.currentUserRole = UserRole.REGULAR
-        }
-        val restrictedViewButton = findViewById<Button>(R.id.restricted_view_button)
-        restrictedViewButton.setOnClickListener {
-            UserSession.currentUserRole = UserRole.RESTRICTED
-            val intent = Intent(this, RestrictedActivity::class.java)
-            startActivity(intent)
-        }
-
     }
-
 
     private fun showNotifSend() {
         val builder = AlertDialog.Builder(this)

@@ -1,7 +1,6 @@
 package com.example.theanimalsarestarving
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import android.view.LayoutInflater
@@ -9,10 +8,9 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 
-class RestrictedActivity : AppCompatActivity() {
+class FeedingActivity : AppCompatActivity() {
 
     private lateinit var petContainer: LinearLayout
 
@@ -20,7 +18,7 @@ class RestrictedActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.restricted_activity)
+        setContentView(R.layout.feeding_activity)
 
         // Get the container where pet items will be added
         petContainer = findViewById(R.id.petContainer)
@@ -53,7 +51,7 @@ class RestrictedActivity : AppCompatActivity() {
 
         val petCircle: ImageView = petLayout.findViewById(R.id.pet_circle)
         val fedStatusText: TextView = petLayout.findViewById(R.id.fed_status)
-        val feedingButton: Button = petLayout.findViewById(R.id.feeding_button)
+        val feedingButton: Button = petLayout.findViewById(R.id.indicate_fed_button)
         val feedingInfo: TextView = petLayout.findViewById(R.id.feeding_info)
 
 

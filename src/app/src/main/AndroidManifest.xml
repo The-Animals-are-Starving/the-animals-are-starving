@@ -17,7 +17,7 @@
             android:exported="false"
             android:label="@string/title_activity_manage_household" />
         <activity
-            android:name=".RestrictedActivity"
+            android:name=".FeedingActivity"
             android:exported="false"
             android:label="RestrictedActivity" />
 
