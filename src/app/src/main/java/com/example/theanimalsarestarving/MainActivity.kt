@@ -22,6 +22,15 @@ class MainActivity : AppCompatActivity() {
 
     private val TAG = "MainActivity"
 
+    //buttons
+    private lateinit var feedingButton: Button
+    private lateinit var notifyButton: Button
+    private lateinit var manageButton: Button
+    private lateinit var feedingHistoryButton: Button
+    private lateinit var adminViewButton: Button
+    private lateinit var regularViewButton: Button
+    private lateinit var restrictedViewButton: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -29,9 +38,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         Log.d(TAG, "onCreate")
 
-        val feedingButton: Button = findViewById<Button>(R.id.feed_button)
-        val notifyButton: Button = findViewById<Button>(R.id.notify_button)
-        val manageButton: Button = findViewById<Button>(R.id.manage_button)
+        feedingButton = findViewById(R.id.feed_button)
+        notifyButton = findViewById(R.id.notify_button)
+        manageButton = findViewById(R.id.manage_button)
+        feedingHistoryButton = findViewById(R.id.feeding_history_button)
+        adminViewButton = findViewById(R.id.admin_view_button)
+        regularViewButton = findViewById(R.id.regular_view_button)
+        restrictedViewButton = findViewById(R.id.restricted_view_button)
+
         val userRoleViewModel: UserRoleViewModel by viewModels()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -46,7 +60,6 @@ class MainActivity : AppCompatActivity() {
         userRoleViewModel.setUserRole(UserRole.ADMIN)
 
 
-
         feedingButton.setOnClickListener{
             val intent = Intent(this, FeedingActivity::class.java)
             startActivity(intent)
@@ -58,22 +71,23 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, ManageHouseholdActivity::class.java)
             startActivity(intent)
         }
+        feedingHistoryButton.setOnClickListener {
+            val intent = Intent(this, HistoryActivity::class.java)
+            startActivity(intent)
+        }
 
 
-        val adminViewButton = findViewById<Button>(R.id.admin_view_button)
         adminViewButton.setOnClickListener {
             userRoleViewModel.setUserRole(UserRole.ADMIN)
             Log.d(TAG, "adminViewButton clicked")
         }
 
-        val regularViewButton = findViewById<Button>(R.id.regular_view_button)
         regularViewButton.setOnClickListener {
             userRoleViewModel.setUserRole(UserRole.REGULAR)
             Log.d(TAG, "regularViewButton clicked")
 
         }
 
-        val restrictedViewButton = findViewById<Button>(R.id.restricted_view_button)
         restrictedViewButton.setOnClickListener {
             userRoleViewModel.setUserRole(UserRole.RESTRICTED)
             Log.d(TAG, "restrictedViewButton clicked")
@@ -81,20 +95,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateRoleBasedUI(role: UserRole) {
-        val notifyButton: Button = findViewById<Button>(R.id.notify_button) //TODO: make this global
-        val manageButton: Button = findViewById<Button>(R.id.manage_button)
         when (role) {
             UserRole.ADMIN -> {
                 notifyButton.visibility = View.VISIBLE
                 manageButton.visibility = View.VISIBLE
+                feedingButton.visibility = View.VISIBLE
             }
             UserRole.REGULAR -> {
                 notifyButton.visibility = View.VISIBLE
                 manageButton.visibility = View.INVISIBLE
+                feedingButton.visibility = View.INVISIBLE
+
             }
             UserRole.RESTRICTED -> {
                 notifyButton.visibility = View.INVISIBLE
                 manageButton.visibility = View.INVISIBLE
+                feedingButton.visibility = View.INVISIBLE
+
             }
         }
     }

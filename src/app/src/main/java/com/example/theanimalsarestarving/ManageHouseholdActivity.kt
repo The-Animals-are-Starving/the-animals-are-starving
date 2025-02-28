@@ -2,33 +2,25 @@ package com.example.theanimalsarestarving
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.app.TimePickerDialog
-import android.icu.util.Calendar
 import android.os.Bundle
 import android.util.Patterns
-import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Spinner
-import android.widget.Switch
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
-import androidx.core.view.contains
-import androidx.core.view.setPadding
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import org.w3c.dom.Text
-import java.security.Key
 
 class ManageHouseholdActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.settings_activity)
+        setContentView(R.layout.manage_activity)
 
         val userListContainer = findViewById<LinearLayout>(R.id.userListContainer)
         val newUserButton = findViewById<Button>(R.id.newUserButton)

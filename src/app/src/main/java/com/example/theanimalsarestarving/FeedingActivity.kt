@@ -1,6 +1,7 @@
 package com.example.theanimalsarestarving
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import android.view.LayoutInflater
@@ -12,17 +13,16 @@ import androidx.core.content.ContextCompat
 
 class FeedingActivity : AppCompatActivity() {
 
+    private var TAG = "Feeding Activity"
     private lateinit var petContainer: LinearLayout
-
-    //TODO: Undo button
+    private lateinit var undoButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.feeding_activity)
 
-        // Get the container where pet items will be added
         petContainer = findViewById(R.id.petContainer)
-
+        undoButton = findViewById(R.id.undo_button)
 
         //TODO: FETCH THIS INFO FROM BACKEND
         val petName = "stinky dog"
@@ -30,10 +30,11 @@ class FeedingActivity : AppCompatActivity() {
         val petImage = R.drawable.dog_default_icon
         val isFed = false
 
-        //Example (Static)
+        loadPet(petName, feedingInfo, petImage, isFed) //example
 
-        loadPet(petName, feedingInfo, petImage, isFed)
-
+        undoButton.setOnClickListener{
+            Log.d(TAG, "Undo Button Clicked")
+        }
     }
 
     // Method to add a pet to the container dynamically

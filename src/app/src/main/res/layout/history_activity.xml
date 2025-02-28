@@ -1,0 +1,39 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FeedingActivity">
+
+    <ScrollView
+        android:id="@+id/petLayoutContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/petContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="73dp"
+                android:layout_gravity="center_horizontal"
+                android:text="Previous Feedings"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:id="@+id/title"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/paw_font"
+                android:textAlignment="center"
+                android:textColor="@color/subtitle_color"
+                android:letterSpacing="0.15"
+                android:lineSpacingExtra="-30sp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

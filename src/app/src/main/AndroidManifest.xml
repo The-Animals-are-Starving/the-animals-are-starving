@@ -20,6 +20,10 @@
             android:name=".FeedingActivity"
             android:exported="false"
             android:label="RestrictedActivity" />
+        <activity
+            android:name=".HistoryActivity"
+            android:exported="false"
+            android:label="RestrictedActivity" />
 
         <activity
             android:name=".MainActivity"

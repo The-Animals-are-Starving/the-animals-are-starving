@@ -33,7 +33,7 @@
         android:fontFamily="@font/paw_font"
         android:text="Home Page"
         android:textAlignment="center"
-        android:textColor="@color/base_pink"
+        android:textColor="@color/subtitle_color"
         android:textSize="25sp"
         android:textStyle="bold"
         android:letterSpacing="0.15"
@@ -54,7 +54,7 @@
         android:layout_width="256dp"
         android:layout_height="100dp"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/base_blue"
+        android:backgroundTint="@color/dark_green"
         android:text="Notify Other Users"
         android:fontFamily="sans-serif-medium"
         android:textSize="19sp"
@@ -65,12 +65,22 @@
         android:layout_width="256dp"
         android:layout_height="100dp"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/dark_blue"
+        android:backgroundTint="@color/base_blue"
         android:text="Manage Household"
         android:fontFamily="sans-serif-medium"
         android:textSize="19sp"
         android:visibility="visible"/>
-    />
+
+    <Button
+        android:id="@+id/feeding_history_button"
+        android:layout_width="256dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/dark_blue"
+        android:text="Feeding History"
+        android:fontFamily="sans-serif-medium"
+        android:textSize="19sp"
+        android:visibility="visible"/>
 
     <LinearLayout
         style="?android:attr/buttonBarStyle"
@@ -87,7 +97,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:layout_weight="1"
-            android:backgroundTint="@color/dark_grey"
+            android:backgroundTint="@color/grey"
             android:fontFamily="sans-serif-medium"
             android:text="Admin View"
             android:textSize="18sp" />
@@ -98,7 +108,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:layout_weight="1"
-            android:backgroundTint="@color/dark_grey"
+            android:backgroundTint="@color/grey"
             android:fontFamily="sans-serif-medium"
             android:text="Regular View"
             android:textSize="18sp" />
@@ -109,7 +119,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:layout_weight="1"
-            android:backgroundTint="@color/dark_grey"
+            android:backgroundTint="@color/grey"
             android:fontFamily="sans-serif-medium"
             android:text="Restricted View"
             android:textSize="18sp" />
