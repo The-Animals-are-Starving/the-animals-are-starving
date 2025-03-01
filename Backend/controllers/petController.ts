@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 import Pet from "../models/Pet";
 import Household from "../models/Household";
 
@@ -25,9 +25,9 @@ export const addPet = async (req: Request, res: Response): Promise<void> => {
     try {
         const { name, householdId, feedingTime } = req.body;
 
-        // Validate household if provided
+        let household = null;
         if (householdId) {
-            const household = await Household.findById(householdId);
+            household = await Household.findById(householdId);
             if (!household) {
                 res.status(404).json({ message: "Household not found" });
                 return;
@@ -41,15 +41,20 @@ export const addPet = async (req: Request, res: Response): Promise<void> => {
         const pet = new Pet({
             petId,
             name,
-            householdId: householdId ? new mongoose.Types.ObjectId(householdId) : undefined,
-            feedingTime,
+            householdId: household ? new mongoose.Types.ObjectId(householdId) : undefined,
+            feedingTime: new Date(feedingTime),
             fed: false
         });
 
         await pet.save();
+
+        if (household) {
+            household.pets.push(pet._id as Types.ObjectId);
+            await household.save();
+        }
+
         res.status(201).json({ message: "Pet added successfully", pet });
     } catch (error) {
-
         res.status(500).json({ message: "Error adding pet", error });
     }
 };
