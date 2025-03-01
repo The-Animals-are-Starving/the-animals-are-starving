@@ -19,6 +19,7 @@ import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.models.UserRole
 import com.example.theanimalsarestarving.network.ApiService
 import com.example.theanimalsarestarving.network.MainRepository
+import com.example.theanimalsarestarving.network.NetworkManager
 import com.example.theanimalsarestarving.network.RetrofitClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
 
     private val TAG = "MainActivity"
     private lateinit var mainRepository: MainRepository
+    private lateinit var apiService: ApiService
 
     //buttons
     private lateinit var feedingButton: Button
@@ -38,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adminViewButton: Button
     private lateinit var regularViewButton: Button
     private lateinit var restrictedViewButton: Button
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -175,7 +178,8 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun retrofitInit() {
-        Log.d(TAG,"retrofitInit()")
+        Log.d(TAG, "retrofitInit()")
+
         // Initialize Retrofit instance
         val retrofit = Retrofit.Builder()
             .baseUrl(RetrofitClient.baseUrl)  // Base URL from RetrofitClient
@@ -183,10 +187,13 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         // Initialize ApiService
-        val apiService = retrofit.create(ApiService::class.java)
+        apiService = retrofit.create(ApiService::class.java)
 
         // Initialize MainRepository with ApiService
-        val mainRepository = MainRepository(apiService)
+        mainRepository = MainRepository(apiService)
+
+        // Initialize the singleton with the instances
+        NetworkManager.initialize(apiService, mainRepository)
 
         // Call the getUser method with a callback to handle the response
         val email = "test@gmail.com"
@@ -194,12 +201,11 @@ class MainActivity : AppCompatActivity() {
         // Make an asynchronous API call
         mainRepository.getUser(email) { user ->
             if (user != null) {
-                // Log the user details if fetched successfully
                 Log.d(TAG, "Fetched user: $user")
             } else {
-                // Log if no user was found or an error occurred
                 Log.d(TAG, "No user found or error occurred.")
             }
         }
     }
+
 }

@@ -11,12 +11,18 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.example.theanimalsarestarving.R
+import com.example.theanimalsarestarving.network.ApiService
+import com.example.theanimalsarestarving.network.MainRepository
+import com.example.theanimalsarestarving.network.NetworkManager
+import org.bson.types.ObjectId
 
 class FeedingActivity : AppCompatActivity() {
 
     private var TAG = "Feeding Activity"
     private lateinit var petContainer: LinearLayout
     private lateinit var undoButton: Button
+    private lateinit var mainRepository: MainRepository
+    private lateinit var apiService: ApiService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +30,21 @@ class FeedingActivity : AppCompatActivity() {
 
         petContainer = findViewById(R.id.petContainer)
         undoButton = findViewById(R.id.undo_button)
+
+        val testHouseholdId = ObjectId("67c2aa855a9890c0f183efa4")
+
+        // Check if NetworkManager is initialized
+        if (NetworkManager.isInitialized()) {
+            mainRepository = NetworkManager.mainRepository
+            apiService = NetworkManager.apiService
+            Log.d("FeedingActivity", "NetworkManager is initialized.")
+            // You can now use mainRepository and apiService
+            fetchAllHouseholdPets(testHouseholdId)
+        } else {
+            Log.e("FeedingActivity", "NetworkManager is not initialized.")
+            // Optionally, handle the error if not initialized
+        }
+
 
         //TODO: FETCH THIS INFO FROM BACKEND
         val petName = "stinky dog"
@@ -84,4 +105,21 @@ class FeedingActivity : AppCompatActivity() {
         // Add the new pet layout to the container
         petContainer.addView(petLayout)
     }
+
+    private fun fetchAllHouseholdPets(householdId: ObjectId) {
+        mainRepository.getPets(householdId) { pets ->
+            // Check if pets is not null and is a valid list
+            if (!pets.isNullOrEmpty()) {
+                // Use a for loop to iterate over the list of pets
+                for (pet in pets) {
+                    Log.d(TAG, "Fetched pet: ${pet.name}, fed: ${pet.fed}")
+                }
+            } else {
+                Log.d(TAG, "No pets found or error occurred.")
+            }
+
+        }
+    }
+
+
 }

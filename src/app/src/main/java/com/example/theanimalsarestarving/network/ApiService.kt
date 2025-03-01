@@ -16,10 +16,11 @@ interface ApiService {
     @GET("user/{email}")
     fun getUser(@Path("email") email: String): Call<User>  // Single user response
 
-    /*TODO: UNTESTED
     //router.get("/household/:householdId", getPetsByHousehold);
-    @GET("household/{householdId}")
-    fun getPets(@Path("householdId") householdId: ObjectId): Call<Pet>  // All household pets
+    @GET("pet/household/{householdId}")
+    fun getPets(@Path("householdId") householdId: ObjectId): Call<List<Pet>>  // Return a list of pets
+
+    /*TODO: UNTESTED
 
     //router.patch("/:petId/feed", updatePetFeedingStatus);
     @PATCH("pet/{petId}/feed")
