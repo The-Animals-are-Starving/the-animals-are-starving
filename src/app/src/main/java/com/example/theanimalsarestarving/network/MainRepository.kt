@@ -1,7 +1,9 @@
 package com.example.theanimalsarestarving.network
 
 import android.util.Log
+import com.example.theanimalsarestarving.models.Pet
 import com.example.theanimalsarestarving.models.User
+import org.bson.types.ObjectId
 import retrofit2.Call
 import retrofit2.Response
 
@@ -27,4 +29,28 @@ class MainRepository(private val apiService: ApiService) {
             }
         })
     }
+
+    //    @GET("household/{householdId}")
+    //    fun getPet(@Path("householdId") householdId: ObjectId): Call<Pet>  // all household pets response
+    fun getPet(householdId: ObjectId, callback: (Pet?) -> Unit) {
+        // Make the API call asynchronously
+        apiService.getPets(householdId).enqueue(object : retrofit2.Callback<Pet> {
+            override fun onResponse(call: Call<Pet>, response: Response<Pet>) {
+                if (response.isSuccessful) {
+                    val pet = response.body()
+                    callback(pet)  // Return the pet through the callback
+                    Log.d("MainRepository", "Success: ${response.body()}")  // Log the successful response
+                } else {
+                    Log.e("MainRepository", "Error: ${response.code()} ${response.message()}")  // Log error responses
+                    callback(null)
+                }
+            }
+
+            override fun onFailure(call: Call<Pet>, t: Throwable) {
+                Log.e("MainRepository", "Failure: ${t.message}")  // Log failure due to network or other issues
+                callback(null)
+            }
+        })
+    }
+
 }
