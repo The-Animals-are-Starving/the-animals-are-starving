@@ -16,7 +16,7 @@ interface ApiService {
     @GET("user/{email}")
     fun getUser(@Path("email") email: String): Call<User>  // Single user response
 
-    //TODO: all below untested
+    /*TODO: UNTESTED
     //router.get("/household/:householdId", getPetsByHousehold);
     @GET("household/{householdId}")
     fun getPets(@Path("householdId") householdId: ObjectId): Call<Pet>  // All household pets
@@ -27,4 +27,6 @@ interface ApiService {
         @Path("petId") petId: ObjectId,      // Pet ID to identify the pet
         @Body fedStatus: Map<String, Boolean> // Directly passing the fed status in the request body
     ): Call<Pet>
+    */
+
 }

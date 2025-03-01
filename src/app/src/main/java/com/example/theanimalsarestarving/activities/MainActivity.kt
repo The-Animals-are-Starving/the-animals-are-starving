@@ -111,18 +111,18 @@ class MainActivity : AppCompatActivity() {
             UserRole.ADMIN -> {
                 notifyButton.visibility = View.VISIBLE
                 manageButton.visibility = View.VISIBLE
-                feedingButton.visibility = View.VISIBLE
+                feedingHistoryButton.visibility = View.VISIBLE
             }
             UserRole.REGULAR -> {
                 notifyButton.visibility = View.VISIBLE
                 manageButton.visibility = View.INVISIBLE
-                feedingButton.visibility = View.INVISIBLE
+                feedingHistoryButton.visibility = View.INVISIBLE
 
             }
             UserRole.RESTRICTED -> {
                 notifyButton.visibility = View.INVISIBLE
                 manageButton.visibility = View.INVISIBLE
-                feedingButton.visibility = View.INVISIBLE
+                feedingHistoryButton.visibility = View.INVISIBLE
 
             }
         }
