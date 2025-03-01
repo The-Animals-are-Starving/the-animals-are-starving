@@ -175,6 +175,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun retrofitInit() {
+        Log.d(TAG,"retrofitInit()")
         // Initialize Retrofit instance
         val retrofit = Retrofit.Builder()
             .baseUrl(RetrofitClient.baseUrl)  // Base URL from RetrofitClient

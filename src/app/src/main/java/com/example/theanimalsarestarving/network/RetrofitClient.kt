@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
     // Base URL for your backend API
-    private const val BASE_URL = "http://localhost:5001"  // Replace with your API base URL
+    private const val BASE_URL = "http://10.0.2.2:5001"
 
     // Retrofit instance - created only once
     private val retrofit: Retrofit by lazy {

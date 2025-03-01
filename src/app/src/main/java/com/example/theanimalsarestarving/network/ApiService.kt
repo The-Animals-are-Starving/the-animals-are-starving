@@ -8,6 +8,6 @@ import retrofit2.http.Query
 
 interface ApiService {
     // Define the endpoint to fetch a single user by email
-    @GET("users/{email}")
+    @GET("user/{email}")
     fun getUser(@Path("email") email: String): Call<User>  // Single user response
 }
