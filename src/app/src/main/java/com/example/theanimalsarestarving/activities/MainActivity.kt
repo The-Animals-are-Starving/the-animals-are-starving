@@ -1,6 +1,6 @@
-package com.example.theanimalsarestarving
+package com.example.theanimalsarestarving.activities
 
-import UserRoleViewModel
+import com.example.theanimalsarestarving.models.UserRoleViewModel
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -15,12 +15,20 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import com.example.theanimalsarestarving.R
+import com.example.theanimalsarestarving.models.UserRole
+import com.example.theanimalsarestarving.network.ApiService
+import com.example.theanimalsarestarving.network.MainRepository
+import com.example.theanimalsarestarving.network.RetrofitClient
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 class MainActivity : AppCompatActivity() {
 
 
     private val TAG = "MainActivity"
+    private lateinit var mainRepository: MainRepository
 
     //buttons
     private lateinit var feedingButton: Button
@@ -36,6 +44,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
+        retrofitInit()
+
+
         Log.d(TAG, "onCreate")
 
         feedingButton = findViewById(R.id.feed_button)
@@ -159,5 +171,34 @@ class MainActivity : AppCompatActivity() {
 
     private fun sendNotif(user: String) { // May pass user as object instead
         //TODO: Implement Firebase api call
+    }
+
+
+    private fun retrofitInit() {
+        // Initialize Retrofit instance
+        val retrofit = Retrofit.Builder()
+            .baseUrl(RetrofitClient.baseUrl)  // Base URL from RetrofitClient
+            .addConverterFactory(GsonConverterFactory.create())  // Gson converter for JSON response
+            .build()
+
+        // Initialize ApiService
+        val apiService = retrofit.create(ApiService::class.java)
+
+        // Initialize MainRepository with ApiService
+        val mainRepository = MainRepository(apiService)
+
+        // Call the getUser method with a callback to handle the response
+        val email = "test@gmail.com"
+
+        // Make an asynchronous API call
+        mainRepository.getUser(email) { user ->
+            if (user != null) {
+                // Log the user details if fetched successfully
+                Log.d(TAG, "Fetched user: $user")
+            } else {
+                // Log if no user was found or an error occurred
+                Log.d(TAG, "No user found or error occurred.")
+            }
+        }
     }
 }

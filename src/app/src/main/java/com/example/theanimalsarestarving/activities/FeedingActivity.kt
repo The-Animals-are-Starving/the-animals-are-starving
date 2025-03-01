@@ -1,4 +1,4 @@
-package com.example.theanimalsarestarving
+package com.example.theanimalsarestarving.activities
 
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import com.example.theanimalsarestarving.R
 
 class FeedingActivity : AppCompatActivity() {
 

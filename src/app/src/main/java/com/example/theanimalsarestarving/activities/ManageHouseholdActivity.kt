@@ -1,4 +1,4 @@
-package com.example.theanimalsarestarving
+package com.example.theanimalsarestarving.activities
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
@@ -13,6 +13,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
+import com.example.theanimalsarestarving.R
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 
