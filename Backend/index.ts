@@ -27,6 +27,6 @@ app.use("/log", logRoutes);
 app.use("/analytics", analyticsRoutes);
 app.use("/user", userRoutes);
 app.use("/pet", petRoutes);
-
-const PORT = process.env.PORT || 5000;
+ 
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

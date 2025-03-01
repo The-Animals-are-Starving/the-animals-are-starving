@@ -1,6 +1,6 @@
-package com.example.theanimalsarestarving
+package com.example.theanimalsarestarving.activities
 
-import UserRoleViewModel
+import com.example.theanimalsarestarving.models.UserRoleViewModel
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -15,12 +15,22 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import com.example.theanimalsarestarving.R
+import com.example.theanimalsarestarving.models.UserRole
+import com.example.theanimalsarestarving.network.ApiService
+import com.example.theanimalsarestarving.network.MainRepository
+import com.example.theanimalsarestarving.network.NetworkManager
+import com.example.theanimalsarestarving.network.RetrofitClient
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 class MainActivity : AppCompatActivity() {
 
 
     private val TAG = "MainActivity"
+    private lateinit var mainRepository: MainRepository
+    private lateinit var apiService: ApiService
 
     //buttons
     private lateinit var feedingButton: Button
@@ -31,11 +41,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var regularViewButton: Button
     private lateinit var restrictedViewButton: Button
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
+        retrofitInit()
+
+
         Log.d(TAG, "onCreate")
 
         feedingButton = findViewById(R.id.feed_button)
@@ -99,18 +114,18 @@ class MainActivity : AppCompatActivity() {
             UserRole.ADMIN -> {
                 notifyButton.visibility = View.VISIBLE
                 manageButton.visibility = View.VISIBLE
-                feedingButton.visibility = View.VISIBLE
+                feedingHistoryButton.visibility = View.VISIBLE
             }
             UserRole.REGULAR -> {
                 notifyButton.visibility = View.VISIBLE
                 manageButton.visibility = View.INVISIBLE
-                feedingButton.visibility = View.INVISIBLE
+                feedingHistoryButton.visibility = View.INVISIBLE
 
             }
             UserRole.RESTRICTED -> {
                 notifyButton.visibility = View.INVISIBLE
                 manageButton.visibility = View.INVISIBLE
-                feedingButton.visibility = View.INVISIBLE
+                feedingHistoryButton.visibility = View.INVISIBLE
 
             }
         }
@@ -160,4 +175,37 @@ class MainActivity : AppCompatActivity() {
     private fun sendNotif(user: String) { // May pass user as object instead
         //TODO: Implement Firebase api call
     }
+
+
+    private fun retrofitInit() {
+        Log.d(TAG, "retrofitInit()")
+
+        // Initialize Retrofit instance
+        val retrofit = Retrofit.Builder()
+            .baseUrl(RetrofitClient.baseUrl)  // Base URL from RetrofitClient
+            .addConverterFactory(GsonConverterFactory.create())  // Gson converter for JSON response
+            .build()
+
+        // Initialize ApiService
+        apiService = retrofit.create(ApiService::class.java)
+
+        // Initialize MainRepository with ApiService
+        mainRepository = MainRepository(apiService)
+
+        // Initialize the singleton with the instances
+        NetworkManager.initialize(apiService, mainRepository)
+
+        // Call the getUser method with a callback to handle the response
+        val email = "test@gmail.com"
+
+        // Make an asynchronous API call
+        mainRepository.getUser(email) { user ->
+            if (user != null) {
+                Log.d(TAG, "Fetched user: $user")
+            } else {
+                Log.d(TAG, "No user found or error occurred.")
+            }
+        }
+    }
+
 }

@@ -9,7 +9,7 @@
     android:orientation="vertical"
     android:padding="16dp"
     android:fontFamily="sans-serif-smallcaps"
-    tools:context=".MainActivity">
+    tools:context=".activities.MainActivity">
 
     <TextView
         android:id="@+id/title"
