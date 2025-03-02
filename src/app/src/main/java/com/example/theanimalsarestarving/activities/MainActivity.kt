@@ -2,6 +2,7 @@ package com.example.theanimalsarestarving.activities
 
 import com.example.theanimalsarestarving.models.UserRoleViewModel
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -46,10 +47,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var regularViewButton: Button
     private lateinit var restrictedViewButton: Button
     private lateinit var openCreateHouseholdButton: Button
+    private lateinit var logoutButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
+
+        if (!isUserLoggedIn()) {
+            redirectToLogin()
+        }
+
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
         Log.d(TAG, "onCreate")
@@ -78,6 +85,7 @@ class MainActivity : AppCompatActivity() {
         regularViewButton = findViewById(R.id.regular_view_button)
         restrictedViewButton = findViewById(R.id.restricted_view_button)
         openCreateHouseholdButton = findViewById(R.id.openCreateHouseholdButton)
+        logoutButton = findViewById(R.id.logoutButton)
 
         val userRoleViewModel: UserRoleViewModel by viewModels()
 
@@ -110,6 +118,13 @@ class MainActivity : AppCompatActivity() {
         }
         openCreateHouseholdButton.setOnClickListener() {
             val intent = Intent(this, CreateHouseholdActivity::class.java)
+            startActivity(intent)
+        }
+
+        logoutButton.setOnClickListener() {
+            val sharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
+            sharedPreferences.edit().putBoolean("isLoggedIn", false).apply()
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
 
@@ -235,6 +250,17 @@ class MainActivity : AppCompatActivity() {
 //                Log.d(TAG, "retrofitInit: No user found or error occurred.")
 //            }
 //        }
+    }
+
+    private fun isUserLoggedIn(): Boolean {
+        val sharedPreferences: SharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
+        return sharedPreferences.getBoolean("isLoggedIn", false) // Default is false (not logged in)
+    }
+
+    private fun redirectToLogin() {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish() // Finish MainActivity so user can't come back by pressing back
     }
 
 }

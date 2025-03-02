@@ -4,23 +4,6 @@ import Pet, { IPet } from "../models/Pet";
 import Household from "../models/Household";
 
 // Add a new pet
-const generateUniquePetId = async (): Promise<number> => {
-    let petId: number;
-    petId = 0;
-    let isUnique = false;
-
-    while (!isUnique) {
-        petId = Math.floor(1000 + Math.random() * 9000); // Generate a random 4-digit number
-        const existingPet = await Pet.findOne({ petId });
-        if (!existingPet) {
-            isUnique = true; // Found a unique ID
-        }
-    }
-
-    return petId;
-};
-
-// Add a new pet
 export const addPet = async (req: Request, res: Response): Promise<void> => {
     try {
         const { name, householdId, feedingTime } = req.body;
@@ -34,10 +17,7 @@ export const addPet = async (req: Request, res: Response): Promise<void> => {
             }
         }
 
-        const petId = await generateUniquePetId();
-
         const pet = new Pet({
-            petId,
             name,
             householdId: household ? new mongoose.Types.ObjectId(householdId) : undefined,
             feedingTime: new Date(feedingTime),
@@ -90,11 +70,7 @@ export const updatePetFeedingStatus = async (req: Request, res: Response): Promi
             updateFields.lastTimeFed = new Date();
         }
 
-        const pet = await Pet.findOneAndUpdate(
-            { petId: Number(petId) },
-            updateFields, 
-            { new: true }
-        );
+        const pet = await Pet.findByIdAndUpdate(petId, updateFields, { new: true });
 
         if (!pet) {
             res.status(404).json({ message: "Pet not found" });
@@ -112,7 +88,7 @@ export const removePet = async (req: Request, res: Response): Promise<void> => {
     try {
         const { petId } = req.params;
 
-        const pet = await Pet.findOneAndDelete({ petId });
+        const pet = await Pet.findByIdAndDelete(petId);
         if (!pet) {
             res.status(404).json({ message: "Pet not found" });
             return;

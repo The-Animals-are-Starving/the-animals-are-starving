@@ -116,14 +116,36 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/openCreateHouseholdButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_weight="1"
-        android:backgroundTint="@color/grey"
-        android:fontFamily="sans-serif-medium"
-        android:text="View Create Household Activity"
-        android:textSize="15sp" />
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <Button
+            android:id="@+id/openCreateHouseholdButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/grey"
+            android:fontFamily="sans-serif-medium"
+            android:text="View Create Household Activity"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/logoutButton"
+            android:layout_width="245dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/grey"
+            android:fontFamily="sans-serif-medium"
+            android:text="Logout"
+            android:textSize="15sp" />
+    </LinearLayout>
+
 </LinearLayout>
