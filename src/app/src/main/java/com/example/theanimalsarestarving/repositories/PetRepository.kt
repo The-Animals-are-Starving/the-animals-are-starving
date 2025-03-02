@@ -58,6 +58,30 @@ object PetRepository {
             Log.e(TAG, "Error: ${e.message}")
         }
     }
+    suspend fun addPetToHousehold(requestBody: Map<String, String>): Pet? {
+        return try {
+            val response: Response<Pet> = withContext(Dispatchers.IO) {
+                apiService.addPetToHousehold(requestBody)
+                    .execute() // Execute the Call synchronously to get a Response
+            }
 
+            if (response.isSuccessful) {
+                val pet = response.body() // Assuming the response is a Pet object
+                if (pet != null) {
+                    Log.d(TAG, "Pet added: $pet")
+                    pet
+                } else {
+                    Log.e(TAG, "Pet is null in the response")
+                    null
+                }
+            } else {
+                Log.e(TAG, "Failed to add pet: ${response.code()} ${response.message()}")
+                null
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error adding pet: ${e.message}")
+            null
+        }
+    }
 
 }

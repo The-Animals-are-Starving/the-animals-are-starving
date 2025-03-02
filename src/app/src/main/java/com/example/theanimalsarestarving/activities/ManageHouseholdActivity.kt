@@ -14,19 +14,29 @@ import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.models.User
 import com.example.theanimalsarestarving.models.Pet
 import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.network.NetworkManager.apiService
+import com.example.theanimalsarestarving.repositories.HouseholdRepository
+import com.example.theanimalsarestarving.repositories.PetRepository
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
 import java.net.URL
 private val testHouseholdId: String = "67c2aa855a9890c0f183efa4"
 
 
 class ManageHouseholdActivity : AppCompatActivity() {
+
+    companion object {
+        private const val TAG = "ManageHouseholdActivity"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,7 +105,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
     }
 
     private fun addUser(name: String, email: String, container: LinearLayout) {
-        val newUser = User(name = name, email = email, householdId = testHouseholdId)
+        val newUser = User(name = name, email = email, householdId = HouseholdRepository.getCurrentHousehold()?._id.toString())
 
         val repository = MainRepository(apiService)
         Log.d("AddUser","Attempting to add user: $newUser")
@@ -178,47 +188,64 @@ class ManageHouseholdActivity : AppCompatActivity() {
      * Shows addPet popup for entering pet data
      */
     private fun addPet(name: String, type: String, time: String, container: LinearLayout) {
-        val newPet = Pet(name = name, householdId = testHouseholdId, feedingTime = time, fed = false, petId = name.map{ it.toInt() }.sum())
+        lifecycleScope.launch {
+            // Construct the request body
+            val requestBody = mapOf(
+                "name" to name,
+                "householdId" to HouseholdRepository.getCurrentHousehold()?._id.toString(),
+                "feedingTime" to time
+            )
 
-        val repository = MainRepository(apiService)
-        Log.d("AddPet","Attempting to add pet: $newPet")
-        repository.addPet(newPet) { addedPet ->
-            if(addedPet != null) {
-                val petRow = LinearLayout(this).apply {
-                    orientation = LinearLayout.HORIZONTAL
-                    layoutParams = LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                    )
-                    setPadding(10, 10, 10, 10)
-                }
-                val petNameView = TextView(this).apply {
-                    text = name
-                    layoutParams = LinearLayout.LayoutParams(
-                        0,
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        1f)
-    
-                }
-                val editButton = Button(this).apply {
-                    text = "Edit"
-                    layoutParams = LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                    )
-                    setOnClickListener { showEditPopup(petNameView) }
-                }
-    
-                petRow.addView(petNameView)
-                petRow.addView(editButton)
-                container.addView(petRow)
-                Log.d("AddPet", "Pet added successfully: $addedPet")
+            try {
+                // Make the network request to add the pet
+                val addedPet = PetRepository.addPetToHousehold(requestBody)
 
+                if (addedPet != null) {
+                    // Now that the pet is added, update the UI (on the main thread)
+                    withContext(Dispatchers.Main) {
+                        val petRow = LinearLayout(this@ManageHouseholdActivity).apply {
+                            orientation = LinearLayout.HORIZONTAL
+                            layoutParams = LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT
+                            )
+                            setPadding(10, 10, 10, 10)
+                        }
 
-            } else {
-                alertMessage("Failed to add pet. Please try again", container)
+                        val petNameView = TextView(this@ManageHouseholdActivity).apply {
+                            text = name
+                            layoutParams = LinearLayout.LayoutParams(
+                                0,
+                                LinearLayout.LayoutParams.WRAP_CONTENT,
+                                1f
+                            )
+                        }
+
+                        val editButton = Button(this@ManageHouseholdActivity).apply {
+                            text = "Edit"
+                            layoutParams = LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.WRAP_CONTENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT
+                            )
+                            setOnClickListener { showEditPopup(petNameView) }
+                        }
+
+                        petRow.addView(petNameView)
+                        petRow.addView(editButton)
+                        container.addView(petRow)
+                        Log.d("AddPet", "Pet added successfully: $addedPet")
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        alertMessage("Failed to add pet. Please try again", container)
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error adding pet: ${e.message}")
+                withContext(Dispatchers.Main) {
+                    alertMessage("Error adding pet. Please try again", container)
+                }
             }
-        
         }
     }
 
