@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.google.firebase.crashlytics)
 }
 
 android {
@@ -65,4 +67,14 @@ dependencies {
     // Kotlin Coroutines (for background tasks)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.2")
+
+    // Firebase stuff
+    implementation(libs.firebase.crashlytics)
+    implementation(platform("com.google.firebase:firebase-bom:33.10.0"))
+    /** we shouldn't need to specify the version since we have the BOM, but it didn't work
+     * so I just added it manually; just something to keep note of...
+     */
+    implementation("com.google.firebase:firebase-messaging:24.1.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
 }
