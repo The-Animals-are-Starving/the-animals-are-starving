@@ -26,8 +26,8 @@ object PetRepository {
             }
 
             if (response.isSuccessful) {
-                PetRepository.currPets = response.body() ?: emptyList()
-                Log.d(TAG, "Fetched and stored pets: ${PetRepository.currPets}")
+                currPets = response.body() ?: emptyList()
+                Log.d(TAG, "Fetched and stored pets: ${currPets}")
             } else {
                 Log.e(TAG, "Error: ${response.code()} ${response.message()}")
             }
@@ -45,7 +45,7 @@ object PetRepository {
 
             if (response.isSuccessful) {
                 Log.d(TAG, "feedPet Response: ${response.code()} ${response.message()}")
-                val petToUpdate = PetRepository.currPets.find { it.petId.toString() == petId } //TODO: Is this necessary?
+                val petToUpdate = currPets.find { it.petId == petId } //TODO: Is this necessary?
                 petToUpdate?.let {
                     it.fed = true  // Mark the pet as fed
                     Log.d(TAG, "Pet updated: ${it.name} is now fed.")
