@@ -12,17 +12,26 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.network.ApiService
-import com.example.theanimalsarestarving.network.MainRepository
+import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.network.NetworkManager
-import org.bson.types.ObjectId
+import com.example.theanimalsarestarving.repositories.PetRepository
+import com.example.theanimalsarestarving.repositories.fetchPets
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.util.Date
 
 class FeedingActivity : AppCompatActivity() {
 
-    private var TAG = "Feeding Activity"
+    companion object {
+        private const val TAG = "FeedingActivity"
+    }
     private lateinit var petContainer: LinearLayout
     private lateinit var undoButton: Button
     private lateinit var mainRepository: MainRepository
     private lateinit var apiService: ApiService
+
+    private val testHouseholdId: String = "67c2aa855a9890c0f183efa4"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,36 +40,42 @@ class FeedingActivity : AppCompatActivity() {
         petContainer = findViewById(R.id.petContainer)
         undoButton = findViewById(R.id.undo_button)
 
-        val testHouseholdId: String = "67c2aa855a9890c0f183efa4"
 
-        // Check if NetworkManager is initialized
-        if (NetworkManager.isInitialized()) {
-            mainRepository = NetworkManager.mainRepository
-            apiService = NetworkManager.apiService
-            Log.d("FeedingActivity", "NetworkManager is initialized.")
-            // You can now use mainRepository and apiService
-            fetchAllHouseholdPets(testHouseholdId)
-        } else {
-            Log.e("FeedingActivity", "NetworkManager is not initialized.")
-            // Optionally, handle the error if not initialized
-        }
+        checkNetworkManager()
 
-
-        //TODO: FETCH THIS INFO FROM BACKEND
-        val petName = "stinky dog"
-        val feedingInfo = "by PERSON at TIME"
-        val petImage = R.drawable.dog_default_icon
-        val isFed = false
-
-        loadPet(petName, feedingInfo, petImage, isFed) //example
+        loadPets(testHouseholdId)
 
         undoButton.setOnClickListener{
             Log.d(TAG, "Undo Button Clicked")
         }
     }
 
+
+    private fun loadPets(testHouseholdId: String) {
+        // Launch a coroutine in the main thread
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                // Wait for fetchPets to complete
+                fetchPets(testHouseholdId)
+
+                // Once fetchPets is done, log the pets
+                Log.d("TAG", "Pets Fetched: ${PetRepository.pets}")
+
+                val petImage = R.drawable.dog_default_icon
+
+                // Iterate through fetched pets
+                for (pet in PetRepository.pets) {
+                    Log.d("TAG", "Pet: $pet")
+                    loadPet(pet.name, pet.feedingTime, petImage, pet.fed)
+                }
+            } catch (e: Exception) {
+                Log.e("TAG", "Error fetching pets: ${e.message}")
+            }
+        }
+    }
     // Method to add a pet to the container dynamically
-    private fun loadPet(petName: String, feedingInfo: String, petImageResId: Int, isFed: Boolean) {
+    private fun loadPet(petName: String, feedingTime: Date, petImageResId: Int, isFed: Boolean) {
+        Log.d(TAG, "Loading pet: (petName: $petName, feedingTime: feedingTime, isFed: isFed)")
         // Inflate the pet_item layout
         val petLayout = LayoutInflater.from(this).inflate(R.layout.pet_item, petContainer, false)
 
@@ -106,18 +121,17 @@ class FeedingActivity : AppCompatActivity() {
         petContainer.addView(petLayout)
     }
 
-    private fun fetchAllHouseholdPets(householdId: String) {
-        mainRepository.getPets(householdId) { pets ->
-            // Check if pets is not null and is a valid list
-            if (!pets.isNullOrEmpty()) {
-                // Use a for loop to iterate over the list of pets
-                for (pet in pets) {
-                    Log.d(TAG, "Fetched pet: ${pet.name}, fed: ${pet.fed}")
-                }
-            } else {
-                Log.d(TAG, "No pets found or error occurred.")
-            }
 
+    // Check if NetworkManager is initialized
+    private fun checkNetworkManager() {
+        if (NetworkManager.isInitialized()) {
+            mainRepository = NetworkManager.mainRepository
+            apiService = NetworkManager.apiService
+            Log.d(TAG, "NetworkManager is initialized.")
+            // You can now use mainRepository and apiService
+        } else {
+            Log.e(TAG, "NetworkManager is not initialized.")
+            throw IllegalStateException("NetworkManager is not initialized.")
         }
     }
 

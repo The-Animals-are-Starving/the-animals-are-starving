@@ -1,14 +1,11 @@
-package com.example.theanimalsarestarving.network
+package com.example.theanimalsarestarving.repositories
 
 import android.util.Log
 import com.example.theanimalsarestarving.models.Pet
 import com.example.theanimalsarestarving.models.User
-import org.bson.types.ObjectId
+import com.example.theanimalsarestarving.network.ApiService
 import retrofit2.Call
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.PATCH
-import retrofit2.http.Path
 
 class MainRepository(private val apiService: ApiService) {
 
