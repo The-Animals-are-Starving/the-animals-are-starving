@@ -1,5 +1,6 @@
 package com.example.theanimalsarestarving.activities
 
+import android.content.Intent
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
@@ -81,29 +82,34 @@ class LoginActivity : AppCompatActivity() {
         Toast.makeText(this, "Error getting credential", Toast.LENGTH_SHORT).show()
     }
 
-    fun handleSignIn(result: GetCredentialResponse) {
-        // Handle the successfully returned credential.
+    private fun handleSignIn(result: GetCredentialResponse) {
         val credential = result.credential
 
         when (credential) {
             is CustomCredential -> {
                 if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
                     try {
-                        // Use googleIdTokenCredential and extract id to validate and
-                        // authenticate on your server.
-                        val googleIdTokenCredential = GoogleIdTokenCredential
-                            .createFrom(credential.data)
+                        val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
                         Log.d(TAG, "Token: ${googleIdTokenCredential.idToken}")
                         Log.d(TAG, "Name: ${googleIdTokenCredential.displayName.toString()}")
 
+                        val email = googleIdTokenCredential.id
+                        Log.d(TAG, "Email: $email")
+
+                        // Save login state
+                        val sharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
+                        sharedPreferences.edit().putBoolean("isLoggedIn", true).putString("userEmail", email).apply()
+
+                        // Navigate to MainActivity after login
+                        val intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
+                        finish() // Finish LoginActivity
                     } catch (e: GoogleIdTokenParsingException) {
                         Log.e(TAG, "Received an invalid google id token response", e)
                     }
                 }
             }
-
             else -> {
-                // Catch any unrecognized credential type here.
                 Log.e(TAG, "Unexpected type of credential")
             }
         }
