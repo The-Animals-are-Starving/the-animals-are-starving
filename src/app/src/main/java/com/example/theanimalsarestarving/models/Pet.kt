@@ -8,5 +8,5 @@ data class Pet(
     val name: String,
     val householdId: String? = null,
     val feedingTime: Date,
-    val fed: Boolean = false
+    var fed: Boolean = false
 )

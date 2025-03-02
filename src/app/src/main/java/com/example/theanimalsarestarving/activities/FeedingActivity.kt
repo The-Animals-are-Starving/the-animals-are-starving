@@ -15,10 +15,12 @@ import com.example.theanimalsarestarving.network.ApiService
 import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.network.NetworkManager
 import com.example.theanimalsarestarving.repositories.PetRepository
+import com.example.theanimalsarestarving.repositories.feedPet
 import com.example.theanimalsarestarving.repositories.fetchPets
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.bson.types.ObjectId
 import java.util.Date
 
 class FeedingActivity : AppCompatActivity() {
@@ -66,7 +68,7 @@ class FeedingActivity : AppCompatActivity() {
                 // Iterate through fetched pets
                 for (pet in PetRepository.pets) {
                     Log.d("TAG", "Pet: $pet")
-                    loadPet(pet.name, pet.feedingTime, petImage, pet.fed)
+                    loadPet(pet.petId, pet.name, pet.feedingTime, petImage, pet.fed)
                 }
             } catch (e: Exception) {
                 Log.e("TAG", "Error fetching pets: ${e.message}")
@@ -74,7 +76,7 @@ class FeedingActivity : AppCompatActivity() {
         }
     }
     // Method to add a pet to the container dynamically
-    private fun loadPet(petName: String, feedingTime: Date, petImageResId: Int, isFed: Boolean) {
+    private fun loadPet(petId: Int, petName: String, feedingTime: Date, petImageResId: Int, isFed: Boolean) {
         Log.d(TAG, "Loading pet: (petName: $petName, feedingTime: feedingTime, isFed: isFed)")
         // Inflate the pet_item layout
         val petLayout = LayoutInflater.from(this).inflate(R.layout.pet_item, petContainer, false)
@@ -109,12 +111,17 @@ class FeedingActivity : AppCompatActivity() {
         //TODO: I dont think this is dynamic? Send this to backend
 
         feedingButton.setOnClickListener {
-            fedStatusText.text = "FED"
-            petCircle.setColorFilter(ContextCompat.getColor(this, R.color.base_green))
-            feedingButton.visibility = View.GONE
-            feedingInfo.visibility = View.VISIBLE
-            //TODO: isFed = true; update backend
+            // Launch a coroutine in the main scope
+            CoroutineScope(Dispatchers.Main).launch {
+                // Call the suspend function feedPet inside the coroutine
+                feedPet(petId.toString())
 
+                // Update UI after feeding the pet
+                fedStatusText.text = "FED"
+                petCircle.setColorFilter(ContextCompat.getColor(this@FeedingActivity, R.color.base_green))
+                feedingButton.visibility = View.GONE
+                feedingInfo.visibility = View.VISIBLE
+            }
         }
 
         // Add the new pet layout to the container
