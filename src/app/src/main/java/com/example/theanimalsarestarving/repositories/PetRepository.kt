@@ -17,7 +17,7 @@ object PetRepository {
     var pets: List<Pet> = emptyList()
 }
 
-//suspend because we want this to finish before continuing
+//Suspend because we want this to finish before continuing
 suspend fun fetchPets(householdId: String) {
     try {
         // Run the network request on an IO thread to avoid blocking the main thread
@@ -55,7 +55,10 @@ suspend fun feedPet(petId: String) {
             }
         } else {
             // Log failure if the response was not successful
-            Log.e(TAG, "Failed to update pet feeding status: ${response.code()} ${response.message()}")
+            Log.e(
+                TAG,
+                "Failed to update pet feeding status: ${response.code()} ${response.message()}"
+            )
         }
     } catch (e: Exception) {
         // Log any errors that occur during the network request

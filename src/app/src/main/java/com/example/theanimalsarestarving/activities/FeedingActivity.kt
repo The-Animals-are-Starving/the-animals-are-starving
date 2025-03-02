@@ -28,8 +28,8 @@ class FeedingActivity : AppCompatActivity() {
     companion object {
         private const val TAG = "FeedingActivity"
     }
+
     private lateinit var petContainer: LinearLayout
-    private lateinit var undoButton: Button
     private lateinit var mainRepository: MainRepository
     private lateinit var apiService: ApiService
 
@@ -40,16 +40,11 @@ class FeedingActivity : AppCompatActivity() {
         setContentView(R.layout.feeding_activity)
 
         petContainer = findViewById(R.id.petContainer)
-        undoButton = findViewById(R.id.undo_button)
 
 
         checkNetworkManager()
 
         loadPets(testHouseholdId)
-
-        undoButton.setOnClickListener{
-            Log.d(TAG, "Undo Button Clicked")
-        }
     }
 
 
@@ -75,8 +70,15 @@ class FeedingActivity : AppCompatActivity() {
             }
         }
     }
+
     // Method to add a pet to the container dynamically
-    private fun loadPet(petId: Int, petName: String, feedingTime: Date, petImageResId: Int, isFed: Boolean) {
+    private fun loadPet(
+        petId: Int,
+        petName: String,
+        feedingTime: Date,
+        petImageResId: Int,
+        isFed: Boolean
+    ) {
         Log.d(TAG, "Loading pet: (petName: $petName, feedingTime: feedingTime, isFed: isFed)")
         // Inflate the pet_item layout
         val petLayout = LayoutInflater.from(this).inflate(R.layout.pet_item, petContainer, false)
@@ -95,7 +97,7 @@ class FeedingActivity : AppCompatActivity() {
         val feedingInfo: TextView = petLayout.findViewById(R.id.feeding_info)
 
 
-        if(isFed == false){
+        if (isFed == false) {
             // Set fed status (this can be dynamic too)
             fedStatusText.text = "NOT FED"
             petCircle.setColorFilter(ContextCompat.getColor(this, R.color.dark_pink))
@@ -118,7 +120,12 @@ class FeedingActivity : AppCompatActivity() {
 
                 // Update UI after feeding the pet
                 fedStatusText.text = "FED"
-                petCircle.setColorFilter(ContextCompat.getColor(this@FeedingActivity, R.color.base_green))
+                petCircle.setColorFilter(
+                    ContextCompat.getColor(
+                        this@FeedingActivity,
+                        R.color.base_green
+                    )
+                )
                 feedingButton.visibility = View.GONE
                 feedingInfo.visibility = View.VISIBLE
             }
