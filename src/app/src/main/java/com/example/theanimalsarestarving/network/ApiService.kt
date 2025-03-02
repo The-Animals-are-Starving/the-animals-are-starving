@@ -18,16 +18,15 @@ interface ApiService {
 
     //router.get("/household/:householdId", getPetsByHousehold);
     @GET("pet/household/{householdId}")
-    fun getPets(@Path("householdId") householdId: ObjectId): Call<List<Pet>>  // Return a list of pets
+    fun getPets(@Path("householdId") householdId: String): Call<List<Pet>>  // Return a list of pets
 
-    /*TODO: UNTESTED
 
     //router.patch("/:petId/feed", updatePetFeedingStatus);
     @PATCH("pet/{petId}/feed")
     fun feedPet(
-        @Path("petId") petId: ObjectId,      // Pet ID to identify the pet
-        @Body fedStatus: Map<String, Boolean> // Directly passing the fed status in the request body
+        @Path("petId") petId: String,
+        @Body body: Map<String, Boolean> = mapOf("fed" to true)
     ): Call<Pet>
-    */
+
 
 }

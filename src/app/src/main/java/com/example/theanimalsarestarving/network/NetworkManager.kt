@@ -1,5 +1,7 @@
 package com.example.theanimalsarestarving.network
 
+import com.example.theanimalsarestarving.repositories.MainRepository
+
 //allows apiService and mainRepository to be accessed throughout different activities
 object NetworkManager {
     // Singleton instances for ApiService and MainRepository
