@@ -178,7 +178,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun retrofitInit() {
-        Log.d(TAG, "retrofitInit()")
+        Log.d("MainActivity", "retrofitInit()")
 
         // Initialize Retrofit instance
         val retrofit = Retrofit.Builder()
@@ -201,9 +201,9 @@ class MainActivity : AppCompatActivity() {
         // Make an asynchronous API call
         mainRepository.getUser(email) { user ->
             if (user != null) {
-                Log.d(TAG, "Fetched user: $user")
+                Log.d("MainActivity", "Fetched user: $user")
             } else {
-                Log.d(TAG, "No user found or error occurred.")
+                Log.d("MainActivity", "No user found or error occurred.")
             }
         }
     }

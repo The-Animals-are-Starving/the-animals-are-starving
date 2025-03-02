@@ -3,6 +3,7 @@ package com.example.theanimalsarestarving.activities
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
@@ -14,8 +15,14 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import com.example.theanimalsarestarving.R
+import com.example.theanimalsarestarving.models.User
+import com.example.theanimalsarestarving.network.MainRepository
+import com.example.theanimalsarestarving.network.NetworkManager.apiService
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import java.net.HttpURLConnection
+import java.net.URL
+
 
 class ManageHouseholdActivity : AppCompatActivity() {
 
@@ -84,17 +91,23 @@ class ManageHouseholdActivity : AppCompatActivity() {
     }
 
     private fun addUser(name: String, email: String, container: LinearLayout) {
-        if (!userExists(name, container)) {
-            val switch = SwitchCompat(this).apply {
-                text = name
-                isChecked = false
-            }
-            container.addView(switch)
+        val newUser = User(name = name, email = email)
 
-            //TODO: Also send user to backend
-        } else {
-            alertMessage("The User Already Exists!", container)
+        val repository = MainRepository(apiService)
+        Log.d("AddUser","Attempting to add user: $newUser")
+        repository.addUser(newUser) { addedUser ->
+            if (addedUser != null) {
+                val switch = SwitchCompat(this).apply {
+                    text = name
+                    isChecked = false
+                }
+                container.addView(switch)
+                Log.d("AddUser", "User added successfully: $addedUser")
+            } else {
+                alertMessage("Failed to add user. Please try again.", container)
+            }
         }
+
     }
 
     private fun userExists(name: String, container: LinearLayout): Boolean {

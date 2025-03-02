@@ -7,10 +7,16 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
+import retrofit2.http.DELETE
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
+
+    //router.post("/", createUser);
+    @POST("user")
+    fun addUser(@Body user: User): Call<User>
 
     //router.get("/:email", getUser);
     @GET("user/{email}")
