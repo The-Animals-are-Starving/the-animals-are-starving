@@ -40,6 +40,8 @@ class LoginActivity : AppCompatActivity() {
 
     private val activityScope = CoroutineScope(Dispatchers.Main)
 
+    private lateinit var loginButton: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -50,8 +52,17 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
-        Log.d(TAG, "WEB_CLIENT_ID: ${BuildConfig.WEB_CLIENT_ID}")
+        loginButton = findViewById(R.id.loginButton)
 
+        loginButton.setOnClickListener {
+            promptLogin();
+        }
+
+        promptLogin()
+    }
+
+
+    fun promptLogin() {
         val credentialManager = CredentialManager.create(this)
         val signInWithGoogleOption: GetSignInWithGoogleOption = GetSignInWithGoogleOption
             .Builder(BuildConfig.WEB_CLIENT_ID)
@@ -74,7 +85,6 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
-
 
     fun handleFailure(exception: Exception) {
         Log.e("Error", "An error occurred: ${exception.message}")
