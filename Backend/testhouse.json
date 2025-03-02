@@ -1,0 +1,9 @@
+{
+    "_id": "67c2aa855a9890c0f183efa4",
+    "name": "Test Household",
+    "managerId": "65d1234567890abcd1234567",
+    "users": [
+        "603c72ef3f1b2d001f8d5a8c"
+    ],
+    "pets": []
+}

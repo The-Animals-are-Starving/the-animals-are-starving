@@ -22,6 +22,7 @@ import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import java.net.HttpURLConnection
 import java.net.URL
+private val testHouseholdId: String = "67c2aa855a9890c0f183efa4"
 
 
 class ManageHouseholdActivity : AppCompatActivity() {
@@ -42,6 +43,8 @@ class ManageHouseholdActivity : AppCompatActivity() {
         newPetButton.setOnClickListener {
             showAddPetDialog(petListContainer)
         }
+
+        refreshUsers()
     }
 
     private fun showAddUserDialog(container: LinearLayout) { //Popup for new user
@@ -91,11 +94,11 @@ class ManageHouseholdActivity : AppCompatActivity() {
     }
 
     private fun addUser(name: String, email: String, container: LinearLayout) {
-        val newUser = User(name = name, email = email)
+        val newUser = User(name = name, email = email, householdId = testHouseholdId)
 
         val repository = MainRepository(apiService)
         Log.d("AddUser","Attempting to add user: $newUser")
-        repository.addUser(newUser) { addedUser ->
+        repository.addUser(newUser) { addedUser -> //adds user
             if (addedUser != null) {
                 val switch = SwitchCompat(this).apply {
                     text = name
@@ -103,16 +106,20 @@ class ManageHouseholdActivity : AppCompatActivity() {
                 }
                 container.addView(switch)
                 Log.d("AddUser", "User added successfully: $addedUser")
+
+                Log.d("AddUserToHousehold","Attempting to add user to household: $newUser")
+                repository.addUserToHousehold(newUser, newUser.householdId) { includedUser -> //adds user
+                    if (includedUser != null) {
+                        Log.d("AddUserToHousehold", "User added to household successfully: $includedUser")
+                    } else {
+                        alertMessage("Failed to add user to household. Please try again.", container)
+                    }
+                }
+
             } else {
                 alertMessage("Failed to add user. Please try again.", container)
             }
         }
-
-    }
-
-    private fun userExists(name: String, container: LinearLayout): Boolean {
-        //TODO: Check user list to see if user already exists
-        return false
     }
 
 
@@ -274,5 +281,25 @@ class ManageHouseholdActivity : AppCompatActivity() {
 
     private fun isValidEmail(email: String): Boolean {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+    private fun refreshUsers() {
+        val userListContainer = findViewById<LinearLayout>(R.id.userListContainer)
+        userListContainer.removeAllViews() // Clear existing user list
+
+        val repository = MainRepository(apiService)
+        repository.getAllUsers(testHouseholdId) { users ->
+            if (users != null) {
+                for (user in users) {
+                    val switch = SwitchCompat(this).apply {
+                        text = user.name
+                        isChecked = false
+                    }
+                    userListContainer.addView(switch)
+                }
+            } else {
+                alertMessage("Failed to fetch users. Please try again.", userListContainer)
+            }
+        }
     }
 }

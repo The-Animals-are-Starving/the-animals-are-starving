@@ -13,19 +13,19 @@
     >
 
     <TextView
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="73dp"
         android:layout_gravity="center_horizontal"
-        android:text="MANAGE HOUSEHOLD"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        android:id="@+id/title"
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/paw_font"
+        android:letterSpacing="0.15"
+        android:lineSpacingExtra="-30sp"
+        android:text="Manage Household"
         android:textAlignment="center"
         android:textColor="@color/subtitle_color"
-        android:letterSpacing="0.15"
-        android:lineSpacingExtra="-30sp" />
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/colo_household_members"

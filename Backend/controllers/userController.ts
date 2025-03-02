@@ -4,7 +4,7 @@ import User, { UserRole } from "../models/User";
 // Create a new user (defaults to "normal" role)
 export const createUser = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { email, name } = req.body;
+        const { email, name, householdId } = req.body;
 
         // Check if user already exists
         const existingUser = await User.findOne({ email });
@@ -14,12 +14,23 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
         }
 
         // Create new user with default role "normal"
-        const user = new User({ email, name, role: "normal" });
+        const user = new User({ email, name, householdId, role: "normal" });
         await user.save();
 
         res.status(201).json({ message: "User created successfully", user });
     } catch (error) {
         res.status(500).json({ message: "Error creating user", error });
+    }
+};
+
+// Get all users
+export const getAllUsers = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { householdId } = req.params;
+        const users = await User.find({householdId}).sort({ name: 1 });
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ message: "Error retrieving users", error });
     }
 };
 

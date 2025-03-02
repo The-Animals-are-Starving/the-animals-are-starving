@@ -38,6 +38,7 @@ export const addUserToHousehold = async (req: Request, res: Response): Promise<v
 
         // Validate household
         const household = await Household.findById(householdId);
+        console.log(`Finding ${householdId}, found: ${household}`)
         if (!household) {
             res.status(404).json({ message: "Household not found" });
             return;
@@ -98,3 +99,4 @@ export const removeUserFromHousehold = async (req: Request, res: Response, next:
         res.status(500).json({ message: "Error removing user", error });
     }
 };
+

@@ -9,8 +9,30 @@ import retrofit2.Response
 
 class MainRepository(private val apiService: ApiService) {
 
+    fun getAllUsers(householdId: String, callback: (List<User>?) -> Unit) {
+        apiService.getAllUsers(householdId).enqueue(object : retrofit2.Callback<List<User>> {
+            override fun onResponse(call: Call<List<User>>, response: Response<List<User>>) {
+                if (response.isSuccessful) {
+                    val users = response.body()
+                    callback(users)
+                    
+                    Log.d("MainRepository", "Users fetched successfully: $users")
+                } else {
+                    Log.e("MainRepository", "Error: ${response.code()} ${response.message()}")
+                    callback(null)
+                }
+            }
+
+            override fun onFailure(call: Call<List<User>>, t: Throwable) {
+                Log.e("MainRepository", "Failure: ${t.message}")
+                callback(null)
+            }
+        })
+    }
+
+
     fun addUser(user: User, callback: (User?) -> Unit) {
-        apiService.addUser(user).enqueue(object : retrofit2.Callback<User> {
+        apiService.addUser(user).enqueue(object : retrofit2.Callback<User> { // this creates the user
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 if (response.isSuccessful) {
                     val newUser = response.body()
@@ -22,6 +44,30 @@ class MainRepository(private val apiService: ApiService) {
                 }
             }
 
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Log.e("MainRepository", "Failure: ${t.message}")
+                callback(null)  // Return null in case of failure
+            }
+        })
+
+    }
+
+    fun addUserToHousehold (user: User, householdId: String, callback: (User?) -> Unit) {
+        val body = mapOf(
+            "email" to user.email,
+            "householdId" to householdId
+        )
+        apiService.addUserToHousehold(body).enqueue(object : retrofit2.Callback<User> { // this adds user to the household
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                if (response.isSuccessful) {
+                    val newUser = response.body()
+                    callback(newUser)  // Return the new user through the callback
+                    Log.d("addUserToHousehold", "User added to household successfully: ${response.body()}")
+                } else {
+                    Log.e("addUserToHousehold", "Error: ${response.code()} ${response.message()}")
+                    callback(null)  // Return null in case of failure
+                }
+            }
             override fun onFailure(call: Call<User>, t: Throwable) {
                 Log.e("MainRepository", "Failure: ${t.message}")
                 callback(null)  // Return null in case of failure

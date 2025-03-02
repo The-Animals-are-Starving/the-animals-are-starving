@@ -14,9 +14,14 @@ import retrofit2.http.Path
 
 interface ApiService {
 
-    //router.post("/", createUser);
     @POST("user")
     fun addUser(@Body user: User): Call<User>
+
+    @POST("household/add-user")
+    fun addUserToHousehold(@Body body: Map<String, String>): Call<User>
+
+    @GET("user/{householdId}")
+    fun getAllUsers(@Path("householdId") householdId: String): Call<List<User>>
 
     @GET("user/{email}")
     fun getUser(@Path("email") email: String): Call<User>  // Single user response
