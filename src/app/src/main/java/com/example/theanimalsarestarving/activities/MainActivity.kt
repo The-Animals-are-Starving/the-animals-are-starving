@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
+
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
         Log.d(TAG, "onCreate")
@@ -109,7 +110,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
         openCreateHouseholdButton.setOnClickListener() {
-            val intent = Intent(this, CreateHouseholdActivity::class.java)
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
 
