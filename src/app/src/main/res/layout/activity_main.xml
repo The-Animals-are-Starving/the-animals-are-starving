@@ -5,10 +5,10 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fontFamily="sans-serif-smallcaps"
     android:gravity="center"
     android:orientation="vertical"
     android:padding="16dp"
-    android:fontFamily="sans-serif-smallcaps"
     tools:context=".activities.MainActivity">
 
     <TextView
@@ -16,9 +16,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:lineSpacingExtra="-30sp"
         android:text="The Animals Are Starving!"
         android:textAlignment="center"
-        android:lineSpacingExtra="-30sp"
         android:textAppearance="@style/TitleTextStyle" />
 
     <TextView
@@ -26,9 +26,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:textAppearance="@style/SubtitleTextStyle"
         android:text="Home Page"
-        />
+        android:textAppearance="@style/SubtitleTextStyle" />
 
     <Button
         android:id="@+id/feed_button"
@@ -36,8 +35,8 @@
         android:layout_height="100dp"
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/base_green"
-        android:text="Feed Da Dawg"
         android:fontFamily="sans-serif-medium"
+        android:text="Feed Da Dawg"
         android:textSize="19sp" />
 
     <Button
@@ -46,10 +45,10 @@
         android:layout_height="100dp"
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/dark_green"
-        android:text="Notify Other Users"
         android:fontFamily="sans-serif-medium"
+        android:text="Notify Other Users"
         android:textSize="19sp"
-        android:visibility="visible"/>
+        android:visibility="visible" />
 
     <Button
         android:id="@+id/manage_button"
@@ -57,10 +56,10 @@
         android:layout_height="100dp"
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/base_blue"
-        android:text="Manage Household"
         android:fontFamily="sans-serif-medium"
+        android:text="Manage Household"
         android:textSize="19sp"
-        android:visibility="visible"/>
+        android:visibility="visible" />
 
     <Button
         android:id="@+id/feeding_history_button"
@@ -68,10 +67,10 @@
         android:layout_height="100dp"
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/dark_blue"
-        android:text="Feeding History"
         android:fontFamily="sans-serif-medium"
+        android:text="Feeding History"
         android:textSize="19sp"
-        android:visibility="visible"/>
+        android:visibility="visible" />
 
     <LinearLayout
         style="?android:attr/buttonBarStyle"
@@ -115,6 +114,16 @@
             android:text="Restricted View"
             android:textSize="15sp" />
 
+    </LinearLayout>
 
-    </LinearLayout>
-    </LinearLayout>
+    <Button
+        android:id="@+id/openCreateHouseholdButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_weight="1"
+        android:backgroundTint="@color/grey"
+        android:fontFamily="sans-serif-medium"
+        android:text="View Create Household Activity"
+        android:textSize="15sp" />
+</LinearLayout>
