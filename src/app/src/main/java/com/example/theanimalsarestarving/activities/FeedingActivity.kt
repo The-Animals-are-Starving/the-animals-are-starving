@@ -31,7 +31,7 @@ class FeedingActivity : AppCompatActivity() {
         petContainer = findViewById(R.id.petContainer)
         undoButton = findViewById(R.id.undo_button)
 
-        val testHouseholdId = ObjectId("67c2aa855a9890c0f183efa4")
+        val testHouseholdId: String = "67c2aa855a9890c0f183efa4"
 
         // Check if NetworkManager is initialized
         if (NetworkManager.isInitialized()) {
@@ -106,7 +106,7 @@ class FeedingActivity : AppCompatActivity() {
         petContainer.addView(petLayout)
     }
 
-    private fun fetchAllHouseholdPets(householdId: ObjectId) {
+    private fun fetchAllHouseholdPets(householdId: String) {
         mainRepository.getPets(householdId) { pets ->
             // Check if pets is not null and is a valid list
             if (!pets.isNullOrEmpty()) {

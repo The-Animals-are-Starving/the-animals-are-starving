@@ -36,16 +36,11 @@ class MainRepository(private val apiService: ApiService) {
     //    @GET("household/{householdId}")
     //    fun getPet(@Path("householdId") householdId: ObjectId): Call<Pet>  // all household pets response
 // Update your method signature to expect a list of pets
-    fun getPets(householdId: ObjectId, callback: (List<Pet>?) -> Unit) {
+    fun getPets(householdId: String, callback: (List<Pet>?) -> Unit) {
         // Make the API call asynchronously
         apiService.getPets(householdId).enqueue(object : retrofit2.Callback<List<Pet>> {
             override fun onResponse(call: Call<List<Pet>>, response: Response<List<Pet>>) {
                 if (response.isSuccessful) {
-                    // Log the raw response body as a string (before parsing it)
-                    val rawJson = response.raw().body()?.string() // Get the raw JSON string
-                    Log.d("MainRepository", "Raw JSON response: $rawJson")
-
-                    // Now parse the response as usual
                     val pets = response.body()
                     callback(pets)  // Return the list of pets through the callback
 
