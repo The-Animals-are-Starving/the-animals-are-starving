@@ -23,12 +23,15 @@
         <activity
             android:name=".activities.FeedingActivity"
             android:exported="false"
-            android:label="RestrictedActivity" />
+            android:label="FeedingActivity" />
         <activity
             android:name=".activities.HistoryActivity"
             android:exported="false"
-            android:label="RestrictedActivity" />
-
+            android:label="HistoryActivity" />
+        <activity
+            android:name=".activities.CreateHouseholdActivity"
+            android:exported="false"
+            android:label="CreateHouseholdActivity" />
         <activity
             android:name=".activities.MainActivity"
             android:exported="true">

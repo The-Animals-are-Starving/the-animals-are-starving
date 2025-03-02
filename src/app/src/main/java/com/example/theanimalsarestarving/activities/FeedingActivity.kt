@@ -15,12 +15,9 @@ import com.example.theanimalsarestarving.network.ApiService
 import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.network.NetworkManager
 import com.example.theanimalsarestarving.repositories.PetRepository
-import com.example.theanimalsarestarving.repositories.feedPet
-import com.example.theanimalsarestarving.repositories.fetchPets
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.bson.types.ObjectId
 import java.util.Date
 
 class FeedingActivity : AppCompatActivity() {
@@ -41,26 +38,19 @@ class FeedingActivity : AppCompatActivity() {
 
         petContainer = findViewById(R.id.petContainer)
 
-
         checkNetworkManager()
-
         loadPets(testHouseholdId)
     }
 
 
     private fun loadPets(testHouseholdId: String) {
-        // Launch a coroutine in the main thread
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                // Wait for fetchPets to complete
-                fetchPets(testHouseholdId)
-
-                // Once fetchPets is done, log the pets
+                PetRepository.fetchPets(testHouseholdId)
                 Log.d("TAG", "Pets Fetched: ${PetRepository.pets}")
 
                 val petImage = R.drawable.dog_default_icon
 
-                // Iterate through fetched pets
                 for (pet in PetRepository.pets) {
                     Log.d("TAG", "Pet: $pet")
                     loadPet(pet.petId, pet.name, pet.feedingTime, petImage, pet.fed)
@@ -116,7 +106,7 @@ class FeedingActivity : AppCompatActivity() {
             // Launch a coroutine in the main scope
             CoroutineScope(Dispatchers.Main).launch {
                 // Call the suspend function feedPet inside the coroutine
-                feedPet(petId.toString())
+                PetRepository.feedPet(petId.toString())
 
                 // Update UI after feeding the pet
                 fedStatusText.text = "FED"

@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adminViewButton: Button
     private lateinit var regularViewButton: Button
     private lateinit var restrictedViewButton: Button
-
+    private lateinit var openCreateHouseholdButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -60,6 +60,7 @@ class MainActivity : AppCompatActivity() {
         adminViewButton = findViewById(R.id.admin_view_button)
         regularViewButton = findViewById(R.id.regular_view_button)
         restrictedViewButton = findViewById(R.id.restricted_view_button)
+        openCreateHouseholdButton = findViewById(R.id.openCreateHouseholdButton)
 
         val userRoleViewModel: UserRoleViewModel by viewModels()
 
@@ -75,11 +76,11 @@ class MainActivity : AppCompatActivity() {
         userRoleViewModel.setUserRole(UserRole.ADMIN)
 
 
-        feedingButton.setOnClickListener{
+        feedingButton.setOnClickListener {
             val intent = Intent(this, FeedingActivity::class.java)
             startActivity(intent)
         }
-        notifyButton.setOnClickListener{
+        notifyButton.setOnClickListener {
             showNotifSend()
         }
         manageButton.setOnClickListener {
@@ -90,7 +91,10 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, HistoryActivity::class.java)
             startActivity(intent)
         }
-
+        openCreateHouseholdButton.setOnClickListener() {
+            val intent = Intent(this, CreateHouseholdActivity::class.java)
+            startActivity(intent)
+        }
 
         adminViewButton.setOnClickListener {
             userRoleViewModel.setUserRole(UserRole.ADMIN)
@@ -107,6 +111,8 @@ class MainActivity : AppCompatActivity() {
             userRoleViewModel.setUserRole(UserRole.RESTRICTED)
             Log.d(TAG, "restrictedViewButton clicked")
         }
+
+
     }
 
     private fun updateRoleBasedUI(role: UserRole) {
@@ -116,12 +122,14 @@ class MainActivity : AppCompatActivity() {
                 manageButton.visibility = View.VISIBLE
                 feedingHistoryButton.visibility = View.VISIBLE
             }
+
             UserRole.REGULAR -> {
                 notifyButton.visibility = View.VISIBLE
                 manageButton.visibility = View.INVISIBLE
                 feedingHistoryButton.visibility = View.INVISIBLE
 
             }
+
             UserRole.RESTRICTED -> {
                 notifyButton.visibility = View.INVISIBLE
                 manageButton.visibility = View.INVISIBLE
@@ -138,7 +146,10 @@ class MainActivity : AppCompatActivity() {
             setPadding(50, 20, 50, 20)
         }
 
-        val users = arrayOf("U1", "U2") //TODO: Get list of users from backend and query if they're restricted
+        val users = arrayOf(
+            "U1",
+            "U2"
+        ) //TODO: Get list of users from backend and query if they're restricted
 
         for (user in users) {
             val userRow = LinearLayout(this).apply {
@@ -149,7 +160,8 @@ class MainActivity : AppCompatActivity() {
                 layoutParams = LinearLayout.LayoutParams(
                     0,
                     LinearLayout.LayoutParams.WRAP_CONTENT,
-                    1f)
+                    1f
+                )
 
             }
             val notifyUserButton = Button(this).apply {
