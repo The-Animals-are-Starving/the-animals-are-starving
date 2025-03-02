@@ -46,13 +46,12 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0")
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("org.mongodb:bson:4.6.0")
-
+    implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.retrofit2.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.bson)
 
 
 }
