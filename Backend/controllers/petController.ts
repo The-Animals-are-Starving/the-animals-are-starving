@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import mongoose, { Types } from "mongoose";
-import Pet from "../models/Pet";
+import Pet, { IPet } from "../models/Pet";
 import Household from "../models/Household";
 
 // Add a new pet
@@ -34,10 +34,8 @@ export const addPet = async (req: Request, res: Response): Promise<void> => {
             }
         }
 
-        // Get a unique petId
         const petId = await generateUniquePetId();
 
-        // Create a new pet
         const pet = new Pet({
             petId,
             name,
@@ -77,7 +75,27 @@ export const updatePetFeedingStatus = async (req: Request, res: Response): Promi
         const { petId } = req.params;
         const { fed } = req.body;
 
-        const pet = await Pet.findOneAndUpdate({ petId }, { fed }, { new: true });
+        if (fed === undefined) {
+            res.status(400).json({ message: "'fed' field is required" });
+            return;
+        }
+
+        if (typeof fed !== "boolean") {
+            res.status(400).json({ message: "'fed' must be a boolean" });
+            return;
+        }
+
+        const updateFields: Partial<IPet> = { fed };
+        if (fed === true) {
+            updateFields.lastTimeFed = new Date();
+        }
+
+        const pet = await Pet.findOneAndUpdate(
+            { petId: Number(petId) },
+            updateFields, 
+            { new: true }
+        );
+
         if (!pet) {
             res.status(404).json({ message: "Pet not found" });
             return;

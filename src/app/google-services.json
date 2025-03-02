@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "90580825399",
+    "project_id": "the-animals-are-starving",
+    "storage_bucket": "the-animals-are-starving.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:90580825399:android:d1e60a6998ce853ba456b2",
+        "android_client_info": {
+          "package_name": "com.example.theanimalsarestarving"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASbwZ4aqZc7nPu7evGoQQ4qUrWw8lmpts"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -42,15 +42,14 @@
 
             </LinearLayout>
 
-            <!-- Button outside LinearLayout but still inside ScrollView -->
-            <Button
-                android:id="@+id/undo_button"
-                android:layout_width="105dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center_horizontal"
-                android:backgroundTint="@color/base_pink"
-                android:text="Undo"
-                />
+<!--            <Button-->
+<!--                android:id="@+id/undo_button"-->
+<!--                android:layout_width="105dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="bottom|center_horizontal"-->
+<!--                android:backgroundTint="@color/base_pink"-->
+<!--                android:text="Undo"-->
+<!--                />-->
 
         </LinearLayout>
     </ScrollView>

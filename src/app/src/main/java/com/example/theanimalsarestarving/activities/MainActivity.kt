@@ -18,7 +18,7 @@ import androidx.lifecycle.Observer
 import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.models.UserRole
 import com.example.theanimalsarestarving.network.ApiService
-import com.example.theanimalsarestarving.network.MainRepository
+import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.network.NetworkManager
 import com.example.theanimalsarestarving.network.RetrofitClient
 import retrofit2.Retrofit
