@@ -8,6 +8,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
+import retrofit2.http.DELETE
 import retrofit2.http.POST
 import retrofit2.http.Path
 
@@ -17,7 +18,6 @@ interface ApiService {
     @POST("user")
     fun addUser(@Body user: User): Call<User>
 
-    //router.get("/:email", getUser);
     @GET("user/{email}")
     fun getUser(@Path("email") email: String): Call<User>  // Single user response
 

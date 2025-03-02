@@ -9,6 +9,26 @@ import retrofit2.Response
 
 class MainRepository(private val apiService: ApiService) {
 
+    fun addUser(user: User, callback: (User?) -> Unit) {
+        apiService.addUser(user).enqueue(object : retrofit2.Callback<User> {
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                if (response.isSuccessful) {
+                    val newUser = response.body()
+                    callback(newUser)  // Return the new user through the callback
+                    Log.d("MainRepository", "User added successfully: ${response.body()}")
+                } else {
+                    Log.e("MainRepository", "Error: ${response.code()} ${response.message()}")
+                    callback(null)  // Return null in case of failure
+                }
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Log.e("MainRepository", "Failure: ${t.message}")
+                callback(null)  // Return null in case of failure
+            }
+        })
+    }
+
     fun getUser(email: String, callback: (User?) -> Unit) {
         // Make the API call asynchronously
         apiService.getUser(email).enqueue(object : retrofit2.Callback<User> {
