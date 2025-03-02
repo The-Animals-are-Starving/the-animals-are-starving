@@ -16,11 +16,16 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.example.theanimalsarestarving.R
+import com.example.theanimalsarestarving.activities.FeedingActivity.Companion
+import com.example.theanimalsarestarving.models.User
 import com.example.theanimalsarestarving.models.UserRole
 import com.example.theanimalsarestarving.network.ApiService
 import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.network.NetworkManager
 import com.example.theanimalsarestarving.network.RetrofitClient
+import com.example.theanimalsarestarving.repositories.CurrUserRepository
+import com.example.theanimalsarestarving.repositories.HouseholdRepository
+import com.example.theanimalsarestarving.repositories.PetRepository
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -47,11 +52,23 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+        Log.d(TAG, "onCreate")
 
         retrofitInit()
 
+        //TODO: Temporary user
+        val tempUser = User(
+            email = "test@gmail.com",
+            name = "Karl",
+            householdId = "67c4d3c3ef8bcfed9510b18f", // Some example household ID
+            role = UserRole.ADMIN // Optionally set role, defaults to REGULAR if not provided
+        )
 
-        Log.d(TAG, "onCreate")
+        CurrUserRepository.setCurrUser(tempUser)
+
+
+        Log.d(TAG, "Current Household: ${HouseholdRepository.getCurrentHousehold()}\n Current User: ${CurrUserRepository.getCurrUser()}\n Current pets: ${PetRepository.getPets()}")
+
 
         feedingButton = findViewById(R.id.feed_button)
         notifyButton = findViewById(R.id.notify_button)
@@ -190,7 +207,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun retrofitInit() {
-        Log.d("MainActivity", "retrofitInit()")
+        Log.d(TAG, "retrofitInit()")
 
         // Initialize Retrofit instance
         val retrofit = Retrofit.Builder()
@@ -206,18 +223,18 @@ class MainActivity : AppCompatActivity() {
 
         // Initialize the singleton with the instances
         NetworkManager.initialize(apiService, mainRepository)
-
-        // Call the getUser method with a callback to handle the response
-        val email = "test@gmail.com"
-
-        // Make an asynchronous API call
-        mainRepository.getUser(email) { user ->
-            if (user != null) {
-                Log.d("MainActivity", "Fetched user: $user")
-            } else {
-                Log.d("MainActivity", "No user found or error occurred.")
-            }
-        }
+//
+//        // Call the getUser method with a callback to handle the response
+//        val email = "test@gmail.com"
+//
+//        // Make an asynchronous API call
+//        mainRepository.getUser(email) { user ->
+//            if (user != null) {
+//                Log.d(TAG, "retrofitInit: Fetched user: $user")
+//            } else {
+//                Log.d(TAG, "retrofitInit: No user found or error occurred.")
+//            }
+//        }
     }
 
 }

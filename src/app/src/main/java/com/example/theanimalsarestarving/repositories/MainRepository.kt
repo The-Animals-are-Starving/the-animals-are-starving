@@ -1,13 +1,16 @@
 package com.example.theanimalsarestarving.repositories
 
 import android.util.Log
+import com.example.theanimalsarestarving.models.Household
 import com.example.theanimalsarestarving.models.Pet
 import com.example.theanimalsarestarving.models.User
 import com.example.theanimalsarestarving.network.ApiService
 import retrofit2.Call
 import retrofit2.Response
 
+//TODO: MOVE THESE FUNCTIONS OUT OF MAINREPOSITORY
 class MainRepository(private val apiService: ApiService) {
+
 
     fun getAllUsers(householdId: String, callback: (List<User>?) -> Unit) {
         apiService.getAllUsers(householdId).enqueue(object : retrofit2.Callback<List<User>> {
@@ -142,34 +145,5 @@ class MainRepository(private val apiService: ApiService) {
             }
         })
     }
-
-
-
-    /* TODO: UNTESTED
-
-    fun feedPet(petId: ObjectId, callback: (Pet?) -> Unit) {
-        // Always send "fed" as true
-        val fedStatus = mapOf("fed" to true)
-
-        // Make the API call asynchronously
-        apiService.feedPet(petId, fedStatus).enqueue(object : retrofit2.Callback<Pet> {
-            override fun onResponse(call: Call<Pet>, response: Response<Pet>) {
-                if (response.isSuccessful) {
-                    val pet = response.body()
-                    callback(pet)  // Return the pet through the callback
-                    Log.d("MainRepository", "Success: ${response.body()}")  // Log the successful response
-                } else {
-                    Log.e("MainRepository", "Error: ${response.code()} ${response.message()}")  // Log error responses
-                    callback(null)
-                }
-            }
-
-            override fun onFailure(call: Call<Pet>, t: Throwable) {
-                Log.e("MainRepository", "Failure: ${t.message}")  // Log failure due to network or other issues
-                callback(null)
-            }
-        })
-    }
-    */
 
 }

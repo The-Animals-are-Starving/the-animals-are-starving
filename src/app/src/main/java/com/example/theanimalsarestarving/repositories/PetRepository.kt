@@ -11,18 +11,23 @@ import kotlinx.coroutines.withContext
 private const val TAG = "PetRepository"
 
 object PetRepository {
-    var pets: List<Pet> = emptyList()
+    //singleton for current list of pets
+    var currPets: List<Pet> = emptyList()
 
 
-    suspend fun fetchPets(householdId: String) {
+    fun getPets(): List<Pet> {
+        return currPets;
+    }
+
+    suspend fun fetchPetsFromDB(householdId: String) {
         try {
             val response: Response<List<Pet>> = withContext(Dispatchers.IO) {
                 apiService.getPets(householdId).execute() // This is a blocking call
             }
 
             if (response.isSuccessful) {
-                PetRepository.pets = response.body() ?: emptyList()
-                Log.d(TAG, "Fetched and stored pets: ${PetRepository.pets}")
+                PetRepository.currPets = response.body() ?: emptyList()
+                Log.d(TAG, "Fetched and stored pets: ${PetRepository.currPets}")
             } else {
                 Log.e(TAG, "Error: ${response.code()} ${response.message()}")
             }
@@ -40,7 +45,7 @@ object PetRepository {
 
             if (response.isSuccessful) {
                 Log.d(TAG, "feedPet Response: ${response.code()} ${response.message()}")
-                val petToUpdate = PetRepository.pets.find { it.petId.toString() == petId } //TODO: Is this necessary?
+                val petToUpdate = PetRepository.currPets.find { it.petId.toString() == petId } //TODO: Is this necessary?
                 petToUpdate?.let {
                     it.fed = true  // Mark the pet as fed
                     Log.d(TAG, "Pet updated: ${it.name} is now fed.")
@@ -53,5 +58,6 @@ object PetRepository {
             Log.e(TAG, "Error: ${e.message}")
         }
     }
+
 
 }

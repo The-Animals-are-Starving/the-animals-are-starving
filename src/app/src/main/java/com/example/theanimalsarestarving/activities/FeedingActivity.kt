@@ -14,6 +14,8 @@ import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.network.ApiService
 import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.network.NetworkManager
+import com.example.theanimalsarestarving.repositories.CurrUserRepository
+import com.example.theanimalsarestarving.repositories.HouseholdRepository
 import com.example.theanimalsarestarving.repositories.PetRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,6 +40,8 @@ class FeedingActivity : AppCompatActivity() {
         petContainer = findViewById(R.id.petContainer)
 
         checkNetworkManager()
+
+        Log.d(TAG, "Current Household: ${HouseholdRepository.getCurrentHousehold()}\n Current User: ${CurrUserRepository.getCurrUser()}\n Current pets: ${PetRepository.getPets()}")
         loadPets(testHouseholdId)
     }
 
@@ -45,12 +49,12 @@ class FeedingActivity : AppCompatActivity() {
     private fun loadPets(testHouseholdId: String) {
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                PetRepository.fetchPets(testHouseholdId)
-                Log.d("TAG", "Pets Fetched: ${PetRepository.pets}")
+                PetRepository.fetchPetsFromDB(testHouseholdId)
+                Log.d("TAG", "Pets Fetched: ${PetRepository.currPets}")
 
                 val petImage = R.drawable.dog_default_icon
 
-                for (pet in PetRepository.pets) {
+                for (pet in PetRepository.currPets) {
                     Log.d("TAG", "Pet: $pet")
                     loadPet(pet.petId, pet.name, pet.feedingTime, petImage, pet.fed)
                 }

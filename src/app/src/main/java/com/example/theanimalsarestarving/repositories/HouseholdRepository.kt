@@ -9,8 +9,20 @@ import retrofit2.Response
 
 object HouseholdRepository {
 
+    // Singleton for current household
+    private var currentHousehold: Household? = null
+
     private const val TAG = "HouseholdRepository"
 
+    // Getter for current household
+    fun getCurrentHousehold(): Household? {
+        return currentHousehold
+    }
+
+    // Setter for current household
+    fun setCurrentHousehold(household: Household) {
+        currentHousehold = household
+    }
 
     suspend fun createHousehold(requestBody: Map<String, String>) {
         try {
@@ -19,7 +31,12 @@ object HouseholdRepository {
             }
 
             if (response.isSuccessful) {
-                Log.d(TAG, "Response Body: ${response.body().toString()}")
+                val household = response.body()
+                if (household != null) {
+                    // Set the current household in the singleton
+                    setCurrentHousehold(household)
+                    Log.d(TAG, "Response Body: $household")
+                }
             } else {
                 Log.e(TAG, "Failed to create household: ${response.code()} ${response.message()}")
             }
@@ -28,4 +45,3 @@ object HouseholdRepository {
         }
     }
 }
-
