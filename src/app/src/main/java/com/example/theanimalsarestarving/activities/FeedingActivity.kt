@@ -18,7 +18,6 @@ import com.example.theanimalsarestarving.repositories.PetRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.Date
 
 class FeedingActivity : AppCompatActivity() {
 
@@ -65,7 +64,7 @@ class FeedingActivity : AppCompatActivity() {
     private fun loadPet(
         petId: Int,
         petName: String,
-        feedingTime: Date,
+        feedingTime: String,
         petImageResId: Int,
         isFed: Boolean
     ) {

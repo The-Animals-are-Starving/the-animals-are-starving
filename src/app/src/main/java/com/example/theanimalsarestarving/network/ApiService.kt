@@ -26,6 +26,9 @@ interface ApiService {
     @GET("user/{email}")
     fun getUser(@Path("email") email: String): Call<User>  // Single user response
 
+    @POST("pet")
+    fun addPet(@Body pet: Pet): Call<Pet> //Adds pet to db
+
     @GET("pet/household/{householdId}")
     fun getPets(@Path("householdId") householdId: String): Call<List<Pet>>  // Return a list of pets
 

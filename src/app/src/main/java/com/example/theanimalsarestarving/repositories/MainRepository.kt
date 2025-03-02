@@ -96,6 +96,27 @@ class MainRepository(private val apiService: ApiService) {
         })
     }
 
+    fun addPet(pet: Pet, callback: (Pet?) -> Unit) {
+        apiService.addPet(pet).enqueue(object : retrofit2.Callback<Pet> { // this creates the Pet
+            override fun onResponse(call: Call<Pet>, response: Response<Pet>) {
+                if (response.isSuccessful) {
+                    val newPet = response.body()
+                    callback(newPet)  // Return the new Pet through the callback
+                    Log.d("MainRepository", "Pet added successfully: ${response.body()}")
+                } else {
+                    Log.e("MainRepository", "Error: ${response.code()} ${response.message()}")
+                    callback(null)  // Return null in case of failure
+                }
+            }
+
+            override fun onFailure(call: Call<Pet>, t: Throwable) {
+                Log.e("MainRepository", "Failure: ${t.message}")
+                callback(null)  // Return null in case of failure
+            }
+        })
+
+    }
+
     //    @GET("household/{householdId}")
     //    fun getPet(@Path("householdId") householdId: ObjectId): Call<Pet>  // all household pets response
 // Update your method signature to expect a list of pets

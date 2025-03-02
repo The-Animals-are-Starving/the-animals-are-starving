@@ -7,6 +7,6 @@ data class Pet(
     val petId: Int,
     val name: String,
     val householdId: String? = null,
-    val feedingTime: Date,
+    val feedingTime: String,
     var fed: Boolean = false
 )

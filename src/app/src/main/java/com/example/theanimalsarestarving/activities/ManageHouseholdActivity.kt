@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.models.User
+import com.example.theanimalsarestarving.models.Pet
 import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.network.NetworkManager.apiService
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -158,8 +159,9 @@ class ManageHouseholdActivity : AppCompatActivity() {
         builder.setPositiveButton("Add") { _, _ ->
             val petName = nameIn.text.toString().trim().replace("\n", "")
             val petType = typeIn.selectedItem.toString()
+            val petFeedTime = feedingTime.text.toString()
             if (petName.isNotEmpty() || petType != "Select Pet Type") {
-                addPet(petName, container)
+                addPet(petName, petType, petFeedTime ,container)
             } else {
                 alertMessage("Please Enter all Pet Info", container)
             }
@@ -175,42 +177,48 @@ class ManageHouseholdActivity : AppCompatActivity() {
     /**
      * Shows addPet popup for entering pet data
      */
-    private fun addPet(name: String, container: LinearLayout) {
-        if (!petExists(name, container)) {
-            //TODO: modify this for the needs of a pet
+    private fun addPet(name: String, type: String, time: String, container: LinearLayout) {
+        val newPet = Pet(name = name, householdId = testHouseholdId, feedingTime = time, fed = false, petId = name.map{ it.toInt() }.sum())
 
-            val petRow = LinearLayout(this).apply {
-                orientation = LinearLayout.HORIZONTAL
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                )
-                setPadding(10, 10, 10, 10)
+        val repository = MainRepository(apiService)
+        Log.d("AddPet","Attempting to add pet: $newPet")
+        repository.addPet(newPet) { addedPet ->
+            if(addedPet != null) {
+                val petRow = LinearLayout(this).apply {
+                    orientation = LinearLayout.HORIZONTAL
+                    layoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                    )
+                    setPadding(10, 10, 10, 10)
+                }
+                val petNameView = TextView(this).apply {
+                    text = name
+                    layoutParams = LinearLayout.LayoutParams(
+                        0,
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        1f)
+    
+                }
+                val editButton = Button(this).apply {
+                    text = "Edit"
+                    layoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                    )
+                    setOnClickListener { showEditPopup(petNameView) }
+                }
+    
+                petRow.addView(petNameView)
+                petRow.addView(editButton)
+                container.addView(petRow)
+                Log.d("AddPet", "Pet added successfully: $addedPet")
+
+
+            } else {
+                alertMessage("Failed to add pet. Please try again", container)
             }
-            val petNameView = TextView(this).apply {
-                text = name
-                layoutParams = LinearLayout.LayoutParams(
-                    0,
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    1f)
-
-            }
-            val editButton = Button(this).apply {
-                text = "Edit"
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                )
-                setOnClickListener { showEditPopup(petNameView) }
-            }
-
-            petRow.addView(petNameView)
-            petRow.addView(editButton)
-            container.addView(petRow)
-
-            //TODO: Also send pet to backend
-        } else {
-            alertMessage("Pet Already Exists!", container)
+        
         }
     }
 
