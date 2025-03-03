@@ -52,10 +52,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-
-        if (!isUserLoggedIn()) {
-            redirectToLogin()
-        }
+//
+//        if (!isUserLoggedIn()) {
+//            redirectToLogin()
+//        }
 
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)

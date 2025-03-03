@@ -58,8 +58,10 @@ object PetRepository {
             Log.e(TAG, "Error: ${e.message}")
         }
     }
+
     suspend fun addPetToHousehold(requestBody: Map<String, String>): Pet? {
         return try {
+            Log.d(TAG, "Attempting to add pet: $requestBody")
             val response: Response<Pet> = withContext(Dispatchers.IO) {
                 apiService.addPetToHousehold(requestBody)
                     .execute() // Execute the Call synchronously to get a Response

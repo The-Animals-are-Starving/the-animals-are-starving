@@ -1,10 +1,11 @@
 package com.example.theanimalsarestarving.models
 
+import com.google.gson.annotations.SerializedName
 import org.bson.types.ObjectId
 import java.util.Date
 
 data class Pet(
-    val petId: String,
+    @SerializedName("_id") val petId: String,  // Map _id from the backend to petId
     val name: String,
     val householdId: String? = null,
     val feedingTime: String,
