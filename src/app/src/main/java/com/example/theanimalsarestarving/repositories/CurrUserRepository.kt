@@ -13,4 +13,6 @@ object CurrUserRepository {
     fun setCurrUser(user: User){
         currUser = user
     }
+
+
 }

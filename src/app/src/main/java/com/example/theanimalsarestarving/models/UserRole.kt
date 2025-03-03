@@ -15,5 +15,14 @@ enum class UserRole(val roleName: String) {
                 else -> throw IllegalArgumentException("Unknown backend role: $backendRole")
             }
         }
+
+        fun toBackendRole(role: UserRole): String {
+            return when (role) {
+                RESTRICTED -> "restricted"
+                REGULAR -> "normal"
+                ADMIN -> "manager"
+                else -> throw IllegalArgumentException("Unknown role: $role")
+            }
+        }
     }
 }
