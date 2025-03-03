@@ -8,10 +8,12 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.theanimalsarestarving.R
+import com.example.theanimalsarestarving.models.UserRole
 import com.example.theanimalsarestarving.repositories.CurrUserRepository
 import com.example.theanimalsarestarving.repositories.HouseholdRepository
 import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.repositories.PetRepository
+import com.example.theanimalsarestarving.repositories.UserRepository
 import kotlinx.coroutines.launch
 
 class CreateHouseholdActivity : AppCompatActivity() {
@@ -39,7 +41,17 @@ class CreateHouseholdActivity : AppCompatActivity() {
             if (householdName.isNotEmpty()) {
                 createHousehold(householdName)
 
-                //Redirect to MainActivity
+                // Launch a coroutine to call the suspend function
+                lifecycleScope.launch {
+                    val currentUser = CurrUserRepository.getCurrUser()
+                    currentUser?.let {
+                        // Call the suspend function in the coroutine
+                        UserRepository.updateUserRole(it.email, UserRole.ADMIN)
+                        Log.d(TAG, "Role updated for user: ${it.email}")
+                    }
+                }
+
+                // Redirect to MainActivity
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
             }
