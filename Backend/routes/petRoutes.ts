@@ -4,7 +4,7 @@ import { addPet, getPetsByHousehold, updatePetFeedingStatus, removePet } from ".
 const router = express.Router();
 
 router.post("/", addPet);
-router.get("/household/:householdId", getPetsByHousehold);
+router.get("/:householdId", getPetsByHousehold);
 router.patch("/:petId/feed", updatePetFeedingStatus);
 router.delete("/:petId", removePet);
 

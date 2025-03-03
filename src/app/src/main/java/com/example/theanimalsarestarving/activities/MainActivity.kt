@@ -249,36 +249,38 @@ class MainActivity : AppCompatActivity() {
             setPadding(50, 20, 50, 20)
         }
 
-        val users = arrayOf(
-            "U1",
-            "U2"
-        ) //TODO: Get list of users from backend and query if they're restricted
+        val repository = MainRepository(apiService)
+        repository.getAllUsers(HouseholdRepository.getCurrentHousehold().toString()) { users ->
+            if (users != null) {
+                for (user in users) {
+                    val userRow = LinearLayout(this).apply {
+                        orientation = LinearLayout.HORIZONTAL
+                    }
+                    val userNameView = TextView(this).apply {
+                        text = user.name
+                        layoutParams = LinearLayout.LayoutParams(
+                            0,
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            1f
+                        )
 
-        for (user in users) {
-            val userRow = LinearLayout(this).apply {
-                orientation = LinearLayout.HORIZONTAL
-            }
-            val userNameView = TextView(this).apply {
-                text = user
-                layoutParams = LinearLayout.LayoutParams(
-                    0,
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    1f
-                )
+                    }
+                    val notifyUserButton = Button(this).apply {
+                        text = "Notify"
+                        layoutParams = LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                        )
+                        setOnClickListener { sendNotif(user.email) }
+                    }
+                    userRow.addView(userNameView)
+                    userRow.addView(notifyUserButton)
 
+                    layout.addView(userRow)
+                }
+            } else {
+                alertMessage("Failed to fetch users. Please try again.", layout)
             }
-            val notifyUserButton = Button(this).apply {
-                text = "Notify"
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                )
-                setOnClickListener { sendNotif(user) }
-            }
-            userRow.addView(userNameView)
-            userRow.addView(notifyUserButton)
-
-            layout.addView(userRow)
         }
 
 
@@ -287,7 +289,7 @@ class MainActivity : AppCompatActivity() {
         builder.show()
     }
 
-    private fun sendNotif(user: String) { // May pass user as object instead
+    private fun sendNotif(email: String) { // May pass user as object instead
         //TODO: Implement Firebase api call
     }
 
@@ -334,4 +336,11 @@ class MainActivity : AppCompatActivity() {
         finish() // Finish MainActivity so user can't come back by pressing back
     }
 
+    private fun alertMessage(message: String, container: LinearLayout) {
+        val warning = AlertDialog.Builder(this)
+        warning.setTitle("Error")
+        warning.setMessage(message)
+        warning.setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+        warning.show()
+    }
 }
