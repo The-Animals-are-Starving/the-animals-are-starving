@@ -7,13 +7,15 @@ export interface IUser extends Document {
     name: string;
     householdId?: string;
     role: UserRole;
+    FCMToken?: string;
 }
 
 const UserSchema = new Schema<IUser>({
     email: { type: String, required: true, unique: true },
     name: { type: String, required: true },
     householdId: { type: String },
-    role: { type: String, enum: ["restricted", "normal", "manager"], default: "normal" }
+    role: { type: String, enum: ["restricted", "normal", "manager"], default: "normal" },
+    FCMToken: { type: String }
 });
 
 export default mongoose.model<IUser>("User", UserSchema);

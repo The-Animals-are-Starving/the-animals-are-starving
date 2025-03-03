@@ -33,6 +33,8 @@ import com.example.theanimalsarestarving.network.RetrofitClient
 import com.example.theanimalsarestarving.repositories.CurrUserRepository
 import com.example.theanimalsarestarving.repositories.HouseholdRepository
 import com.example.theanimalsarestarving.repositories.PetRepository
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -120,6 +122,21 @@ class MainActivity : AppCompatActivity() {
             updateRoleBasedUI(role)
         })
         userRoleViewModel.setUserRole(UserRole.ADMIN)
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            // Log and toast
+            val msg = getString(R.string.msg_token_fmt, token)
+            Log.d(TAG, msg)
+            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+        })
 
         feedingButton.setOnClickListener {
             val intent = Intent(this, FeedingActivity::class.java)

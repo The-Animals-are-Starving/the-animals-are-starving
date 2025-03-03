@@ -17,4 +17,6 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="limbo_instructions_text">Or have your manager add you to a household and reopen the app to continue.</string>
+
+    <string name="msg_token_fmt">FCM Registration Token: %s</string>
 </resources>

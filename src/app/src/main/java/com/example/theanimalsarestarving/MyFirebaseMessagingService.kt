@@ -5,13 +5,21 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Message
+import android.util.Log
+import android.widget.ArrayAdapter
+import android.widget.LinearLayout
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.example.theanimalsarestarving.activities.MainActivity
+import com.example.theanimalsarestarving.models.UserRole
+import com.example.theanimalsarestarving.network.NetworkManager.apiService
+import com.example.theanimalsarestarving.repositories.CurrUserRepository
+import com.example.theanimalsarestarving.repositories.MainRepository
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -24,6 +32,23 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         if(remoteMessage.getNotification() != null) {
             generateNotification(remoteMessage.notification!!.title!!, remoteMessage.notification!!.body!!)
+        }
+    }
+
+    override fun onNewToken(token: String) {
+        Log.d(TAG, "Refreshed token: $token")
+
+        val email = CurrUserRepository.getCurrUser()?.email.toString()
+
+        val repository = MainRepository(apiService)
+        repository.updateUserToken(email, token) { success ->
+
+            if (success) {
+                Log.d("UpdateUserToken", "User token updated successfully")
+            } else {
+                Log.e("MainRepository", "Error: Failed to update user token")
+            }
+
         }
     }
 

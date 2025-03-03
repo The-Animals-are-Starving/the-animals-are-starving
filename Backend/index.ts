@@ -8,6 +8,7 @@ import logRoutes from "./routes/logRoutes";
 import analyticsRoutes from "./routes/analyticsRoutes";
 import userRoutes from "./routes/userRoutes";
 import petRoutes from "./routes/petRoutes";
+import notificationRoutes from "./routes/notificationRoutes";
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use("/log", logRoutes);
 app.use("/analytics", analyticsRoutes);
 app.use("/user", userRoutes);
 app.use("/pet", petRoutes);
+app.use("/notify", notificationRoutes);
  
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

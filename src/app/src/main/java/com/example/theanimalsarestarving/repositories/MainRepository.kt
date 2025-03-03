@@ -74,6 +74,23 @@ class MainRepository(private val apiService: ApiService) {
         })
     }
 
+    fun updateUserToken(email: String, token: String, callback: (Boolean) -> Unit) {
+        val reqBody = mapOf(
+            "email" to email,
+            "token" to token
+        )
+        apiService.updateUserRole(email, reqBody).enqueue(object : retrofit2.Callback<User> {
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                callback(response.isSuccessful)
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Log.e("MainRepository", "Error updating user token: ${t.message}")
+                callback(false)
+            }
+        })
+    }
+
     fun getAllPets(householdId: String, callback: (List<Pet>?) -> Unit) {
         apiService.getAllPets(householdId).enqueue(object: retrofit2.Callback<List<Pet>> {
             override fun onResponse(call: Call<List<Pet>>, response: Response<List<Pet>>) {
