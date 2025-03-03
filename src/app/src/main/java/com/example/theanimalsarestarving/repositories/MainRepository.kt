@@ -1,9 +1,8 @@
 package com.example.theanimalsarestarving.repositories
 
 import android.util.Log
-import com.example.theanimalsarestarving.models.Household
-import com.example.theanimalsarestarving.models.Pet
 import com.example.theanimalsarestarving.models.User
+import com.example.theanimalsarestarving.models.UserRole
 import com.example.theanimalsarestarving.network.ApiService
 import retrofit2.Call
 import retrofit2.Response
@@ -35,6 +34,7 @@ class MainRepository(private val apiService: ApiService) {
 
 
     fun addUser(user: User, callback: (User?) -> Unit) {
+        user.householdId = HouseholdRepository.getCurrentHousehold().toString()
         apiService.addUser(user).enqueue(object : retrofit2.Callback<User> { // this creates the user
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 if (response.isSuccessful) {
@@ -55,7 +55,28 @@ class MainRepository(private val apiService: ApiService) {
 
     }
 
-    fun addUserToHousehold (user: User, householdId: String, callback: (User?) -> Unit) {
+
+    fun updateUserRole(email: String, newRole: UserRole, callback: (Boolean) -> Unit) {
+        val reqBody = mapOf(
+            "email" to email,
+            "role" to UserRole.toBackendRole(newRole)
+            )
+        apiService.updateUserRole(email, reqBody).enqueue(object : retrofit2.Callback<User> {
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                callback(response.isSuccessful)
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Log.e("MainRepository", "Error updating user role: ${t.message}")
+                callback(false)
+            }
+        })
+    }
+
+
+
+    //Not being used anymore
+    /*fun addUserToHousehold (user: User, householdId: String, callback: (User?) -> Unit) {
         val body = mapOf(
             "email" to user.email,
             "householdId" to householdId
@@ -76,7 +97,7 @@ class MainRepository(private val apiService: ApiService) {
                 callback(null)  // Return null in case of failure
             }
         })
-    }
+    }*/
 
 //    fun getUser(email: String, callback: (User?) -> Unit) {
 //        // Make the API call asynchronously

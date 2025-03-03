@@ -5,7 +5,9 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
+import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
@@ -13,11 +15,10 @@ import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SwitchCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.models.User
-import com.example.theanimalsarestarving.models.Pet
+import com.example.theanimalsarestarving.models.UserRole
 import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.network.NetworkManager.apiService
 import com.example.theanimalsarestarving.repositories.HouseholdRepository
@@ -27,8 +28,7 @@ import com.google.android.material.timepicker.TimeFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.net.HttpURLConnection
-import java.net.URL
+
 private val testHouseholdId: String = "67c2aa855a9890c0f183efa4"
 
 
@@ -111,21 +111,20 @@ class ManageHouseholdActivity : AppCompatActivity() {
         Log.d("AddUser","Attempting to add user: $newUser")
         repository.addUser(newUser) { addedUser -> //adds user
             if (addedUser != null) {
-                val switch = SwitchCompat(this).apply {
-                    text = name
-                    isChecked = false
-                }
-                container.addView(switch)
-                Log.d("AddUser", "User added successfully: $addedUser")
 
-                Log.d("AddUserToHousehold","Attempting to add user to household: $newUser")
+                Log.d("AddUser", "User added successfully: $addedUser")
+                refreshUsers()
+
+
+                // no need to actually add user to household bc household is a param on the user we can just search by household TODO: maybe optimize later
+                /*Log.d("AddUserToHousehold","Attempting to add user to household: $newUser")
                 repository.addUserToHousehold(newUser, newUser.householdId) { includedUser -> //adds user
                     if (includedUser != null) {
                         Log.d("AddUserToHousehold", "User added to household successfully: $includedUser")
                     } else {
                         alertMessage("Failed to add user to household. Please try again.", container)
                     }
-                }
+                }*/
 
             } else {
                 alertMessage("Failed to add user. Please try again.", container)
@@ -301,11 +300,6 @@ class ManageHouseholdActivity : AppCompatActivity() {
         builder.show()
     }
 
-    private fun petExists(name: String, container: LinearLayout): Boolean {
-        //TODO: Check pet list to see if pet already exists in backend
-        return false
-    }
-
     private fun alertMessage(message: String, container: LinearLayout) {
         val warning = AlertDialog.Builder(this)
         warning.setTitle("Error")
@@ -323,18 +317,92 @@ class ManageHouseholdActivity : AppCompatActivity() {
         userListContainer.removeAllViews() // Clear existing user list
 
         val repository = MainRepository(apiService)
-        repository.getAllUsers(testHouseholdId) { users ->
+        repository.getAllUsers(HouseholdRepository.getCurrentHousehold().toString()) { users ->
             if (users != null) {
                 for (user in users) {
-                    val switch = SwitchCompat(this).apply {
-                        text = user.name
-                        isChecked = false
+
+                    val userRow = LinearLayout(this).apply {
+                        orientation = LinearLayout.HORIZONTAL
+                        layoutParams = LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                        )
+                        setPadding(10, 10, 10, 10)
                     }
-                    userListContainer.addView(switch)
+
+                    val nameView = TextView(this).apply {
+                        text = user.name
+                        layoutParams = LinearLayout.LayoutParams(
+                            0,
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            1f
+                        )
+                    }
+
+                    val roleSpinner = Spinner(this)
+                    val roleOptions = arrayOf(UserRole.REGULAR, UserRole.RESTRICTED, UserRole.ADMIN)
+                    val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, roleOptions)
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) // Set dropdown item style
+                    roleSpinner.adapter = adapter
+
+                    // Set current role
+                    roleSpinner.setSelection(roleOptions.indexOf(user.role))
+
+                    roleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                            val selectedRole = roleOptions[position]
+
+                            // Prevent unnecessary API calls if role is unchanged
+                            val role = if (user.role == null) UserRole.REGULAR else UserRole.fromBackendRole(user.role.toString())
+                            if (selectedRole != role) {
+                                roleSpinner.isEnabled = false
+                                updateUserRole(user.email, selectedRole, roleSpinner)
+                            }
+                        }
+
+                        override fun onNothingSelected(parent: AdapterView<*>) {}
+                    }
+
+                    userRow.addView(nameView)
+                    userRow.addView(roleSpinner)
+                    userListContainer.addView(userRow)
+
                 }
             } else {
                 alertMessage("Failed to fetch users. Please try again.", userListContainer)
             }
         }
     }
+
+    private fun updateUserRole(userId: String, newRole: UserRole, spinner: Spinner) {
+        val repository = MainRepository(apiService)
+        Log.d("UpdateUserRole", "Updating user role for user: $userId to role: $newRole")
+
+        // Disable the spinner selection to prevent multiple selections while the request is in progress
+        spinner.isEnabled = false
+
+        // Call the backend to update the user role
+        repository.updateUserRole(userId, newRole) { success ->
+
+            if (success) {
+                Log.d("UpdateUserRole", "User role updated successfully")
+            } else {
+                alertMessage("Failed to update role. Try again.", spinner.parent as LinearLayout)
+                // Reset the spinner to its previous role (in case of failure)
+                val roleOptions = arrayOf(UserRole.REGULAR, UserRole.RESTRICTED, UserRole.ADMIN)
+                val adapter = ArrayAdapter(spinner.context, android.R.layout.simple_spinner_item, roleOptions)
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spinner.adapter = adapter
+
+                val selectedPosition = roleOptions.indexOf(newRole)
+                if (selectedPosition >= 0) {
+                    spinner.setSelection(selectedPosition)
+                }
+            }
+
+            spinner.isEnabled = true
+
+        }
+    }
+
 }
