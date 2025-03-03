@@ -3,6 +3,7 @@ package com.example.theanimalsarestarving.network
 import com.example.theanimalsarestarving.models.Household
 import com.example.theanimalsarestarving.models.Pet
 import com.example.theanimalsarestarving.models.User
+import com.example.theanimalsarestarving.models.UserRole
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
@@ -18,6 +19,13 @@ interface ApiService {
 
     @POST("household/add-user")
     fun addUserToHousehold(@Body body: Map<String, String>): Call<User>
+
+    @PATCH("user/{email}")
+    fun updateRoleManager(
+        @Path("email") email: String,
+        @Body body: Map<String, String> = mapOf("role" to "manager")
+    ): Call<User>
+
 
     @GET("user/{householdId}")
     fun getAllUsers(@Path("householdId") householdId: String): Call<List<User>>
@@ -44,4 +52,6 @@ interface ApiService {
     suspend fun createHousehold(
         @Body body: Map<String, String>
     ): Response<Household>
+
+
 }
