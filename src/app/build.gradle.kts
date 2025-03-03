@@ -85,6 +85,7 @@ dependencies {
     // Firebase stuff
     implementation(libs.firebase.crashlytics)
     implementation(platform("com.google.firebase:firebase-bom:33.10.0"))
+    implementation("com.google.firebase:firebase-analytics-ktx")
     /** we shouldn't need to specify the version since we have the BOM, but it didn't work
      * so I just added it manually; just something to keep note of...
      */
