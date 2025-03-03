@@ -3,19 +3,25 @@ package com.example.theanimalsarestarving.activities
 import com.example.theanimalsarestarving.models.UserRoleViewModel
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import android.Manifest
 import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.activities.FeedingActivity.Companion
 import com.example.theanimalsarestarving.models.User
@@ -48,6 +54,21 @@ class MainActivity : AppCompatActivity() {
     private lateinit var restrictedViewButton: Button
     private lateinit var openCreateHouseholdButton: Button
     private lateinit var logoutButton: Button
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            // can do notifications stuff now
+        } else {
+            Toast.makeText(this, "Notification permission denied.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        askNotificationPermission()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -99,7 +120,6 @@ class MainActivity : AppCompatActivity() {
             updateRoleBasedUI(role)
         })
         userRoleViewModel.setUserRole(UserRole.ADMIN)
-
 
         feedingButton.setOnClickListener {
             val intent = Intent(this, FeedingActivity::class.java)
@@ -167,6 +187,57 @@ class MainActivity : AppCompatActivity() {
                 manageButton.visibility = View.INVISIBLE
                 feedingHistoryButton.visibility = View.INVISIBLE
 
+            }
+        }
+    }
+
+    private fun askNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            when {
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED -> {
+                    // Permission already granted; do nothing.
+                }
+                shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
+                    AlertDialog.Builder(this)
+                        .setTitle("Notification Permission Required")
+                        .setMessage("This feature is critical for alerting you when your pet needs feeding.")
+                        .setPositiveButton("OK") { dialog, _ ->
+                            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                            dialog.dismiss()
+                        }
+                        .setNegativeButton("No thanks") { dialog, _ ->
+                            Toast.makeText(this, "Notifications will be disabled.", Toast.LENGTH_SHORT).show()
+                            dialog.dismiss()
+                        }
+                        .create()
+                        .show()
+                }
+                else -> {
+                    val sharedPref = getSharedPreferences("permission_prefs", MODE_PRIVATE)
+                    val hasRequested = sharedPref.getBoolean("requestedPostNotifications", false)
+                    if (!hasRequested) {
+                        sharedPref.edit().putBoolean("requestedPostNotifications", true).apply()
+                        requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    } else {
+                        AlertDialog.Builder(this)
+                            .setTitle("Enable Notifications in Settings")
+                            .setMessage("Notifications are a key feature. Please go to Settings > Apps > YourApp > Permissions and enable notifications.")
+                            .setPositiveButton("Open Settings") { dialog, _ ->
+                                val intent = Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                intent.data = android.net.Uri.fromParts("package", packageName, null)
+                                startActivity(intent)
+                                dialog.dismiss()
+                            }
+                            .setNegativeButton("Cancel") { dialog, _ ->
+                                dialog.dismiss()
+                            }
+                            .create()
+                            .show()
+                    }
+                }
             }
         }
     }

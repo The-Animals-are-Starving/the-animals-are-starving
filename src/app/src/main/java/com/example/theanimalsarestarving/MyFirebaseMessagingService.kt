@@ -48,7 +48,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setSmallIcon(R.drawable.dog_default_icon)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
-            .setVibrate(longArrayOf(1000,1000,1000,1000))
+            .setVibrate(longArrayOf(2500,1000,2500,1000))
             .setOnlyAlertOnce(true)
 
         builder = builder.setContent(getRemoteView(title, message))
