@@ -200,7 +200,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
                 // Make the network request to add the pet
                 val addedPet = PetRepository.addPetToHousehold(requestBody)
 
-                if (addedPet != null) {
+                if (addedPet) {
                     // Now that the pet is added, update the UI (on the main thread)
                     withContext(Dispatchers.Main) {
                         val petRow = LinearLayout(this@ManageHouseholdActivity).apply {
@@ -233,7 +233,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
                         petRow.addView(petNameView)
                         petRow.addView(editButton)
                         container.addView(petRow)
-                        Log.d("AddPet", "Pet added successfully: $addedPet")
+//                        Log.d(TAG, "Pet added successfully: $addedPet") //TODO: Broken Log
                     }
                 } else {
                     withContext(Dispatchers.Main) {

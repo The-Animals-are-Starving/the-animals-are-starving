@@ -59,8 +59,8 @@ object PetRepository {
         }
     }
 
-    suspend fun addPetToHousehold(requestBody: Map<String, String>): Pet? {
-        return try {
+    suspend fun addPetToHousehold(requestBody: Map<String, String>): Boolean {
+         try {
             Log.d(TAG, "Attempting to add pet: $requestBody")
             val response: Response<Pet> = withContext(Dispatchers.IO) {
                 apiService.addPetToHousehold(requestBody)
@@ -68,21 +68,24 @@ object PetRepository {
             }
 
             if (response.isSuccessful) {
-                val pet = response.body() // Assuming the response is a Pet object
-                if (pet != null) {
-                    Log.d(TAG, "Pet added: $pet")
-                    pet
-                } else {
-                    Log.e(TAG, "Pet is null in the response")
-                    null
-                }
+                Log.d(TAG, "Pet Added")
+                return true
+//                Log.d(TAG, "Response addPetToHousehold: ${response.toString()}")
+//                val pet = response.body() // Assuming the response is a Pet object
+//                if (pet != null) {
+//                    Log.d(TAG, "Pet added: $pet") //TODO: broken log
+//                    pet
+//                } else {
+//                    Log.e(TAG, "Pet is null in the response")
+//                    null
+//                }
             } else {
                 Log.e(TAG, "Failed to add pet: ${response.code()} ${response.message()}")
-                null
+                return false
             }
         } catch (e: Exception) {
             Log.e(TAG, "Error adding pet: ${e.message}")
-            null
+            return false
         }
     }
 
