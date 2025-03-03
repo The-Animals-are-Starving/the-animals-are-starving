@@ -27,6 +27,18 @@ interface ApiService {
         @Body body: Map<String, String> = mapOf("role" to "manager")
     ): Call<User>
 
+    @PATCH("user/{email}")
+    fun updateRoleNormal(
+        @Path("email") email: String,
+        @Body body: Map<String, String> = mapOf("role" to "normal")
+    ): Call<User>
+
+    @PATCH("user/{email}")
+    fun updateRoleRestricted(
+        @Path("email") email: String,
+        @Body body: Map<String, String> = mapOf("role" to "restricted")
+    ): Call<User>
+
 
     @GET("user/{householdId}")
     fun getAllUsers(@Path("householdId") householdId: String): Call<List<User>>
