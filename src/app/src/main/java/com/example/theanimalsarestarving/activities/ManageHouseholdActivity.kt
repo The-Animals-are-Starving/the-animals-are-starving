@@ -19,6 +19,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.models.User
 import com.example.theanimalsarestarving.models.UserRole
+import com.example.theanimalsarestarving.models.Pet
 import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.network.NetworkManager.apiService
 import com.example.theanimalsarestarving.repositories.HouseholdRepository
@@ -33,10 +34,6 @@ private val testHouseholdId: String = "67c2aa855a9890c0f183efa4"
 
 
 class ManageHouseholdActivity : AppCompatActivity() {
-
-    companion object {
-        private const val TAG = "ManageHouseholdActivity"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -187,64 +184,19 @@ class ManageHouseholdActivity : AppCompatActivity() {
      * Shows addPet popup for entering pet data
      */
     private fun addPet(name: String, type: String, time: String, container: LinearLayout) {
-        lifecycleScope.launch {
-            // Construct the request body
-            val requestBody = mapOf(
-                "name" to name,
-                "householdId" to HouseholdRepository.getCurrentHousehold()?._id.toString(),
-                "feedingTime" to time
-            )
+        val newPet = Pet(name = name, feedingTime = time, householdId = HouseholdRepository.getCurrentHousehold()?._id.toString())
 
-            try {
-                // Make the network request to add the pet
-                val addedPet = PetRepository.addPetToHousehold(requestBody)
+        val repository = MainRepository(apiService)
+        Log.d("AddPet", "Attempting to add new pet $newPet")
+        repository.addPet(newPet) { addedPet ->
+            if (addedPet != null) {
+                Log.d("AddPet", "Pet added successfully $newPet")
+                refreshPets()
 
-                if (addedPet) {
-                    // Now that the pet is added, update the UI (on the main thread)
-                    withContext(Dispatchers.Main) {
-                        val petRow = LinearLayout(this@ManageHouseholdActivity).apply {
-                            orientation = LinearLayout.HORIZONTAL
-                            layoutParams = LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.MATCH_PARENT,
-                                LinearLayout.LayoutParams.WRAP_CONTENT
-                            )
-                            setPadding(10, 10, 10, 10)
-                        }
-
-                        val petNameView = TextView(this@ManageHouseholdActivity).apply {
-                            text = name
-                            layoutParams = LinearLayout.LayoutParams(
-                                0,
-                                LinearLayout.LayoutParams.WRAP_CONTENT,
-                                1f
-                            )
-                        }
-
-                        val editButton = Button(this@ManageHouseholdActivity).apply {
-                            text = "Edit"
-                            layoutParams = LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.WRAP_CONTENT,
-                                LinearLayout.LayoutParams.WRAP_CONTENT
-                            )
-                            setOnClickListener { showEditPopup(petNameView) }
-                        }
-
-                        petRow.addView(petNameView)
-                        petRow.addView(editButton)
-                        container.addView(petRow)
-//                        Log.d(TAG, "Pet added successfully: $addedPet") //TODO: Broken Log
-                    }
-                } else {
-                    withContext(Dispatchers.Main) {
-                        alertMessage("Failed to add pet. Please try again", container)
-                    }
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, "Error adding pet: ${e.message}")
-                withContext(Dispatchers.Main) {
-                    alertMessage("Error adding pet. Please try again", container)
-                }
+            } else {
+                alertMessage("Failed to add pet. Please try again.", container)
             }
+
         }
     }
 
@@ -374,6 +326,53 @@ class ManageHouseholdActivity : AppCompatActivity() {
         }
     }
 
+    private fun refreshPets() {
+
+        val petListContainer = findViewById<LinearLayout>(R.id.petListContainer)
+        petListContainer.removeAllViews() 
+
+        val repository = MainRepository(apiService)
+        repository.getAllPets(HouseholdRepository.getCurrentHousehold().toString()) { pets ->
+            if (pets != null) {
+                for (pet in pets) {
+                    val petRow = LinearLayout(this).apply {
+                        orientation = LinearLayout.HORIZONTAL
+                        layoutParams = LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                        )
+                        setPadding(10, 10, 10, 10)
+                    }
+
+                    val petNameView = TextView(this).apply {
+                        text = pet.name
+                        layoutParams = LinearLayout.LayoutParams(
+                            0,
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            1f
+                        )
+                    }
+
+                    val editButton = Button(this).apply {
+                        text = "Edit"
+                        layoutParams = LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                        )
+                        setOnClickListener { showEditPopup(petNameView) }
+                    }
+
+                    petRow.addView(petNameView)
+                    petRow.addView(editButton)
+                    petListContainer.addView(petRow)
+        //                        Log.d(TAG, "Pet added successfully: $addedPet") //TODO: Broken Log
+                }
+            } else {
+                alertMessage("Failed to fetch pets. Please try again.", petListContainer)
+            }
+        }
+    }
+
     private fun updateUserRole(userId: String, newRole: UserRole, spinner: Spinner) {
         val repository = MainRepository(apiService)
         Log.d("UpdateUserRole", "Updating user role for user: $userId to role: $newRole")
@@ -404,5 +403,6 @@ class ManageHouseholdActivity : AppCompatActivity() {
 
         }
     }
+
 
 }

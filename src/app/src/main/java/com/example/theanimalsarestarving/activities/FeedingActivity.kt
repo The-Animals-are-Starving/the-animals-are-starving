@@ -57,7 +57,7 @@ class FeedingActivity : AppCompatActivity() {
 
                 for (pet in PetRepository.currPets) {
                     Log.d("TAG", "Pet: $pet")
-                    loadPet(pet.petId, pet.name, pet.feedingTime, petImage, pet.fed)
+                    loadPet(pet.name, pet.feedingTime, petImage, pet.fed)
                 }
             } catch (e: Exception) {
                 Log.e("TAG", "Error fetching pets: ${e.message}")
@@ -66,7 +66,7 @@ class FeedingActivity : AppCompatActivity() {
     }
 
     // Method to add a pet to the container dynamically
-    private fun loadPet(petId: String, petName: String, feedingTime: String, petImageResId: Int, isFed: Boolean) {
+    private fun loadPet(petName: String, feedingTime: String, petImageResId: Int, isFed: Boolean) {
         Log.d(TAG, "Loading pet: (petName: $petName, feedingTime: feedingTime, isFed: isFed)")
         // Inflate the pet_item layout
         val petLayout = LayoutInflater.from(this).inflate(R.layout.pet_item, petContainer, false)
@@ -104,7 +104,7 @@ class FeedingActivity : AppCompatActivity() {
             // Launch a coroutine in the main scope
             CoroutineScope(Dispatchers.Main).launch {
                 // Call the suspend function feedPet inside the coroutine
-                PetRepository.feedPet(petId.toString())
+                PetRepository.feedPet(petName)
 
                 // Update UI after feeding the pet
                 fedStatusText.text = "FED"

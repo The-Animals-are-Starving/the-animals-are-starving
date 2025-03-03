@@ -22,7 +22,7 @@ object PetRepository {
     suspend fun fetchPetsFromDB(householdId: String) {
         try {
             val response: Response<List<Pet>> = withContext(Dispatchers.IO) {
-                apiService.getPets(householdId).execute() // This is a blocking call
+                apiService.getAllPets(householdId).execute() // This is a blocking call
             }
 
             if (response.isSuccessful) {
@@ -37,15 +37,15 @@ object PetRepository {
     }
 
 
-    suspend fun feedPet(petId: String) {
+    suspend fun feedPet(petName: String) {
         try {
             val response: Response<Pet> = withContext(Dispatchers.IO) {
-                apiService.feedPet(petId).execute() // This is a blocking call
+                apiService.feedPet(petName).execute() // This is a blocking call
             }
 
             if (response.isSuccessful) {
                 Log.d(TAG, "feedPet Response: ${response.code()} ${response.message()}")
-                val petToUpdate = currPets.find { it.petId == petId } //TODO: Is this necessary?
+                val petToUpdate = currPets.find { it.name == petName } //TODO: Is this necessary?
                 petToUpdate?.let {
                     it.fed = true  // Mark the pet as fed
                     Log.d(TAG, "Pet updated: ${it.name} is now fed.")
@@ -59,7 +59,8 @@ object PetRepository {
         }
     }
 
-    suspend fun addPetToHousehold(requestBody: Map<String, String>): Boolean {
+    //removed for the same reason, find pets through household search
+    /*suspend fun addPetToHousehold(requestBody: Map<String, String>): Boolean {
          try {
             Log.d(TAG, "Attempting to add pet: $requestBody")
             val response: Response<Pet> = withContext(Dispatchers.IO) {
@@ -87,6 +88,6 @@ object PetRepository {
             Log.e(TAG, "Error adding pet: ${e.message}")
             return false
         }
-    }
+    }*/
 
 }
