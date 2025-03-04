@@ -22,17 +22,16 @@ object CurrUserRepository {
     suspend fun fetchCurrUser(userEmail: String): User? {
         return try {
             // Switch to the IO dispatcher for the blocking network call
-            val response: Response<List<User>> = withContext(Dispatchers.IO) {
+            val response: Response<User> = withContext(Dispatchers.IO) {
                 apiService.getUser(userEmail).execute() // Blocking call to fetch the user
             }
 
             if (response.isSuccessful) {
-                val users = response.body()
-                if (users.isNullOrEmpty()) {
+                val user = response.body()
+                if (user==null) {
                     Log.d("CurrUserRepository", "User Does Not Exist In DB: $userEmail")
                     null
                 } else {
-                    val user = users.find { it.email == userEmail }
                     Log.d("CurrUserRepository", "Fetched User: $user")
                     user // Return the first user matching the email (or null if not found)
                 }

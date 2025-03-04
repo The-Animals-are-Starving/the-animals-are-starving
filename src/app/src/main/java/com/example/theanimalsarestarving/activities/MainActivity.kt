@@ -91,9 +91,10 @@ class MainActivity : AppCompatActivity() {
 
         val sharedPreferences: SharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
 
-        val email = sharedPreferences.getString("userEmail", "").toString()
+//        val email = sharedPreferences.getString("userEmail", "").toString()
         val name = sharedPreferences.getString("userName", "").toString()
 
+        val email = "test1@gmail.com"
 
         lifecycleScope.launch {
             try {
@@ -104,18 +105,21 @@ class MainActivity : AppCompatActivity() {
                 if (user != null) {
                     CurrUserRepository.setCurrUser(user)
                 } else {
+                    Log.d(TAG, "Unable to find user in db, redirecting to limbo")
                     redirectToLimbo()
                 }
+
+                // This block will now run after the above logic has finished
+                if (CurrUserRepository.getCurrUser()?.householdId == null) {
+                    Log.d(TAG, "current user has a null houseid, redirecting to limbo")
+                    redirectToLimbo()
+                }
+
             } catch (e: Exception) {
                 Log.e(TAG, "Error fetching user: ${e.message}")
             }
         }
 
-        if (CurrUserRepository.getCurrUser()?.householdId == null) {
-            redirectToLimbo()
-        }
-
-        Log.d(TAG, "USER FETCHED: " + CurrUserRepository.getCurrUser().toString())
 
         setContentView(R.layout.activity_main)
 
