@@ -53,7 +53,7 @@ class CreateHouseholdActivity : AppCompatActivity() {
                         if (householdCreated!= null) {
 
                             HouseholdRepository.setCurrentHousehold(householdCreated) //sets current household singleton
-                            UserRepository.addUserToHousehold(householdCreated._id, managerEmail)
+//                            UserRepository.addUserToHousehold(householdCreated._id, managerEmail)  //when you create the household, the current user is automatically added
                             UserRepository.updateUserRole(managerEmail, UserRole.ADMIN)
 
 

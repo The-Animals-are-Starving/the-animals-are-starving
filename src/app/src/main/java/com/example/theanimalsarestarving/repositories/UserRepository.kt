@@ -64,7 +64,7 @@ object UserRepository {
                 }
             } else {
                 // If the request failed, log the error and return null
-                Log.e(TAG, "Failed to add user: ${response.code()} ${response.message()}")
+                Log.e(TAG, "Failed to add user to household: ${response.code()} ${response.message()} ")
                 null
             }
         } catch (e: Exception) {
