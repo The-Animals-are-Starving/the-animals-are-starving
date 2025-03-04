@@ -2,6 +2,11 @@
 
 ## 1. Change History
 <!-- Leave blank for M3 -->
+1. **Reworked Interfaces (2025-03-03)**
+    - Under **Designs Specification**, our old interfaces used java style formatting from frontend communication with the backend, when it should've been REST. These interfaces were converted to REST style. We also had to add/modify/remove some interfaces as we gained a better image of what it would take to actually implement them. There were many interfaces that we needed when coding that we did not account for in milestone 3 that have now been added. We also didn't consider the many different actions needed that become clear once coding.
+
+1. **Added Contributions (2025-03-03)**
+    - Under **Contributions**, added the contributions made towards completing milestone 4.
 
 ## 2. Project Description
 “Did you feed the animals?” “Are the animals fed?” “Anyone feed the animals?” These texts flood the family group chat every day. The kids don’t respond. Mom is still at work. No one knows if the beasts have been fed. The beasts also lie, as though they are starving and wasting away even if they already got dinner. Many task managing apps out there are WAY too complicated. TAS is straightforward app that indicates whether or not your beloved household pet has been fed. To go even further, there will be a minimal mode, for those living with grandparents, small children, or a grumpy father that does not want to be bothered with a new app. Simple, easy, convenient. 
@@ -153,7 +158,7 @@
             - **Main success scenario**:
                 1. User clicks the "Login Button"
                 2. User is directed to the google authentication page
-                3. If the user has an account, their household information is retrieved and they are sent to the main screen. Otherwise, if the user does not have an account, they are added to the database and displayed a welcome message asking them to join or initiate a household.
+                3. If the user has an account, their household information is retrieved and they are sent to the main screen. Otherwise, if the user does not have an account, they are displayed a welcome message asking them to join or initiate a household.
             - **Failure scenario(s)**:
                 - 1b. User is unable to authenticate through Google.
                     - 1b1. The app encounters an issue during the authentication process (e.g., incorrect credentials, server error)
@@ -183,7 +188,37 @@
 1. **User & Household Management Service**
     - **Purpose**: Manages user authentication (via Google API), household creation, and user roles. Ensures that users belong to a household before accessing pets and feeding logs. Separating user management from pet and feeding history ensures scalability and maintainability. Alternative being embedding user management in pet tracking would lead to tight coupling and harder role-based access control.
     - **Interfaces**: 
-        1. ```User login(String email);```
+
+        1. ```POST /user/```
+           - **Body**: { email, name, householdId }
+           - **Purpose**: Adds a new user to a household.
+        
+        1. ```GET /user/:householdId```
+           - **Purpose**: Returns all the users in a household.
+
+        1. ```GET /user/:email```
+           - **Purpose**: Returns user object with specified email.
+
+        1. ```PUT /user/:email```
+           - **Body**: Updates to make to user.
+           - **Purpose**: Updates user object with specified email.
+
+        1. ```DELETE /user/:email```
+           - **Purpose**: Deletes user object with specified email.
+
+        1. ```POST /household/create```
+           - **Body**: { householdName, managerEmail }
+           - **Purpose**: Creates a household with a specified manager.
+
+        1. ```POST /household/add-user```
+           - **Body**: { householdId, email }
+           - **Purpose**: Adds specified email to a household.
+
+        1. ```POST /household/remove-user```
+           - **Body**: { householdId, email }
+           - **Purpose**: Removes specified email to a household.
+
+        <!-- 1. ```User login(String email);```
            - **Purpose**: Verifies email and returns user details.
         
         2. ```Household createHousehold(String householdName, String ownerUserId);```
@@ -196,37 +231,71 @@
            - **Purpose**: Removes a user from a household. Returns `true` on success.
         
         5. ```List<User> getUnrestrictedUsers();```
-           - **Purpose**: Gets all the users that are not in restricted mode.
+           - **Purpose**: Gets all the users that are not in restricted mode. -->
 
 2. **Pet Management Service**
     - **Purpose**: Tracks pets in a household and their feeding schedules. Keeping pet data separate from user management allows for future expansions like health tracking. Merging it with user management would complicate database queries.
     - **Interfaces**: 
-        1. ```Pet addPet(String householdId, String petName, String species, String feedingSchedule);```
+        1. ```POST /pet/```
+           - **Body**: { name, householdId, feedingTime }
+           - **Purpose**: Adds a new pet to a household with a specified name and feeding time.
+
+        1. ```GET /pet/:householdId```
+           - **Purpose**: Returns all the pets in a household.
+
+        1. ```PUT /pet/:petId/feed```
+           - **Body**: { fed }
+           - **Purpose**: Updates the status of a pet on if it's fed or not.
+
+        1. ```DELETE /pet/:petId```
+           - **Purpose**: Removes a pet from a household.
+
+        <!-- 1. ```Pet addPet(String householdId, String petName, String species, String feedingSchedule);```
            - **Purpose**: Adds a pet to a household.
         
         2. ```boolean removePet(String petId);```
            - **Purpose**: Removes a pet from the system. Returns `true` on success.
         
         3. ```List<Pet> getPetsByHousehold(String householdId);```
-           - **Purpose**: Retrieves all pets for a given household.
+           - **Purpose**: Retrieves all pets for a given household. -->
 
 3. **Logging**
     - **Purpose**: Records and retrieves feeding history, ensuring users can check when and who last fed a pet. Keeping a dedicated feeding log service prevents bloating the pet management component. Embedding it in pet service would create unnecessary dependencies between pet data and feeding logs, and may lead to complications like calculations tied to the household rather than a specific pet.
-    - **Interfaces**: 
-        1. Pet addPet(String householdId, String petName, String species, String feedingSchedule);
+    - **Interfaces**:
+        1. ```POST /log/```
+            - **Body**: { petId, userEmail, amount, householdId }
+            - **Purpose**: Logs the fact that *user* fed *pet*, *amount* of food for each household.
+        1. ```GET /log/pet/:petId```
+            - **Purpose**: Gets the feeding history for a given pet.
+        1. ```GET /log/household/:householdId```
+            - **Purpose**: Gets the feeding history for a given household.
+        1. ```GET /log/user/:userEmail```
+            - **Purpose**: Gets the feeding history for a given user.
+        1. ```GET /analytics/rankings/:householdId```
+            - **Purpose**: Gets the rankings of users based off feeding contributions for a given household.
+        1. ```POST /analytics/feeding-cost/:householdId```
+            - **Body**: { pricePerKg }
+            - **Purpose**: Uses feeding logs to predict the cost to feed the animals for the next month.
+        1. ```GET /analytics/anomalies/:householdId```
+            - **Purpose**: Detects anomalies in feeding behavior.
+        
+        <!-- 1. Pet addPet(String householdId, String petName, String species, String feedingSchedule);
             - **Purpose**: Adds a pet to a household.
         2. boolean removePet(String petId);
             - **Purpose**: Removes a pet from a household.
        3. List<Pet> getPetsByHousehold(String householdId);
-            - **Purpose**:  Retrieves all pets for a given household.
+            - **Purpose**:  Retrieves all pets for a given household. -->
 
 4. **Notifications**
     - **Purpose**: Sends reminders to users when pets need to be fed and alerts them when a feeding is logged, also users to send requests to other users. Implementing notifications with users directly would bloat the user component and unnecessarily tie mass notifications to individual users.
     - **Interfaces**: 
-         1. sendNotifcations(message, recipients[])
+        1. ```POST /notify/:email```
+           - **Purpose**: Notifies the user with specified email address to feed the animals.
+
+         <!-- 1. sendNotifcations(message, recipients[])
             - **Purpose**: interacts with the notification service. Sent by application
         2. sendNotifcations(message, senderID, recipients[])
-            - **Purpose**: interacts with the notification service. Used when sending request to feed.
+            - **Purpose**: interacts with the notification service. Used when sending request to feed. -->
 
 
 
@@ -389,7 +458,11 @@ The app will support multiple languages, clear navigation, large readable fonts,
         ```
 
 ## 5. Contributions
+1. **Milestone 3**
 - Tjammie Ko: Sequence Diagrams, Formatting, Other (14h)
 - Dean McCarthy: Functional Requirements, Actors, Other (7h)
 - Aidan Cotsakis: Presentation, Reflections, Other (8h)
 - Matthew Fung: MD File, Functional Requirements, Dependency Diagram, Other (16h)
+
+2. **Milestone 4**
+- 
