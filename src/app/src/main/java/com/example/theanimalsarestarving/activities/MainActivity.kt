@@ -75,10 +75,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-//
-//        if (!isUserLoggedIn()) {
-//            redirectToLogin()
-//        }
+
+        if (!isUserLoggedIn()) {
+            redirectToLogin()
+        }
 
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
@@ -87,16 +87,20 @@ class MainActivity : AppCompatActivity() {
         retrofitInit()
 
         //TODO: Temporary user
-        val tempUser = User(
-            email = "test@gmail.com",
-            name = "Karl",
-            householdId = "67c4d3c3ef8bcfed9510b18f", // Some example household ID
-            role = UserRole.ADMIN // Optionally set role, defaults to REGULAR if not provided
+        val sharedPreferences: SharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
+
+        val email = sharedPreferences.getString("userEmail", "").toString()
+        val name = sharedPreferences.getString("userName", "").toString()
+        val houseId = HouseholdRepository.getCurrentHousehold()?._id.toString()
+
+        val currUser = User(
+            email = email,
+            name = name,
+            householdId = houseId, // Some example household ID
+            role = UserRole.REGULAR // Optionally set role, defaults to REGULAR if not provided
         )
 
-        CurrUserRepository.setCurrUser(tempUser)
-
-
+        CurrUserRepository.setCurrUser(currUser)
         Log.d(TAG, "Current Household: ${HouseholdRepository.getCurrentHousehold()}\n Current User: ${CurrUserRepository.getCurrUser()}\n Current pets: ${PetRepository.getPets()}")
 
 
