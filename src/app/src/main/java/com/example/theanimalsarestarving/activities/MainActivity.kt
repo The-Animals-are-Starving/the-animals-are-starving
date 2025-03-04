@@ -94,6 +94,7 @@ class MainActivity : AppCompatActivity() {
 //        val email = sharedPreferences.getString("userEmail", "").toString()
         val name = sharedPreferences.getString("userName", "").toString()
 
+        //TODO: !!FROM TJ!! REMOVE THIS HARD CODED EMAIL IF YOU WANT TO TEST
         val email = "test1234@gmail.com"
 
         lifecycleScope.launch {
@@ -114,7 +115,7 @@ class MainActivity : AppCompatActivity() {
                     Log.d(TAG, "current user has a null or empty houseid, redirecting to limbo")
                     redirectToLimbo()
                 } else {
-                    //set current household TODO: FETCH CURR HOUSEHOLD
+                    //set current household TODO: FETCH CURR HOUSEHOLD - do this later if necessary
                     val currHousehold = Household(
                         _id = CurrUserRepository.getCurrUser()?.householdId.toString(),
                         name = "",

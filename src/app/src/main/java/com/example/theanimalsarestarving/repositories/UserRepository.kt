@@ -41,6 +41,31 @@ object UserRepository {
         }
     }
 
+    suspend fun updateUserHouseholdId(email: String,householdId: String) {
+        val requestBody = mapOf(
+            "email" to email,
+            "householdId" to householdId
+        )
+        try {
+            Log.d(TAG, "Attempting to UPDATE user's household ID with requestBody: $requestBody")
+
+            // Make the network request asynchronously using enqueue on Dispatchers.IO
+            val response = withContext(Dispatchers.IO) {
+                // Execute the request synchronously using execute()
+                apiService.updateUserHouseholdId(email, requestBody).execute()
+            }
+
+            if (response.isSuccessful) {
+                    Log.d(TAG, "User updated successfully: ${response.body()}")
+
+            } else {
+                // If the request failed, log the error and return null
+                Log.e(TAG, "Failed to updated user's householdId: ${response.code()} ${response.message()} ")
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error updating user's householdId: ${e.message}")
+        }
+    }
 
     suspend fun addUserToHousehold(householdId: String, email: String): User? {
         val requestBody = mapOf(

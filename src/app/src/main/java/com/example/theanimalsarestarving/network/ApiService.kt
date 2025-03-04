@@ -50,6 +50,13 @@ interface ApiService {
     ): Call<User>
 
 
+    @PATCH("user/update-household/{email}")
+    fun updateUserHouseholdId(
+        @Path("email") email: String,
+        @Body body: Map<String, String>
+    ): Call<User>
+
+
     @GET("user/{householdId}")
     fun getAllUsers(@Path("householdId") householdId: String): Call<List<User>>
 
