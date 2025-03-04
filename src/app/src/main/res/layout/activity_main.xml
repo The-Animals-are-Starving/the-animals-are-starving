@@ -1,151 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/main_scrollview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fontFamily="sans-serif-smallcaps"
-    android:gravity="center"
-    android:orientation="vertical"
     android:padding="16dp"
     tools:context=".activities.MainActivity">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:lineSpacingExtra="-30sp"
-        android:text="The Animals Are Starving!"
-        android:textAlignment="center"
-        android:textAppearance="@style/TitleTextStyle" />
-
-    <TextView
-        android:id="@+id/subtitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="Home Page"
-        android:textAppearance="@style/SubtitleTextStyle" />
-
-    <Button
-        android:id="@+id/feed_button"
-        android:layout_width="256dp"
-        android:layout_height="100dp"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/base_green"
-        android:fontFamily="sans-serif-medium"
-        android:text="Feed Da Dawg"
-        android:textSize="19sp" />
-
-    <Button
-        android:id="@+id/notify_button"
-        android:layout_width="256dp"
-        android:layout_height="100dp"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/dark_green"
-        android:fontFamily="sans-serif-medium"
-        android:text="Notify Other Users"
-        android:textSize="19sp"
-        android:visibility="visible" />
-
-    <Button
-        android:id="@+id/manage_button"
-        android:layout_width="256dp"
-        android:layout_height="100dp"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/base_blue"
-        android:fontFamily="sans-serif-medium"
-        android:text="Manage Household"
-        android:textSize="19sp"
-        android:visibility="visible" />
-
-    <Button
-        android:id="@+id/feeding_history_button"
-        android:layout_width="256dp"
-        android:layout_height="100dp"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/dark_blue"
-        android:fontFamily="sans-serif-medium"
-        android:text="Feeding History"
-        android:textSize="19sp"
-        android:visibility="visible" />
-
+    <!-- LinearLayout inside ScrollView -->
     <LinearLayout
-        style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="5dp"
-        android:orientation="horizontal"
-        android:padding="5dp">
+        android:orientation="vertical"
+        android:gravity="center"
+        android:fontFamily="sans-serif-smallcaps">
 
-        <Button
-            android:id="@+id/admin_view_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/grey"
-            android:fontFamily="sans-serif-medium"
-            android:text="Admin View"
-            android:textSize="15sp" />
-
-        <Button
-            android:id="@+id/regular_view_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/grey"
-            android:fontFamily="sans-serif-medium"
-            android:text="Regular View"
-            android:textSize="15sp" />
-
-        <Button
-            android:id="@+id/restricted_view_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/grey"
-            android:fontFamily="sans-serif-medium"
-            android:text="Restricted View"
-            android:textSize="15sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        style="?android:attr/buttonBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="5dp"
-        android:orientation="horizontal"
-        android:padding="5dp">
-
-        <Button
-            android:id="@+id/openCreateHouseholdButton"
+        <TextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/grey"
-            android:fontFamily="sans-serif-medium"
-            android:text="View Create Household Activity"
-            android:textSize="15sp" />
+            android:lineSpacingExtra="-30sp"
+            android:text="The Animals Are Starving!"
+            android:textAlignment="center"
+            android:textAppearance="@style/TitleTextStyle" />
 
-        <Button
-            android:id="@+id/logoutButton"
-            android:layout_width="245dp"
+        <TextView
+            android:id="@+id/subtitle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/grey"
-            android:fontFamily="sans-serif-medium"
-            android:text="Logout"
-            android:textSize="15sp" />
-    </LinearLayout>
+            android:text="Home Page"
+            android:textAppearance="@style/SubtitleTextStyle" />
 
-</LinearLayout>
+        <Button
+            android:id="@+id/feed_button"
+            android:layout_width="256dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/base_green"
+            android:fontFamily="sans-serif-medium"
+            android:text="Feed Da Dawg"
+            android:textSize="19sp" />
+
+        <Button
+            android:id="@+id/notify_button"
+            android:layout_width="256dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/dark_green"
+            android:fontFamily="sans-serif-medium"
+            android:text="Notify Other Users"
+            android:textSize="19sp"
+            android:visibility="visible" />
+
+        <Button
+            android:id="@+id/manage_button"
+            android:layout_width="256dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/base_blue"
+            android:fontFamily="sans-serif-medium"
+            android:text="Manage Household"
+            android:textSize="19sp"
+            android:visibility="visible" />
+
+        <Button
+            android:id="@+id/feeding_history_button"
+            android:layout_width="256dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/dark_blue"
+            android:fontFamily="sans-serif-medium"
+            android:text="Feeding History"
+            android:textSize="19sp"
+            android:visibility="visible" />
+
+        <LinearLayout
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <Button
+                android:id="@+id/admin_view_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/grey"
+                android:fontFamily="sans-serif-medium"
+                android:text="Admin View"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/regular_view_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/grey"
+                android:fontFamily="sans-serif-medium"
+                android:text="Regular View"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/restricted_view_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/grey"
+                android:fontFamily="sans-serif-medium"
+                android:text="Restricted View"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <Button
+                android:id="@+id/openCreateHouseholdButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/grey"
+                android:fontFamily="sans-serif-medium"
+                android:text="View Create Household Activity"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/logoutButton"
+                android:layout_width="245dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/grey"
+                android:fontFamily="sans-serif-medium"
+                android:text="Logout"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
