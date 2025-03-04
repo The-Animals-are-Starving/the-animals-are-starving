@@ -1,4 +1,5 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,8 +10,7 @@
         android:id="@+id/petLayoutContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        android:fillViewport="true">  <!-- Ensures content takes full height -->
 
         <LinearLayout
             android:id="@+id/petContainer"
@@ -22,17 +22,28 @@
             <TextView
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
-                android:layout_height="73dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/paw_font"
                 android:letterSpacing="0.15"
-                android:lineSpacingExtra="-30sp"
                 android:text="Previous Feedings"
                 android:textAlignment="center"
                 android:textColor="@color/subtitle_color"
                 android:textSize="30sp"
                 android:textStyle="bold" />
+
+            <!-- Box for Feedings Logs -->
+            <LinearLayout
+                android:id="@+id/feedingsLogBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_marginBottom="16dp">
+
+
+            </LinearLayout>
 
         </LinearLayout>
 
