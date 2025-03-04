@@ -8,7 +8,9 @@
     <ScrollView
         android:id="@+id/petLayoutContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <LinearLayout
             android:id="@+id/petContainer"
@@ -18,19 +20,19 @@
             android:paddingTop="16dp">
 
             <TextView
+                android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="73dp"
                 android:layout_gravity="center_horizontal"
-                android:text="Previous Feedings"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                android:id="@+id/title"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/paw_font"
+                android:letterSpacing="0.15"
+                android:lineSpacingExtra="-30sp"
+                android:text="Previous Feedings"
                 android:textAlignment="center"
                 android:textColor="@color/subtitle_color"
-                android:letterSpacing="0.15"
-                android:lineSpacingExtra="-30sp" />
+                android:textSize="30sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
