@@ -75,10 +75,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-//
-//        if (!isUserLoggedIn()) {
-//            redirectToLogin()
-//        }
+
+        if (!isUserLoggedIn()) {
+            redirectToLogin()
+        }
 
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
@@ -87,16 +87,20 @@ class MainActivity : AppCompatActivity() {
         retrofitInit()
 
         //TODO: Temporary user
-        val tempUser = User(
-            email = "test@gmail.com",
-            name = "Karl",
-            householdId = "67c4d3c3ef8bcfed9510b18f", // Some example household ID
-            role = UserRole.ADMIN // Optionally set role, defaults to REGULAR if not provided
+        val sharedPreferences: SharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
+
+        val email = sharedPreferences.getString("userEmail", "").toString()
+        val name = sharedPreferences.getString("userName", "").toString()
+        val houseId = HouseholdRepository.getCurrentHousehold()?._id.toString()
+
+        val currUser = User(
+            email = email,
+            name = name,
+            householdId = houseId, // Some example household ID
+            role = UserRole.REGULAR // Optionally set role, defaults to REGULAR if not provided
         )
 
-        CurrUserRepository.setCurrUser(tempUser)
-
-
+        CurrUserRepository.setCurrUser(currUser)
         Log.d(TAG, "Current Household: ${HouseholdRepository.getCurrentHousehold()}\n Current User: ${CurrUserRepository.getCurrUser()}\n Current pets: ${PetRepository.getPets()}")
 
 
@@ -269,32 +273,42 @@ class MainActivity : AppCompatActivity() {
         val repository = MainRepository(apiService)
         repository.getAllUsers(HouseholdRepository.getCurrentHousehold().toString()) { users ->
             if (users != null) {
-                for (user in users) {
-                    val userRow = LinearLayout(this).apply {
-                        orientation = LinearLayout.HORIZONTAL
+                if (users.isEmpty()) { //not working atm dunno why
+                    val noticeText = "No Users in Household"
+                    val noticeView = TextView(this).apply {
+                        text = noticeText
+                        textSize = 20f
                     }
-                    val userNameView = TextView(this).apply {
-                        text = user.name
-                        layoutParams = LinearLayout.LayoutParams(
-                            0,
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
-                            1f
-                        )
+                    layout.addView(noticeView)
+                } else {
+                    for (user in users) {
+                        val userRow = LinearLayout(this).apply {
+                            orientation = LinearLayout.HORIZONTAL
+                        }
+                        val userNameView = TextView(this).apply {
+                            text = user.name
+                            layoutParams = LinearLayout.LayoutParams(
+                                0,
+                                LinearLayout.LayoutParams.WRAP_CONTENT,
+                                1f
+                            )
 
-                    }
-                    val notifyUserButton = Button(this).apply {
-                        text = "Notify"
-                        layoutParams = LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT
-                        )
-                        setOnClickListener { sendNotif(user.email) }
-                    }
-                    userRow.addView(userNameView)
-                    userRow.addView(notifyUserButton)
+                        }
+                        val notifyUserButton = Button(this).apply {
+                            text = "Notify"
+                            layoutParams = LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.WRAP_CONTENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT
+                            )
+                            setOnClickListener { sendNotif(user.email) }
+                        }
+                        userRow.addView(userNameView)
+                        userRow.addView(notifyUserButton)
 
-                    layout.addView(userRow)
+                        layout.addView(userRow)
+                    }
                 }
+
             } else {
                 alertMessage("Failed to fetch users. Please try again.", layout)
             }
