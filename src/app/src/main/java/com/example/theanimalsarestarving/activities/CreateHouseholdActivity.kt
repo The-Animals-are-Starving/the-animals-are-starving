@@ -56,14 +56,16 @@ class CreateHouseholdActivity : AppCompatActivity() {
                         setCurrentHousehold()
 
                         // Get current user and update role
-                        val currentUser = CurrUserRepository.getCurrUser()
-                        currentUser?.let {
-                            UserRepository.updateUserRole(it.email, UserRole.ADMIN)
-                            Log.d(TAG, "Role updated for user: ${it.email}")
-                        }
+//                        val currentUser = CurrUserRepository.getCurrUser()
+//                        currentUser?.let {
+//                            UserRepository.updateUserRole(it.email, UserRole.ADMIN)
+//                            Log.d(TAG, "Role updated for user: ${it.email}")
+//                        }
 
                         // Delay for 1 second before adding user
 
+
+                        delay(1000)
                         // Now safely add the user
                         addUser(managerName, managerEmail)
 
@@ -91,7 +93,6 @@ class CreateHouseholdActivity : AppCompatActivity() {
                 HouseholdRepository.createHousehold(requestBody)
 
                 // After creating the household, set the current household
-                setCurrentHousehold()
             } catch (e: Exception) {
                 Log.e(TAG, "Error creating household: ${e.message}")
             }
@@ -113,12 +114,14 @@ class CreateHouseholdActivity : AppCompatActivity() {
     private fun addUser(name: String, email: String) {
         Log.d(TAG, "HAHAHHAHAHHA? ")
 
-        val newUser = User(name = name, email = email, householdId = HouseholdRepository.getCurrentHousehold()?._id.toString())
+        val newUser = User(name = name, email = email, householdId = "HOUSE")
+
 
         Log.d(TAG, "HAHAHHAHAHHA: " + newUser)
 
         val repository = MainRepository(apiService)
         Log.d("AddUser","Attempting to add user: $newUser")
+
         repository.addUser(newUser) { addedUser -> //adds user
             if (addedUser != null) {
 

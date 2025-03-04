@@ -36,7 +36,7 @@ class MainRepository(private val apiService: ApiService) {
 
 
     fun addUser(user: User, callback: (User?) -> Unit) {
-        user.householdId = HouseholdRepository.getCurrentHousehold().toString()
+        user.householdId = HouseholdRepository.getCurrentHousehold()?._id.toString()
         apiService.addUser(user).enqueue(object : retrofit2.Callback<User> { // this creates the user
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 if (response.isSuccessful) {

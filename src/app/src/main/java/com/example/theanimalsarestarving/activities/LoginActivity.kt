@@ -45,6 +45,9 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        skipLogin()
+
         setContentView(R.layout.activity_login)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -90,6 +93,17 @@ class LoginActivity : AppCompatActivity() {
         Log.e("Error", "An error occurred: ${exception.message}")
         // You can also show a Toast or handle the failure differently
         Toast.makeText(this, "Error getting credential", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun skipLogin() {
+        // Save login state
+        val sharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
+        sharedPreferences.edit().putBoolean("isLoggedIn", true).putString("userEmail", "a@b.c").putString("userName", "John").apply()
+
+        // Navigate to MainActivity after login
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish() // Finish LoginActivity
     }
 
     private fun handleSignIn(result: GetCredentialResponse) {
