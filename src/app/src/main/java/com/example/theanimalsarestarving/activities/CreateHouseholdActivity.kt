@@ -1,6 +1,7 @@
 package com.example.theanimalsarestarving.activities
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -35,11 +36,13 @@ class CreateHouseholdActivity : AppCompatActivity() {
         createButton = findViewById(R.id.create_button)
 
         createButton.setOnClickListener {
+            val sharedPreferences: SharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
+            val managerEmail = sharedPreferences.getString("userEmail", "").toString()
             val householdName = userInputHouseholdName.text.toString().trim()
 
             // Ensure the household name is not empty
             if (householdName.isNotEmpty()) {
-                createHousehold(householdName)
+                createHousehold(householdName, managerEmail)
 
                 // Launch a coroutine to call the suspend function
                 lifecycleScope.launch {
@@ -58,10 +61,10 @@ class CreateHouseholdActivity : AppCompatActivity() {
         }
     }
 
-    private fun createHousehold(householdName: String) {
+    private fun createHousehold(householdName: String, managerEmail: String) {
         val requestBody = mapOf(
             "householdName" to householdName,
-            "managerEmail" to CurrUserRepository.getCurrUser()?.email.toString()
+            "managerEmail" to managerEmail
         )
 
         // Make the network request using a coroutine

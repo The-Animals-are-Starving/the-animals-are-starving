@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post("/", createUser);
 router.get("/:householdId", getAllUsers);
-router.get("/:email", getUser);
+router.get("/specific-user/:email", getUser);
 router.patch("/:email", updateUserRole);
 router.delete("/:email", deleteUser);
 

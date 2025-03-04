@@ -48,7 +48,7 @@ interface ApiService {
     @GET("user/{householdId}")
     fun getAllUsers(@Path("householdId") householdId: String): Call<List<User>>
 
-    @GET("user/{email}")
+    @GET("user/specific-user/{email}")
     fun getUser(@Path("email") email: String): Call<User>  // Single user response
 
     @PATCH("user/{email}")
