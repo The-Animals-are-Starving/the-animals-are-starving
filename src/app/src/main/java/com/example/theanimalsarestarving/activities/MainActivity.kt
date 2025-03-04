@@ -115,6 +115,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        if (CurrUserRepository.getCurrUser()?.householdId == null) {
+            redirectToLimbo()
+        }
+
         Log.d(TAG, "USER FETCHED: " + CurrUserRepository.getCurrUser().toString())
 
         setContentView(R.layout.activity_main)
