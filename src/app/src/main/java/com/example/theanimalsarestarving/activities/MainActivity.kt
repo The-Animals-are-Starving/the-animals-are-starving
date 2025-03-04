@@ -273,32 +273,42 @@ class MainActivity : AppCompatActivity() {
         val repository = MainRepository(apiService)
         repository.getAllUsers(HouseholdRepository.getCurrentHousehold().toString()) { users ->
             if (users != null) {
-                for (user in users) {
-                    val userRow = LinearLayout(this).apply {
-                        orientation = LinearLayout.HORIZONTAL
+                if (users.isEmpty()) { //not working atm dunno why
+                    val noticeText = "No Users in Household"
+                    val noticeView = TextView(this).apply {
+                        text = noticeText
+                        textSize = 20f
                     }
-                    val userNameView = TextView(this).apply {
-                        text = user.name
-                        layoutParams = LinearLayout.LayoutParams(
-                            0,
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
-                            1f
-                        )
+                    layout.addView(noticeView)
+                } else {
+                    for (user in users) {
+                        val userRow = LinearLayout(this).apply {
+                            orientation = LinearLayout.HORIZONTAL
+                        }
+                        val userNameView = TextView(this).apply {
+                            text = user.name
+                            layoutParams = LinearLayout.LayoutParams(
+                                0,
+                                LinearLayout.LayoutParams.WRAP_CONTENT,
+                                1f
+                            )
 
-                    }
-                    val notifyUserButton = Button(this).apply {
-                        text = "Notify"
-                        layoutParams = LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT
-                        )
-                        setOnClickListener { sendNotif(user.email) }
-                    }
-                    userRow.addView(userNameView)
-                    userRow.addView(notifyUserButton)
+                        }
+                        val notifyUserButton = Button(this).apply {
+                            text = "Notify"
+                            layoutParams = LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.WRAP_CONTENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT
+                            )
+                            setOnClickListener { sendNotif(user.email) }
+                        }
+                        userRow.addView(userNameView)
+                        userRow.addView(notifyUserButton)
 
-                    layout.addView(userRow)
+                        layout.addView(userRow)
+                    }
                 }
+
             } else {
                 alertMessage("Failed to fetch users. Please try again.", layout)
             }
