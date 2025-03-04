@@ -25,6 +25,7 @@ import android.Manifest
 import androidx.lifecycle.lifecycleScope
 import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.activities.FeedingActivity.Companion
+import com.example.theanimalsarestarving.models.Household
 import com.example.theanimalsarestarving.models.User
 import com.example.theanimalsarestarving.models.UserRole
 import com.example.theanimalsarestarving.network.ApiService
@@ -123,7 +124,15 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        //TODO: Temporary user
+        val currhousehold = Household(
+            _id = CurrUserRepository.getCurrUser()?.householdId.toString(),
+            name = "",
+            managerId = "",
+            pets = emptyList(),
+            users = emptyList()
+        )
+
+        HouseholdRepository.setCurrentHousehold(currhousehold)
 
         Log.d(TAG, "Current Household: ${HouseholdRepository.getCurrentHousehold()}\n Current User: ${CurrUserRepository.getCurrUser()}\n Current pets: ${PetRepository.getPets()}")
 

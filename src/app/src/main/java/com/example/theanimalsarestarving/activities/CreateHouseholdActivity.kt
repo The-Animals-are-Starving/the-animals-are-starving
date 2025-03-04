@@ -6,16 +6,20 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.theanimalsarestarving.R
+import com.example.theanimalsarestarving.models.User
 import com.example.theanimalsarestarving.models.UserRole
+import com.example.theanimalsarestarving.network.NetworkManager.apiService
 import com.example.theanimalsarestarving.repositories.CurrUserRepository
 import com.example.theanimalsarestarving.repositories.HouseholdRepository
 import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.repositories.PetRepository
 import com.example.theanimalsarestarving.repositories.UserRepository
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 
 class CreateHouseholdActivity : AppCompatActivity() {
 
@@ -36,31 +40,44 @@ class CreateHouseholdActivity : AppCompatActivity() {
         createButton = findViewById(R.id.create_button)
 
         createButton.setOnClickListener {
-            val sharedPreferences: SharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
-            val managerEmail = sharedPreferences.getString("userEmail", "").toString()
-            val householdName = userInputHouseholdName.text.toString().trim()
+            lifecycleScope.launch {
+                val sharedPreferences: SharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
+                val managerEmail = sharedPreferences.getString("userEmail", "").toString()
+                val managerName = sharedPreferences.getString("userName", "").toString()
+                val householdName = userInputHouseholdName.text.toString().trim()
 
-            // Ensure the household name is not empty
-            if (householdName.isNotEmpty()) {
-                createHousehold(householdName, managerEmail)
+                // Ensure the household name is not empty
+                if (householdName.isNotEmpty()) {
+                    try {
+                        // Create household and wait for completion
+                        createHousehold(householdName, managerEmail)
 
-                // Launch a coroutine to call the suspend function
-                lifecycleScope.launch {
-                    val currentUser = CurrUserRepository.getCurrUser()
-                    currentUser?.let {
-                        // Call the suspend function in the coroutine
-                        UserRepository.updateUserRole(it.email, UserRole.ADMIN)
-                        Log.d(TAG, "Role updated for user: ${it.email}")
+                        // Ensure household is set before proceeding
+                        setCurrentHousehold()
+
+                        // Get current user and update role
+                        val currentUser = CurrUserRepository.getCurrUser()
+                        currentUser?.let {
+                            UserRepository.updateUserRole(it.email, UserRole.ADMIN)
+                            Log.d(TAG, "Role updated for user: ${it.email}")
+                        }
+
+                        // Delay for 1 second before adding user
+
+                        // Now safely add the user
+                        addUser(managerName, managerEmail)
+
+                        // Move to the MainActivity
+                        val intent = Intent(this@CreateHouseholdActivity, MainActivity::class.java)
+                        startActivity(intent)
+
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Error during household creation or user update: ${e.message}")
                     }
                 }
-
-                // Redirect to MainActivity
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
             }
         }
     }
-
     private fun createHousehold(householdName: String, managerEmail: String) {
         val requestBody = mapOf(
             "householdName" to householdName,
@@ -90,6 +107,26 @@ class CreateHouseholdActivity : AppCompatActivity() {
             Log.d(TAG, "Successfully set current household: $currentHousehold")
         } else {
             Log.e(TAG, "Failed to set current household.")
+        }
+    }
+
+    private fun addUser(name: String, email: String) {
+        Log.d(TAG, "HAHAHHAHAHHA? ")
+
+        val newUser = User(name = name, email = email, householdId = HouseholdRepository.getCurrentHousehold()?._id.toString())
+
+        Log.d(TAG, "HAHAHHAHAHHA: " + newUser)
+
+        val repository = MainRepository(apiService)
+        Log.d("AddUser","Attempting to add user: $newUser")
+        repository.addUser(newUser) { addedUser -> //adds user
+            if (addedUser != null) {
+
+                Log.d("AddUser", "User added successfully: $addedUser")
+
+            } else {
+                Log.d("AddUser", "Failed to add user")
+            }
         }
     }
 }
