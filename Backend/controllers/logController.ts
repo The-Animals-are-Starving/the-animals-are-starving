@@ -35,10 +35,9 @@ export const logFeeding = async (req: Request, res: Response): Promise<void> => 
 
         // Create log entry
         const log = new Log({
+            householdId: householdId ? new mongoose.Types.ObjectId(householdId) : undefined,
             petId,
             userId: user._id,
-            amount,
-            householdId: householdId ? new mongoose.Types.ObjectId(householdId) : undefined,
             timestamp: new Date(),
         });
 
@@ -65,7 +64,7 @@ export const getPetFeedingHistory = async (req: Request, res: Response) => {
 export const getHouseholdFeedingHistory = async (req: Request, res: Response) => {
     try {
         const { householdId } = req.params;
-        const logs = await Log.find({ householdId }).populate("userId", "email name").populate("petId", "name").sort({ timestamp: -1 });
+        const logs = await Log.find({ householdId }).sort({ timestamp: -1 });
 
         res.json(logs);
     } catch (error) {
