@@ -77,6 +77,25 @@ export const updateUserRole = async (req: Request, res: Response): Promise<void>
     }
 };
 
+// Update user details (including role)
+export const updateUserHouseholdId = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { email } = req.params;
+        const updates = req.body;
+
+        const user = await User.findOneAndUpdate({ email }, updates, { new: true });
+
+        if (!user) {
+            res.status(404).json({ message: "User not found" });
+            return;
+        }
+
+        res.json({ message: "User Household ID updated successfully", user });
+    } catch (error) {
+        res.status(500).json({ message: "Error updating user household ID", error });
+    }
+};
+
 // Delete a user
 export const deleteUser = async (req: Request, res: Response): Promise<void> => {
     try {
