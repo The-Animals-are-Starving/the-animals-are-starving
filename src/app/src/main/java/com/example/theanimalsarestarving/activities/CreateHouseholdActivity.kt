@@ -38,7 +38,7 @@ class CreateHouseholdActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 val sharedPreferences: SharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
 //                val managerEmail = sharedPreferences.getString("userEmail", "").toString()
-                val managerEmail = "test1@gmail.com"
+                val managerEmail = "test1234@gmail.com"
 //                val managerName = sharedPreferences.getString("userName", "").toString()
                 val managerName = "tj"
                 val householdName = userInputHouseholdName.text.toString().trim()
@@ -53,6 +53,7 @@ class CreateHouseholdActivity : AppCompatActivity() {
                         if (householdCreated!= null) {
 
                             HouseholdRepository.setCurrentHousehold(householdCreated) //sets current household singleton
+                            //TODO: Update user to have householdid
 //                            UserRepository.addUserToHousehold(householdCreated._id, managerEmail)  //when you create the household, the current user is automatically added
                             UserRepository.updateUserRole(managerEmail, UserRole.ADMIN)
 

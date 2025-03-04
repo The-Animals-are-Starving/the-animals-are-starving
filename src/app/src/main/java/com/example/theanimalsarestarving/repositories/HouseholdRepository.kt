@@ -23,6 +23,7 @@ object HouseholdRepository {
 
     // Setter for current household
     fun setCurrentHousehold(household: Household) {
+        Log.d(TAG, "Setting Current Household to : $household")
         currentHousehold = household
     }
 

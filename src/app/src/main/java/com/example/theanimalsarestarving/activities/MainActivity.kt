@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity() {
 //        val email = sharedPreferences.getString("userEmail", "").toString()
         val name = sharedPreferences.getString("userName", "").toString()
 
-        val email = "test1@gmail.com"
+        val email = "test1234@gmail.com"
 
         lifecycleScope.launch {
             try {
@@ -110,9 +110,21 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 // This block will now run after the above logic has finished
-                if (CurrUserRepository.getCurrUser()?.householdId == null) {
-                    Log.d(TAG, "current user has a null houseid, redirecting to limbo")
+                if (CurrUserRepository.getCurrUser()?.householdId.isNullOrEmpty()) {
+                    Log.d(TAG, "current user has a null or empty houseid, redirecting to limbo")
                     redirectToLimbo()
+                } else {
+                    //set current household TODO: FETCH CURR HOUSEHOLD
+                    val currHousehold = Household(
+                        _id = CurrUserRepository.getCurrUser()?.householdId.toString(),
+                        name = "",
+                        managerId = "",
+                        pets = emptyList(),
+                        users = emptyList()
+                    )
+
+                    HouseholdRepository.setCurrentHousehold(currHousehold)
+
                 }
 
             } catch (e: Exception) {
@@ -123,16 +135,6 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-
-        val currHousehold = Household(
-            _id = CurrUserRepository.getCurrUser()?.householdId.toString(),
-            name = "",
-            managerId = "",
-            pets = emptyList(),
-            users = emptyList()
-        )
-
-        HouseholdRepository.setCurrentHousehold(currHousehold)
 
         Log.d(TAG, "Current Household: ${HouseholdRepository.getCurrentHousehold()}\n Current User: ${CurrUserRepository.getCurrUser()}\n Current pets: ${PetRepository.getPets()}")
 
