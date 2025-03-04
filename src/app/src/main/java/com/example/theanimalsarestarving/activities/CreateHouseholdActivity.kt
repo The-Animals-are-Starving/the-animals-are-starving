@@ -34,7 +34,7 @@ class CreateHouseholdActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.create_household_activity)
         Log.d(TAG, "onCreate")
-        Log.d(TAG, "Current Household: ${HouseholdRepository.getCurrentHousehold()}\n Current User: ${CurrUserRepository.getCurrUser()}\n Current pets: ${PetRepository.getPets()}")
+        Log.d(TAG, "Creating household! Current Household: ${HouseholdRepository.getCurrentHousehold()}\n Current User: ${CurrUserRepository.getCurrUser()}\n Current pets: ${PetRepository.getPets()}")
 
         userInputHouseholdName = findViewById(R.id.user_input_household_name)
         createButton = findViewById(R.id.create_button)
@@ -46,27 +46,10 @@ class CreateHouseholdActivity : AppCompatActivity() {
                 val managerName = sharedPreferences.getString("userName", "").toString()
                 val householdName = userInputHouseholdName.text.toString().trim()
 
-                // Ensure the household name is not empty
                 if (householdName.isNotEmpty()) {
                     try {
-                        // Create household and wait for completion
+                        Log.d(TAG, "creating household with manager email: $managerEmail")
                         createHousehold(householdName, managerEmail)
-
-                        // Ensure household is set before proceeding
-                        setCurrentHousehold()
-
-                        // Get current user and update role
-//                        val currentUser = CurrUserRepository.getCurrUser()
-//                        currentUser?.let {
-//                            UserRepository.updateUserRole(it.email, UserRole.ADMIN)
-//                            Log.d(TAG, "Role updated for user: ${it.email}")
-//                        }
-
-                        // Delay for 1 second before adding user
-
-
-                        delay(1000)
-                        // Now safely add the user
                         addUser(managerName, managerEmail)
 
                         // Move to the MainActivity
@@ -86,13 +69,9 @@ class CreateHouseholdActivity : AppCompatActivity() {
             "managerEmail" to managerEmail
         )
 
-        // Make the network request using a coroutine
         lifecycleScope.launch {
             try {
-                // Call the repository function to create the household
                 HouseholdRepository.createHousehold(requestBody)
-
-                // After creating the household, set the current household
             } catch (e: Exception) {
                 Log.e(TAG, "Error creating household: ${e.message}")
             }

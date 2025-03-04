@@ -91,20 +91,15 @@ class MainActivity : AppCompatActivity() {
 
         val sharedPreferences: SharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
 
-        // Set as a sharedPreference upon user login
         val email = sharedPreferences.getString("userEmail", "").toString()
         val name = sharedPreferences.getString("userName", "").toString()
 
-        // TODO: check database to see if email is in a household
-
-//        val email = "jimbo1996@gmail.com"
 
         lifecycleScope.launch {
             try {
-                // Call the repository function to create the household
                 val user = CurrUserRepository.fetchCurrUser(email)
 
-                Log.d(TAG, "USER FETCHED _ 0: " + user.toString())
+                Log.d(TAG, "USER FETCHED : " + user.toString())
 
                 if (user != null) {
                     CurrUserRepository.setCurrUser(user)
@@ -124,7 +119,8 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        val currhousehold = Household(
+
+        val currHousehold = Household(
             _id = CurrUserRepository.getCurrUser()?.householdId.toString(),
             name = "",
             managerId = "",
@@ -132,7 +128,7 @@ class MainActivity : AppCompatActivity() {
             users = emptyList()
         )
 
-        HouseholdRepository.setCurrentHousehold(currhousehold)
+        HouseholdRepository.setCurrentHousehold(currHousehold)
 
         Log.d(TAG, "Current Household: ${HouseholdRepository.getCurrentHousehold()}\n Current User: ${CurrUserRepository.getCurrUser()}\n Current pets: ${PetRepository.getPets()}")
 
