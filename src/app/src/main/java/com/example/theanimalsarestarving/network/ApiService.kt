@@ -3,6 +3,7 @@ package com.example.theanimalsarestarving.network
 import com.example.theanimalsarestarving.models.Household
 import com.example.theanimalsarestarving.models.Pet
 import com.example.theanimalsarestarving.models.User
+import com.example.theanimalsarestarving.models.FeedingLog
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
@@ -47,7 +48,7 @@ interface ApiService {
     @GET("user/{householdId}")
     fun getAllUsers(@Path("householdId") householdId: String): Call<List<User>>
 
-    @GET("user/{email}")
+    @GET("user/specific-user/{email}")
     fun getUser(@Path("email") email: String): Call<User>  // Single user response
 
     @PATCH("user/{email}")
@@ -69,6 +70,9 @@ interface ApiService {
     suspend fun createHousehold(
         @Body body: Map<String, String>
     ): Response<Household>
+
+    @GET("log/household/{householdId}")
+    fun getLogs(@Path("householdId") householdId: String): Call<List<FeedingLog>>
 
 
 }

@@ -22,6 +22,7 @@ import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import android.Manifest
+import androidx.lifecycle.lifecycleScope
 import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.activities.FeedingActivity.Companion
 import com.example.theanimalsarestarving.models.User
@@ -35,6 +36,7 @@ import com.example.theanimalsarestarving.repositories.HouseholdRepository
 import com.example.theanimalsarestarving.repositories.PetRepository
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -81,26 +83,48 @@ class MainActivity : AppCompatActivity() {
         }
 
         enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
+
         Log.d(TAG, "onCreate")
 
         retrofitInit()
 
-        //TODO: Temporary user
         val sharedPreferences: SharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
 
+        // Set as a sharedPreference upon user login
         val email = sharedPreferences.getString("userEmail", "").toString()
         val name = sharedPreferences.getString("userName", "").toString()
-        val houseId = HouseholdRepository.getCurrentHousehold()?._id.toString()
 
-        val currUser = User(
-            email = email,
-            name = name,
-            householdId = houseId, // Some example household ID
-            role = UserRole.REGULAR // Optionally set role, defaults to REGULAR if not provided
-        )
+        // TODO: check database to see if email is in a household
 
-        CurrUserRepository.setCurrUser(currUser)
+//        val email = "jimbo1996@gmail.com"
+
+        lifecycleScope.launch {
+            try {
+                // Call the repository function to create the household
+                val user = CurrUserRepository.fetchCurrUser(email)
+
+                Log.d(TAG, "USER FETCHED _ 0: " + user.toString())
+
+                if (user != null) {
+                    CurrUserRepository.setCurrUser(user)
+                } else {
+                    redirectToLimbo()
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error fetching user: ${e.message}")
+            }
+        }
+
+        if (CurrUserRepository.getCurrUser()?.householdId == null) {
+            redirectToLimbo()
+        }
+
+        Log.d(TAG, "USER FETCHED: " + CurrUserRepository.getCurrUser().toString())
+
+        setContentView(R.layout.activity_main)
+
+        //TODO: Temporary user
+
         Log.d(TAG, "Current Household: ${HouseholdRepository.getCurrentHousehold()}\n Current User: ${CurrUserRepository.getCurrUser()}\n Current pets: ${PetRepository.getPets()}")
 
 
@@ -363,6 +387,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun redirectToLogin() {
         val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish() // Finish MainActivity so user can't come back by pressing back
+    }
+
+    private fun redirectToLimbo() {
+        val intent = Intent(this, CreateHouseholdActivity::class.java)
         startActivity(intent)
         finish() // Finish MainActivity so user can't come back by pressing back
     }

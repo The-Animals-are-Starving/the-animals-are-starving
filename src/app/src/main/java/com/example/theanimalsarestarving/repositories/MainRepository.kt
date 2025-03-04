@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.theanimalsarestarving.models.Pet
 import com.example.theanimalsarestarving.models.User
 import com.example.theanimalsarestarving.models.UserRole
+import com.example.theanimalsarestarving.models.FeedingLog
 import com.example.theanimalsarestarving.network.ApiService
 import retrofit2.Call
 import retrofit2.Response
@@ -98,7 +99,7 @@ class MainRepository(private val apiService: ApiService) {
                     val pets = response.body()
                     callback(pets)
 
-                    Log.d("MainRepository", "Users fetched successfully: $pets")
+                    Log.d("MainRepository", "Pets fetched successfully: $pets")
                 } else {
                     Log.e("MainRepository", "Error: ${response.code()} ${response.message()}")
                     callback(null)
@@ -130,6 +131,26 @@ class MainRepository(private val apiService: ApiService) {
             }
         })
 
+    }
+
+    fun getLogs(householdId: String, callback: (List<FeedingLog>?) -> Unit) {
+        apiService.getLogs(householdId).enqueue(object: retrofit2.Callback<List<FeedingLog>> {
+            override fun onResponse(call: Call<List<FeedingLog>>, response: Response<List<FeedingLog>>) {
+                if (response.isSuccessful) {
+                    val logs = response.body()
+                    callback(logs)
+    
+                    Log.d("MainRepository", "Logs fetched successfully: $logs")
+                } else {
+                    Log.e("MainRepository", "Error: ${response.code()} ${response.message()}")
+                    callback(null)
+                }
+            }
+            override fun onFailure(call: Call<List<FeedingLog>>, t: Throwable) {
+                Log.e("MainRepository", "Failure: ${t.message}")
+                callback(null)
+            }
+        })
     }
 
 

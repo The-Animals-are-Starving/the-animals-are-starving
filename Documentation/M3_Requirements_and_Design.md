@@ -6,7 +6,7 @@
     - Under **Designs Specification**, our old interfaces used java style formatting from frontend communication with the backend, when it should've been REST. These interfaces were converted to REST style. We also had to add/modify/remove some interfaces as we gained a better image of what it would take to actually implement them. There were many interfaces that we needed when coding that we did not account for in milestone 3 that have now been added. We also didn't consider the many different actions needed that become clear once coding.
 
 1. **Added Contributions (2025-03-03)**
-    - Under **Contributions**, added the contributions made towards completing milestone 4.
+    - Under **Contributions**, added the contributions made towards completing milestone 4. Reformatted milestone 3 contributions to match the look.
 
 ## 2. Project Description
 “Did you feed the animals?” “Are the animals fed?” “Anyone feed the animals?” These texts flood the family group chat every day. The kids don’t respond. Mom is still at work. No one knows if the beasts have been fed. The beasts also lie, as though they are starving and wasting away even if they already got dinner. Many task managing apps out there are WAY too complicated. TAS is straightforward app that indicates whether or not your beloved household pet has been fed. To go even further, there will be a minimal mode, for those living with grandparents, small children, or a grumpy father that does not want to be bothered with a new app. Simple, easy, convenient. 
@@ -196,7 +196,7 @@
         1. ```GET /user/:householdId```
            - **Purpose**: Returns all the users in a household.
 
-        1. ```GET /user/:email```
+        1. ```GET /user/specific-user/:email```
            - **Purpose**: Returns user object with specified email.
 
         1. ```PUT /user/:email```
@@ -458,11 +458,35 @@ The app will support multiple languages, clear navigation, large readable fonts,
         ```
 
 ## 5. Contributions
-1. **Milestone 3**
-- Tjammie Ko: Sequence Diagrams, Formatting, Other (14h)
-- Dean McCarthy: Functional Requirements, Actors, Other (7h)
-- Aidan Cotsakis: Presentation, Reflections, Other (8h)
-- Matthew Fung: MD File, Functional Requirements, Dependency Diagram, Other (16h)
+### **Milestone 3**
+- **Tjammie Ko *(14 hours)***: Sequence Diagrams, Formatting, Other
+- **Dean McCarthy *(7 hours)***: Functional Requirements, Actors, Other
+- **Aidan Cotsakis *(8 hours)***: Presentation, Reflections, Other
+- **Matthew Fung *(16 hours)***: MD File, Functional Requirements, Dependency Diagram, Other
 
-2. **Milestone 4**
-- 
+### **Milestone 4**
+- **Tjammie Ko *(35 hours)***:
+Created the majority of the frontend interface,
+created pages for managing households, feeding pets, making new households, viewing logs, and more,
+worked on getting frontend to communicate with backend,
+other.
+- **Dean McCarthy *(25 hours)***:
+Worked on various aspects of frontend and backend code,
+created UI to add pets,
+handled managing users on the front and back end,
+smart notifications,
+other.
+- **Aidan Cotsakis *(20 hours)***:
+Setup User authentication,
+updated Documentation,
+wrote Reflections,
+modified Various UI components,
+other.
+- **Matthew Fung *(35 hours)***:
+Created the majority of the backend,
+worked on deploying server,
+created notification system,
+implemented main complexity,
+added endpoints for users, pets, households, and more,
+looked into https communication,
+other.

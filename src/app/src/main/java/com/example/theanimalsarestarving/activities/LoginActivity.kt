@@ -111,7 +111,7 @@ class LoginActivity : AppCompatActivity() {
                         sharedPreferences.edit().putBoolean("isLoggedIn", true).putString("userEmail", email).putString("userName", googleIdTokenCredential.displayName.toString()).apply()
 
                         // Navigate to MainActivity after login
-                        val intent = Intent(this, CreateHouseholdActivity::class.java)
+                        val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                         finish() // Finish LoginActivity
                     } catch (e: GoogleIdTokenParsingException) {
