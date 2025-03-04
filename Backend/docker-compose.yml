@@ -20,7 +20,6 @@ services:
     environment:
       - DB_URI=${DB_URI}
       - PORT=${PORT}
-      - FIREBASE_SERVICE_ACCOUNT=${FIREBASE_SERVICE_ACCOUNT}
     ports:
       - ${PORT}:${PORT}
     depends_on:
