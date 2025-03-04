@@ -15,7 +15,7 @@ object CurrUserRepository {
         return currUser
     }
 
-    fun setCurrUser(user: User){
+    fun setCurrUser(user: User) {
         currUser = user
     }
 
@@ -23,25 +23,25 @@ object CurrUserRepository {
         return try {
             // Switch to the IO dispatcher for the blocking network call
             val response: Response<User> = withContext(Dispatchers.IO) {
-                apiService.getUser(userEmail).execute() // This is still a blocking call
+                apiService.getUser(userEmail).execute() // Blocking call to fetch the user
             }
 
             if (response.isSuccessful) {
                 val user = response.body()
-                if (user == null) {
+                if (user==null) {
                     Log.d("CurrUserRepository", "User Does Not Exist In DB: $userEmail")
+                    null
                 } else {
-                    Log.d("CurrUserRepository", "FetchedUser: $user")
+                    Log.d("CurrUserRepository", "Fetched User: $user")
+                    user // Return the first user matching the email (or null if not found)
                 }
-                user
             } else {
                 Log.e("CurrUserRepository", "Error: ${response.code()} ${response.message()}")
-                null
+                null // Return null if the request was unsuccessful
             }
         } catch (t: Throwable) {
-            Log.e("CurrUserRepository", "WE ARE HERE")
-            Log.e("CurrUserRepository", "Failure: ${t.message}")
-            null
+            Log.e("CurrUserRepository", "Failure in FetchCurrUser: ${t.message}")
+            null // Return null in case of an exception
         }
     }
 }

@@ -91,48 +91,51 @@ class MainActivity : AppCompatActivity() {
 
         val sharedPreferences: SharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
 
-        // Set as a sharedPreference upon user login
-        val email = sharedPreferences.getString("userEmail", "").toString()
+//        val email = sharedPreferences.getString("userEmail", "").toString()
         val name = sharedPreferences.getString("userName", "").toString()
 
-        // TODO: check database to see if email is in a household
-
-//        val email = "jimbo1996@gmail.com"
+        //TODO: !!FROM TJ!! REMOVE THIS HARD CODED EMAIL IF YOU WANT TO TEST
+        val email = "test1234@gmail.com"
 
         lifecycleScope.launch {
             try {
-                // Call the repository function to create the household
                 val user = CurrUserRepository.fetchCurrUser(email)
 
-                Log.d(TAG, "USER FETCHED _ 0: " + user.toString())
+                Log.d(TAG, "USER FETCHED : " + user.toString())
 
                 if (user != null) {
                     CurrUserRepository.setCurrUser(user)
                 } else {
+                    Log.d(TAG, "Unable to find user in db, redirecting to limbo")
                     redirectToLimbo()
                 }
+
+                // This block will now run after the above logic has finished
+                if (CurrUserRepository.getCurrUser()?.householdId.isNullOrEmpty()) {
+                    Log.d(TAG, "current user has a null or empty houseid, redirecting to limbo")
+                    redirectToLimbo()
+                } else {
+                    //set current household TODO: FETCH CURR HOUSEHOLD - do this later if necessary
+                    val currHousehold = Household(
+                        _id = CurrUserRepository.getCurrUser()?.householdId.toString(),
+                        name = "",
+                        managerId = "",
+                        pets = emptyList(),
+                        users = emptyList()
+                    )
+
+                    HouseholdRepository.setCurrentHousehold(currHousehold)
+
+                }
+
             } catch (e: Exception) {
                 Log.e(TAG, "Error fetching user: ${e.message}")
             }
         }
 
-        if (CurrUserRepository.getCurrUser()?.householdId == null) {
-            redirectToLimbo()
-        }
-
-        Log.d(TAG, "USER FETCHED: " + CurrUserRepository.getCurrUser().toString())
 
         setContentView(R.layout.activity_main)
 
-        val currhousehold = Household(
-            _id = CurrUserRepository.getCurrUser()?.householdId.toString(),
-            name = "",
-            managerId = "",
-            pets = emptyList(),
-            users = emptyList()
-        )
-
-        HouseholdRepository.setCurrentHousehold(currhousehold)
 
         Log.d(TAG, "Current Household: ${HouseholdRepository.getCurrentHousehold()}\n Current User: ${CurrUserRepository.getCurrUser()}\n Current pets: ${PetRepository.getPets()}")
 

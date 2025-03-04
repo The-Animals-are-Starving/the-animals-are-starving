@@ -22,6 +22,7 @@ import com.example.theanimalsarestarving.models.UserRole
 import com.example.theanimalsarestarving.models.Pet
 import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.network.NetworkManager.apiService
+import com.example.theanimalsarestarving.repositories.CurrUserRepository
 import com.example.theanimalsarestarving.repositories.HouseholdRepository
 import com.example.theanimalsarestarving.repositories.PetRepository
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -36,6 +37,7 @@ private val testHouseholdId: String = "67c2aa855a9890c0f183efa4"
 class ManageHouseholdActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.manage_activity)
 
@@ -51,6 +53,8 @@ class ManageHouseholdActivity : AppCompatActivity() {
         newPetButton.setOnClickListener {
             showAddPetDialog(petListContainer)
         }
+
+        Log.d("ManageHouseholdActivity", "Current Household: ${HouseholdRepository.getCurrentHousehold()}\n Current User: ${CurrUserRepository.getCurrUser()}\n Current pets: ${PetRepository.getPets()}")
 
         refreshUsers()
     }
