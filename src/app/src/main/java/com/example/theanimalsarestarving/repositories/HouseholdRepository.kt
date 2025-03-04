@@ -1,6 +1,8 @@
 package com.example.theanimalsarestarving.repositories
 
 import android.util.Log
+import com.example.theanimalsarestarving.activities.CreateHouseholdActivity
+import com.example.theanimalsarestarving.activities.CreateHouseholdActivity.Companion
 import com.example.theanimalsarestarving.models.Household
 import com.example.theanimalsarestarving.network.NetworkManager.apiService
 import kotlinx.coroutines.Dispatchers
@@ -24,30 +26,33 @@ object HouseholdRepository {
         currentHousehold = household
     }
 
-    suspend fun createHousehold(requestBody: Map<String, String>): Household? {
-        return try {
+
+    suspend fun createHousehold(householdName: String, managerEmail: String): Household? {
+        val requestBody = mapOf(
+            "householdName" to householdName,
+            "managerEmail" to managerEmail
+        )
+
+        try {
+            Log.d(TAG, "Attempting to create household with requestBody: $requestBody")
+
             val response: Response<Household> = withContext(Dispatchers.IO) {
-                apiService.createHousehold(requestBody) // Make the network request
+                apiService.createHousehold(requestBody)
             }
+
             if (response.isSuccessful) {
                 val household = response.body()
-                if (household != null) {
-                    setCurrentHousehold(household)
-                    Log.d(TAG, "Response Body: $household")
-                    household
-                } else {
-                    Log.e(TAG, "Response body is null")
-                    null
-                }
+                Log.d(TAG, "createHousehold response body: $household")
+                Log.d(TAG, "Response Body: $household")
+                return household
             } else {
                 Log.e(TAG, "Failed to create household: ${response.code()} ${response.message()}")
-                null
+                return null
             }
         } catch (e: Exception) {
             Log.e(TAG, "Error creating household: ${e.message}")
-            null
+            return null
         }
     }
-
 
 }

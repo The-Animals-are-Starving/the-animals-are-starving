@@ -17,8 +17,13 @@ interface ApiService {
     @POST("user")
     fun addUser(@Body user: User): Call<User>
 
+    @POST("user")
+    fun createUser(@Body body: Map<String, String>): Call<User>
+
+
     @POST("household/add-user")
     fun addUserToHousehold(@Body body: Map<String, String>): Call<User>
+
 
     @PATCH("user/{email}")
     fun updateRoleManager(

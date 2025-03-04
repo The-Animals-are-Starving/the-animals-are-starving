@@ -16,6 +16,67 @@ object UserRepository {
     //singleton for current list of users
     var currUsers: List<User> = emptyList()
 
+    suspend fun createUser(email: String, name: String, householdId: String): User? {
+        val requestBody = mapOf(
+            "email" to email,
+            "name" to name,
+            "householdId" to householdId
+        )
+
+        return try {
+            Log.d(TAG, "Attempting to create user with requestBody: $requestBody")
+            val response = withContext(Dispatchers.IO) {
+                apiService.createUser(requestBody).execute()  // Perform the request synchronously
+            }
+
+            if (response.isSuccessful) {
+                response.body()  // Return the created user if successful
+            } else {
+                Log.e(TAG, "Failed to create user: ${response.code()} ${response.message()}")
+                null
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error creating user: ${e.message}")
+            null
+        }
+    }
+
+
+    suspend fun addUserToHousehold(householdId: String, email: String): User? {
+        val requestBody = mapOf(
+            "householdId" to householdId,
+            "email" to email
+        )
+
+        return try {
+            Log.d(TAG, "Attempting to add user to household with requestBody: $requestBody")
+
+            // Make the network request asynchronously using enqueue on Dispatchers.IO
+            val response = withContext(Dispatchers.IO) {
+                // Execute the request synchronously using execute()
+                apiService.addUserToHousehold(requestBody).execute()
+            }
+
+            if (response.isSuccessful) {
+                // If the request was successful, return the user object from the response
+                response.body().also {
+                    Log.d(TAG, "User added successfully: $it")
+                }
+            } else {
+                // If the request failed, log the error and return null
+                Log.e(TAG, "Failed to add user: ${response.code()} ${response.message()}")
+                null
+            }
+        } catch (e: Exception) {
+            // Catch any exceptions and log them
+            Log.e(TAG, "Error adding user: ${e.message}")
+            null
+        }
+    }
+
+
+
+
     suspend fun updateUserRole(userEmail: String, newRole: UserRole) {
         when (newRole) {
             UserRole.ADMIN -> setManager(userEmail)

@@ -6,20 +6,15 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.theanimalsarestarving.R
-import com.example.theanimalsarestarving.models.User
 import com.example.theanimalsarestarving.models.UserRole
-import com.example.theanimalsarestarving.network.NetworkManager.apiService
 import com.example.theanimalsarestarving.repositories.CurrUserRepository
 import com.example.theanimalsarestarving.repositories.HouseholdRepository
-import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.repositories.PetRepository
 import com.example.theanimalsarestarving.repositories.UserRepository
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.delay
 
 class CreateHouseholdActivity : AppCompatActivity() {
 
@@ -42,72 +37,37 @@ class CreateHouseholdActivity : AppCompatActivity() {
         createButton.setOnClickListener {
             lifecycleScope.launch {
                 val sharedPreferences: SharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
-                val managerEmail = sharedPreferences.getString("userEmail", "").toString()
-                val managerName = sharedPreferences.getString("userName", "").toString()
+//                val managerEmail = sharedPreferences.getString("userEmail", "").toString()
+                val managerEmail = "test1@gmail.com"
+//                val managerName = sharedPreferences.getString("userName", "").toString()
+                val managerName = "tj"
                 val householdName = userInputHouseholdName.text.toString().trim()
-
-                if (householdName.isNotEmpty()) {
+                if(householdName.isNotEmpty()) {
                     try {
-                        Log.d(TAG, "creating household with manager email: $managerEmail")
-                        createHousehold(householdName, managerEmail)
-                        addUser(managerName, managerEmail)
+                        UserRepository.createUser(managerEmail, managerName, "") //null string or ""?
 
-                        // Move to the MainActivity
-                        val intent = Intent(this@CreateHouseholdActivity, MainActivity::class.java)
-                        startActivity(intent)
+                        Log.d(TAG, "creating household with manager email: $managerEmail")
+                        // Make sure the household creation completes before proceeding
+                        val householdCreated = HouseholdRepository.createHousehold(householdName, managerEmail) // Ensure this is a suspend function
+
+                        if (householdCreated!= null) {
+
+                            HouseholdRepository.setCurrentHousehold(householdCreated) //sets current household singleton
+                            UserRepository.addUserToHousehold(householdCreated._id, managerEmail)
+                            UserRepository.updateUserRole(managerEmail, UserRole.ADMIN)
+
+
+                            // Move to the MainActivity after both tasks are done
+                            val intent = Intent(this@CreateHouseholdActivity, MainActivity::class.java)
+                            startActivity(intent)
+                        } else {
+                            Log.e(TAG, "Household creation failed")
+                        }
 
                     } catch (e: Exception) {
-                        Log.e(TAG, "Error during household creation or user update: ${e.message}")
+                        Log.e(TAG, "Error during household creation or user updates: ${e.message}")
                     }
                 }
-            }
-        }
-    }
-    private fun createHousehold(householdName: String, managerEmail: String) {
-        val requestBody = mapOf(
-            "householdName" to householdName,
-            "managerEmail" to managerEmail
-        )
-
-        lifecycleScope.launch {
-            try {
-                HouseholdRepository.createHousehold(requestBody)
-            } catch (e: Exception) {
-                Log.e(TAG, "Error creating household: ${e.message}")
-            }
-        }
-    }
-
-    private fun setCurrentHousehold() {
-        val currentHousehold = HouseholdRepository.getCurrentHousehold()
-
-        if (currentHousehold != null) {
-            // Use the setter to set the current household in the repository
-            HouseholdRepository.setCurrentHousehold(currentHousehold)
-            Log.d(TAG, "Successfully set current household: $currentHousehold")
-        } else {
-            Log.e(TAG, "Failed to set current household.")
-        }
-    }
-
-    private fun addUser(name: String, email: String) {
-        Log.d(TAG, "HAHAHHAHAHHA? ")
-
-        val newUser = User(name = name, email = email, householdId = "HOUSE")
-
-
-        Log.d(TAG, "HAHAHHAHAHHA: " + newUser)
-
-        val repository = MainRepository(apiService)
-        Log.d("AddUser","Attempting to add user: $newUser")
-
-        repository.addUser(newUser) { addedUser -> //adds user
-            if (addedUser != null) {
-
-                Log.d("AddUser", "User added successfully: $addedUser")
-
-            } else {
-                Log.d("AddUser", "Failed to add user")
             }
         }
     }
