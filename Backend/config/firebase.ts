@@ -1,12 +1,13 @@
 import admin, { ServiceAccount } from "firebase-admin";
-import { initializeApp, cert } from "firebase-admin/app";
-const serviceAccountKey = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+import { cert } from "firebase-admin/app";
+require('dotenv').config();
 
-const serviceAccountKey: ServiceAccount = {
-  projectId: serviceAccount.project_id,
-  privateKey: serviceAccount.private_key,
-  clientEmail: serviceAccount.client_email,
-};
+const firebaseServiceAccount = process.env.FIREBASE_SERVICE_ACCOUNT;
+if (!firebaseServiceAccount) {
+  throw new Error("FIREBASE_SERVICE_ACCOUNT is not defined in the environment variables.");
+}
+
+const serviceAccountKey: ServiceAccount = JSON.parse(firebaseServiceAccount);
 
 admin.initializeApp({
   credential: cert(serviceAccountKey),
