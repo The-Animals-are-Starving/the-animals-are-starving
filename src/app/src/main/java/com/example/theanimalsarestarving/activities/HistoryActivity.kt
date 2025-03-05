@@ -18,7 +18,7 @@ class HistoryActivity : AppCompatActivity() {
         setContentView(R.layout.history_activity)
 
 
-        val householdId = HouseholdRepository.getCurrentHousehold().toString()
+        val householdId = HouseholdRepository.getCurrentHousehold()?._id.toString()
 
         refreshHistory(householdId)
 

@@ -307,7 +307,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val repository = MainRepository(apiService)
-        repository.getAllUsers(HouseholdRepository.getCurrentHousehold().toString()) { users ->
+        repository.getAllUsers(HouseholdRepository.getCurrentHousehold()?._id.toString()) { users ->
             if (users != null) {
                 if (users.isEmpty()) { //not working atm dunno why
                     val noticeText = "No Users in Household"
