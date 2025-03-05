@@ -59,6 +59,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
         Log.d("ManageHouseholdActivity", "Current Household: ${currHouseholdId}\n Current User: ${CurrUserRepository.getCurrUser()}\n Current pets: ${PetRepository.getPets()}")
 
         refreshUsers()
+        refreshPets()
     }
 
     private fun showAddUserDialog(container: LinearLayout) { //Popup for new user

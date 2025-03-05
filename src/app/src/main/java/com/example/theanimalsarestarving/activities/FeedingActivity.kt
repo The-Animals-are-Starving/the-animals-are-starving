@@ -1,5 +1,6 @@
 package com.example.theanimalsarestarving.activities
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -11,6 +12,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.example.theanimalsarestarving.R
+import com.example.theanimalsarestarving.models.Pet
 import com.example.theanimalsarestarving.network.ApiService
 import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.network.NetworkManager
@@ -100,22 +102,32 @@ class FeedingActivity : AppCompatActivity() {
 
         //TODO: I dont think this is dynamic? Send this to backend
 
+        val repository = PetRepository
+        repository.feedPet(petName) { success ->
+
+        }
+
+
         feedingButton.setOnClickListener {
             // Launch a coroutine in the main scope
             CoroutineScope(Dispatchers.Main).launch {
                 // Call the suspend function feedPet inside the coroutine
-                PetRepository.feedPet(petName)
-
-                // Update UI after feeding the pet
-                fedStatusText.text = "FED"
-                petCircle.setColorFilter(
-                    ContextCompat.getColor(
-                        this@FeedingActivity,
-                        R.color.base_green
-                    )
-                )
-                feedingButton.visibility = View.GONE
-                feedingInfo.visibility = View.VISIBLE
+                PetRepository.feedPet(petName) { success ->
+                    if (success) {
+                        // Update UI after feeding the pet
+                        fedStatusText.text = "FED"
+                        petCircle.setColorFilter(
+                            ContextCompat.getColor(
+                                this@FeedingActivity,
+                                R.color.base_green
+                            )
+                        )
+                        feedingButton.visibility = View.GONE
+                        feedingInfo.visibility = View.VISIBLE
+                    } else {
+                        alertMessage("Failed to feed pet. Please try again.", petContainer)
+                    }
+                }
             }
         }
 
@@ -135,6 +147,14 @@ class FeedingActivity : AppCompatActivity() {
             Log.e(TAG, "NetworkManager is not initialized.")
             throw IllegalStateException("NetworkManager is not initialized.")
         }
+    }
+
+    private fun alertMessage(message: String, container: LinearLayout) {
+        val warning = AlertDialog.Builder(this)
+        warning.setTitle("Error")
+        warning.setMessage(message)
+        warning.setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+        warning.show()
     }
 
 

@@ -55,7 +55,7 @@ export const getPetsByHousehold = async (req: Request, res: Response) => {
 // Update pet's feeding status
 export const updatePetFeedingStatus = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { petId } = req.params;
+        const { petName } = req.params;
         const { fed } = req.body;
 
         if (fed === undefined) {
@@ -67,6 +67,16 @@ export const updatePetFeedingStatus = async (req: Request, res: Response): Promi
             res.status(400).json({ message: "'fed' must be a boolean" });
             return;
         }
+        console.log("Attempting to feed pet name: %s", petName)
+
+        const petObj = await Pet.findOne({name: petName});
+        if (!petObj) {
+            res.status(404).json({ message: "Pet not found" });
+            return;
+        }
+        console.log("Found pet id: %s", petObj._id)
+
+        const petId = petObj._id;
 
         const updateFields: Partial<IPet> = { fed };
         if (fed === true) {
@@ -82,6 +92,7 @@ export const updatePetFeedingStatus = async (req: Request, res: Response): Promi
 
         res.json({ message: "Pet feeding status updated", pet });
     } catch (error) {
+        console.log(error)
         res.status(500).json({ message: "Error updating pet feeding status", error });
     }
 };

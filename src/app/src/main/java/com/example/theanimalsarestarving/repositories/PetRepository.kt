@@ -2,10 +2,12 @@ package com.example.theanimalsarestarving.repositories
 
 import android.util.Log
 import com.example.theanimalsarestarving.models.Pet
+import com.example.theanimalsarestarving.models.User
 import retrofit2.Response
 import com.example.theanimalsarestarving.network.NetworkManager.apiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.Call
 
 
 private const val TAG = "PetRepository"
@@ -37,8 +39,20 @@ object PetRepository {
     }
 
 
-    suspend fun feedPet(petName: String) {
-        try {
+    fun feedPet(petName: String, callback: (Boolean) -> Unit) {
+        Log.d("PetRepository", "Attempting to feed pet name: $petName")
+        apiService.feedPet(petName).enqueue(object : retrofit2.Callback<Pet> {
+            override fun onResponse(call: Call<Pet>, response: Response<Pet>) {
+                callback(response.isSuccessful)
+            }
+
+            override fun onFailure(call: Call<Pet>, t: Throwable) {
+                Log.e("PetRepository", "Error feeding pet: ${t.message}")
+                callback(false)
+            }
+        })
+
+        /*try {
             val response: Response<Pet> = withContext(Dispatchers.IO) {
                 apiService.feedPet(petName).execute() // This is a blocking call
             }
@@ -56,7 +70,7 @@ object PetRepository {
         } catch (e: Exception) {
             // Log any errors that occur during the network request
             Log.e(TAG, "Error: ${e.message}")
-        }
+        }*/
     }
 
     //removed for the same reason, find pets through household search
