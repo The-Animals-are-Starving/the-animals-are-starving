@@ -199,7 +199,7 @@
         1. ```GET /user/specific-user/:email```
            - **Purpose**: Returns user object with specified email.
 
-        1. ```PUT /user/:email```
+        1. ```PATCH /user/:email```
            - **Body**: Updates to make to user.
            - **Purpose**: Updates user object with specified email.
 
@@ -228,7 +228,7 @@
         1. ```GET /pet/:householdId```
            - **Purpose**: Returns all the pets in a household.
 
-        1. ```PUT /pet/:petName/feed```
+        1. ```PATCH /pet/:petName/feed```
            - **Body**: { fed }
            - **Purpose**: Updates the status of a pet on if it's fed or not.
 
