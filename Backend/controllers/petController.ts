@@ -100,8 +100,17 @@ export const updatePetFeedingStatus = async (req: Request, res: Response): Promi
 // Remove a pet
 export const removePet = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { petId } = req.params;
+        const { petName } = req.params;
 
+
+        const petObj = await Pet.findOne({name: petName});
+        if (!petObj) {
+            res.status(404).json({ message: "Pet not found" });
+            return;
+        }
+        console.log("Found pet id: %s", petObj._id)
+
+        const petId = petObj._id;
         const pet = await Pet.findByIdAndDelete(petId);
         if (!pet) {
             res.status(404).json({ message: "Pet not found" });
