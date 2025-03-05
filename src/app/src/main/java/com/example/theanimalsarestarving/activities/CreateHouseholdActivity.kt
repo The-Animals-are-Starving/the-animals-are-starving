@@ -37,10 +37,10 @@ class CreateHouseholdActivity : AppCompatActivity() {
         createButton.setOnClickListener {
             lifecycleScope.launch {
                 val sharedPreferences: SharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
-//                val managerEmail = sharedPreferences.getString("userEmail", "").toString()
-                val managerEmail = "test1234@gmail.com"
-//                val managerName = sharedPreferences.getString("userName", "").toString()
-                val managerName = "tj"
+                val managerEmail = sharedPreferences.getString("userEmail", "").toString()
+//                val managerEmail = "test1234@gmail.com"
+                val managerName = sharedPreferences.getString("userName", "").toString()
+//                val managerName = "tj"
                 val householdName = userInputHouseholdName.text.toString().trim()
                 if(householdName.isNotEmpty()) {
                     try {
