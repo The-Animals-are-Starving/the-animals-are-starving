@@ -69,7 +69,7 @@ class FeedingActivity : AppCompatActivity() {
 
     // Method to add a pet to the container dynamically
     private fun loadPet(petName: String, feedingTime: String, petImageResId: Int, isFed: Boolean) {
-        Log.d(TAG, "Loading pet: (petName: $petName, feedingTime: feedingTime, isFed: isFed)")
+        Log.d(TAG, "Loading pet: (petName: $petName, feedingTime: feedingTime, isFed: $isFed)")
         // Inflate the pet_item layout
         val petLayout = LayoutInflater.from(this).inflate(R.layout.pet_item, petContainer, false)
 
