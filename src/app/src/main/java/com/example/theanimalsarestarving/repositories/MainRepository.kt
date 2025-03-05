@@ -14,6 +14,7 @@ class MainRepository(private val apiService: ApiService) {
 
 
     fun getAllUsers(householdId: String, callback: (List<User>?) -> Unit) {
+        Log.d("MainRepository", "Fetching users from household: $householdId")
         apiService.getAllUsers(householdId).enqueue(object : retrofit2.Callback<List<User>> {
             override fun onResponse(call: Call<List<User>>, response: Response<List<User>>) {
                 if (response.isSuccessful) {
@@ -113,7 +114,12 @@ class MainRepository(private val apiService: ApiService) {
         })
     }
     fun addPet(pet: Pet, callback: (Pet?) -> Unit) {
-        apiService.addPet(pet).enqueue(object : retrofit2.Callback<Pet> { // this creates the Pet
+        val body = mapOf(
+            "name" to pet.name,
+            "householdId" to pet.householdId,
+            "feedingTime" to pet.feedingTime
+        )
+        apiService.addPet(body).enqueue(object : retrofit2.Callback<Pet> { // this creates the Pet
             override fun onResponse(call: Call<Pet>, response: Response<Pet>) {
                 if (response.isSuccessful) {
                     val newPet = response.body()

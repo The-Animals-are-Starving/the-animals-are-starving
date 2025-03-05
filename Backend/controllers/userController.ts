@@ -14,7 +14,10 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
         }
 
         // Create new user with default role "normal"
-        const user = new User({ email, name, householdId, role: "normal" });
+        const user = new User({ 
+            email, 
+            name, 
+            householdId, role: "normal" });
         await user.save();
 
         res.status(201).json({ message: "User created successfully", user });
@@ -27,7 +30,7 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
 export const getAllUsers = async (req: Request, res: Response): Promise<void> => {
     try {
         const { householdId } = req.params;
-        const users = await User.find({householdId}).sort({ name: 1 });
+        const users = await User.find({householdId: householdId}).sort({ name: 1 });
         res.json(users);
     } catch (error) {
         res.status(500).json({ message: "Error retrieving users", error });

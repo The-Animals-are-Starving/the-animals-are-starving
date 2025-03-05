@@ -67,7 +67,7 @@ interface ApiService {
     fun updateUserRole(@Path("email") email: String, @Body body: Map<String, String>): Call<User>  // Single user response
 
     @POST("pet")
-    fun addPet(@Body body: Pet): Call<Pet> //Adds pet to db
+    fun addPet(@Body body: Map<String, String?>): Call<Pet> //Adds pet to db
 
     @GET("pet/{householdId}")
     fun getAllPets(@Path("householdId") householdId: String): Call<List<Pet>>  // Return a list of pets

@@ -7,6 +7,8 @@ import Household from "../models/Household";
 export const addPet = async (req: Request, res: Response): Promise<void> => {
     try {
         const { name, householdId, feedingTime } = req.body;
+        console.log("adding pet with name:%s, house:%s, time:%s", name, householdId, feedingTime)
+        
 
         let household = null;
         if (householdId) {
@@ -19,20 +21,21 @@ export const addPet = async (req: Request, res: Response): Promise<void> => {
 
         const pet = new Pet({
             name,
-            householdId: household ? new mongoose.Types.ObjectId(householdId) : undefined,
+            householdId: householdId,
             feedingTime: new Date(feedingTime),
             fed: false
         });
 
         await pet.save();
 
-        if (household) {
+        /*if (household) {
             household.pets.push(pet._id as Types.ObjectId);
             await household.save();
-        }
+        }*/
 
         res.status(201).json({ message: "Pet added successfully", pet });
     } catch (error) {
+        console.log(error)
         res.status(500).json({ message: "Error adding pet", error });
     }
 };

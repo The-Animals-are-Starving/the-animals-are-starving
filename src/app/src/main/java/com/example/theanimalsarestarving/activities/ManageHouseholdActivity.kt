@@ -17,6 +17,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.theanimalsarestarving.R
+import com.example.theanimalsarestarving.models.Household
 import com.example.theanimalsarestarving.models.User
 import com.example.theanimalsarestarving.models.UserRole
 import com.example.theanimalsarestarving.models.Pet
@@ -35,6 +36,7 @@ private val testHouseholdId: String = "67c2aa855a9890c0f183efa4"
 
 
 class ManageHouseholdActivity : AppCompatActivity() {
+    val currHouseholdId = if (HouseholdRepository.getCurrentHousehold() != null) HouseholdRepository.getCurrentHousehold()?._id else 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -54,7 +56,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
             showAddPetDialog(petListContainer)
         }
 
-        Log.d("ManageHouseholdActivity", "Current Household: ${HouseholdRepository.getCurrentHousehold()}\n Current User: ${CurrUserRepository.getCurrUser()}\n Current pets: ${PetRepository.getPets()}")
+        Log.d("ManageHouseholdActivity", "Current Household: ${currHouseholdId}\n Current User: ${CurrUserRepository.getCurrUser()}\n Current pets: ${PetRepository.getPets()}")
 
         refreshUsers()
     }
@@ -106,7 +108,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
     }
 
     private fun addUser(name: String, email: String, container: LinearLayout) {
-        val newUser = User(name = name, email = email, householdId = HouseholdRepository.getCurrentHousehold()?._id.toString())
+        val newUser = User(name = name, email = email, householdId = currHouseholdId.toString())
 
         val repository = MainRepository(apiService)
         Log.d("AddUser","Attempting to add user: $newUser")
@@ -188,7 +190,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
      * Shows addPet popup for entering pet data
      */
     private fun addPet(name: String, type: String, time: String, container: LinearLayout) {
-        val newPet = Pet(name = name, feedingTime = time, householdId = HouseholdRepository.getCurrentHousehold()?._id.toString())
+        val newPet = Pet(name = name, feedingTime = time, householdId = currHouseholdId.toString())
 
         val repository = MainRepository(apiService)
         Log.d("AddPet", "Attempting to add new pet $newPet")
@@ -273,59 +275,61 @@ class ManageHouseholdActivity : AppCompatActivity() {
         userListContainer.removeAllViews() // Clear existing user list
 
         val repository = MainRepository(apiService)
-        repository.getAllUsers(HouseholdRepository.getCurrentHousehold().toString()) { users ->
-            if (users != null) {
-                for (user in users) {
+        if (currHouseholdId != null) {
+            repository.getAllUsers(currHouseholdId.toString()) { users ->
+                if (users != null) {
+                    for (user in users) {
 
-                    val userRow = LinearLayout(this).apply {
-                        orientation = LinearLayout.HORIZONTAL
-                        layoutParams = LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT
-                        )
-                        setPadding(10, 10, 10, 10)
-                    }
-
-                    val nameView = TextView(this).apply {
-                        text = user.name
-                        layoutParams = LinearLayout.LayoutParams(
-                            0,
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
-                            1f
-                        )
-                    }
-
-                    val roleSpinner = Spinner(this)
-                    val roleOptions = arrayOf(UserRole.REGULAR, UserRole.RESTRICTED, UserRole.ADMIN)
-                    val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, roleOptions)
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) // Set dropdown item style
-                    roleSpinner.adapter = adapter
-
-                    // Set current role
-                    roleSpinner.setSelection(roleOptions.indexOf(user.role))
-
-                    roleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                        override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                            val selectedRole = roleOptions[position]
-
-                            // Prevent unnecessary API calls if role is unchanged
-                            val role = if (user.role == null) UserRole.REGULAR else UserRole.fromBackendRole(user.role.toString())
-                            if (selectedRole != role) {
-                                roleSpinner.isEnabled = false
-                                updateUserRole(user.email, selectedRole, roleSpinner)
-                            }
+                        val userRow = LinearLayout(this).apply {
+                            orientation = LinearLayout.HORIZONTAL
+                            layoutParams = LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT
+                            )
+                            setPadding(10, 10, 10, 10)
                         }
 
-                        override fun onNothingSelected(parent: AdapterView<*>) {}
+                        val nameView = TextView(this).apply {
+                            text = user.name
+                            layoutParams = LinearLayout.LayoutParams(
+                                0,
+                                LinearLayout.LayoutParams.WRAP_CONTENT,
+                                1f
+                            )
+                        }
+
+                        val roleSpinner = Spinner(this)
+                        val roleOptions = arrayOf(UserRole.REGULAR, UserRole.RESTRICTED, UserRole.ADMIN)
+                        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, roleOptions)
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) // Set dropdown item style
+                        roleSpinner.adapter = adapter
+
+                        // Set current role
+                        roleSpinner.setSelection(roleOptions.indexOf(user.role))
+
+                        roleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                                val selectedRole = roleOptions[position]
+
+                                // Prevent unnecessary API calls if role is unchanged
+                                val role = if (user.role == null) UserRole.REGULAR else UserRole.fromBackendRole(user.role.toString())
+                                if (selectedRole != role) {
+                                    roleSpinner.isEnabled = false
+                                    updateUserRole(user.email, selectedRole, roleSpinner)
+                                }
+                            }
+
+                            override fun onNothingSelected(parent: AdapterView<*>) {}
+                        }
+
+                        userRow.addView(nameView)
+                        userRow.addView(roleSpinner)
+                        userListContainer.addView(userRow)
+
                     }
-
-                    userRow.addView(nameView)
-                    userRow.addView(roleSpinner)
-                    userListContainer.addView(userRow)
-
+                } else {
+                    alertMessage("Failed to fetch users. Please try again.", userListContainer)
                 }
-            } else {
-                alertMessage("Failed to fetch users. Please try again.", userListContainer)
             }
         }
     }
@@ -336,43 +340,45 @@ class ManageHouseholdActivity : AppCompatActivity() {
         petListContainer.removeAllViews() 
 
         val repository = MainRepository(apiService)
-        repository.getAllPets(HouseholdRepository.getCurrentHousehold().toString()) { pets ->
-            if (pets != null) {
-                for (pet in pets) {
-                    val petRow = LinearLayout(this).apply {
-                        orientation = LinearLayout.HORIZONTAL
-                        layoutParams = LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT
-                        )
-                        setPadding(10, 10, 10, 10)
-                    }
+        if (currHouseholdId != null) {
+            repository.getAllPets(currHouseholdId.toString()) { pets ->
+                if (pets != null) {
+                    for (pet in pets) {
+                        val petRow = LinearLayout(this).apply {
+                            orientation = LinearLayout.HORIZONTAL
+                            layoutParams = LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT
+                            )
+                            setPadding(10, 10, 10, 10)
+                        }
 
-                    val petNameView = TextView(this).apply {
-                        text = pet.name
-                        layoutParams = LinearLayout.LayoutParams(
-                            0,
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
-                            1f
-                        )
-                    }
+                        val petNameView = TextView(this).apply {
+                            text = pet.name
+                            layoutParams = LinearLayout.LayoutParams(
+                                0,
+                                LinearLayout.LayoutParams.WRAP_CONTENT,
+                                1f
+                            )
+                        }
 
-                    val editButton = Button(this).apply {
-                        text = "Edit"
-                        layoutParams = LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT
-                        )
-                        setOnClickListener { showEditPopup(petNameView) }
-                    }
+                        val editButton = Button(this).apply {
+                            text = "Edit"
+                            layoutParams = LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.WRAP_CONTENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT
+                            )
+                            setOnClickListener { showEditPopup(petNameView) }
+                        }
 
-                    petRow.addView(petNameView)
-                    petRow.addView(editButton)
-                    petListContainer.addView(petRow)
-        //                        Log.d(TAG, "Pet added successfully: $addedPet") //TODO: Broken Log
+                        petRow.addView(petNameView)
+                        petRow.addView(editButton)
+                        petListContainer.addView(petRow)
+                        //                        Log.d(TAG, "Pet added successfully: $addedPet") //TODO: Broken Log
+                    }
+                } else {
+                    alertMessage("Failed to fetch pets. Please try again.", petListContainer)
                 }
-            } else {
-                alertMessage("Failed to fetch pets. Please try again.", petListContainer)
             }
         }
     }
