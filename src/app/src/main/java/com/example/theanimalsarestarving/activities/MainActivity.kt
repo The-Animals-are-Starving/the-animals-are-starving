@@ -91,11 +91,11 @@ class MainActivity : AppCompatActivity() {
 
         val sharedPreferences: SharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
 
-//        val email = sharedPreferences.getString("userEmail", "").toString()
+        val email = sharedPreferences.getString("userEmail", "").toString()
         val name = sharedPreferences.getString("userName", "").toString()
 
         //TODO: !!FROM TJ!! REMOVE THIS HARD CODED EMAIL IF YOU WANT TO TEST
-        val email = "test1234@gmail.com"
+//        val email = "test1234@gmail.com"
 
         lifecycleScope.launch {
             try {

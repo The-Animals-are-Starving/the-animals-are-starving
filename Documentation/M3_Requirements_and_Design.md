@@ -199,7 +199,7 @@
         1. ```GET /user/specific-user/:email```
            - **Purpose**: Returns user object with specified email.
 
-        1. ```PUT /user/:email```
+        1. ```PATCH /user/:email```
            - **Body**: Updates to make to user.
            - **Purpose**: Updates user object with specified email.
 
@@ -218,21 +218,6 @@
            - **Body**: { householdId, email }
            - **Purpose**: Removes specified email to a household.
 
-        <!-- 1. ```User login(String email);```
-           - **Purpose**: Verifies email and returns user details.
-        
-        2. ```Household createHousehold(String householdName, String ownerUserId);```
-           - **Purpose**: Creates a new household with an owner.
-        
-        3. ```boolean addUser(String email);```
-           - **Purpose**: Adds an existing user to a household. Returns `true` on success.
-        
-        4. ```boolean removeUserFromHousehold(String householdId, String userId);```
-           - **Purpose**: Removes a user from a household. Returns `true` on success.
-        
-        5. ```List<User> getUnrestrictedUsers();```
-           - **Purpose**: Gets all the users that are not in restricted mode. -->
-
 2. **Pet Management Service**
     - **Purpose**: Tracks pets in a household and their feeding schedules. Keeping pet data separate from user management allows for future expansions like health tracking. Merging it with user management would complicate database queries.
     - **Interfaces**: 
@@ -243,21 +228,12 @@
         1. ```GET /pet/:householdId```
            - **Purpose**: Returns all the pets in a household.
 
-        1. ```PUT /pet/:petId/feed```
+        1. ```PATCH /pet/:petName/feed```
            - **Body**: { fed }
            - **Purpose**: Updates the status of a pet on if it's fed or not.
 
-        1. ```DELETE /pet/:petId```
+        1. ```DELETE /pet/:petName```
            - **Purpose**: Removes a pet from a household.
-
-        <!-- 1. ```Pet addPet(String householdId, String petName, String species, String feedingSchedule);```
-           - **Purpose**: Adds a pet to a household.
-        
-        2. ```boolean removePet(String petId);```
-           - **Purpose**: Removes a pet from the system. Returns `true` on success.
-        
-        3. ```List<Pet> getPetsByHousehold(String householdId);```
-           - **Purpose**: Retrieves all pets for a given household. -->
 
 3. **Logging**
     - **Purpose**: Records and retrieves feeding history, ensuring users can check when and who last fed a pet. Keeping a dedicated feeding log service prevents bloating the pet management component. Embedding it in pet service would create unnecessary dependencies between pet data and feeding logs, and may lead to complications like calculations tied to the household rather than a specific pet.
@@ -279,25 +255,11 @@
         1. ```GET /analytics/anomalies/:householdId```
             - **Purpose**: Detects anomalies in feeding behavior.
         
-        <!-- 1. Pet addPet(String householdId, String petName, String species, String feedingSchedule);
-            - **Purpose**: Adds a pet to a household.
-        2. boolean removePet(String petId);
-            - **Purpose**: Removes a pet from a household.
-       3. List<Pet> getPetsByHousehold(String householdId);
-            - **Purpose**:  Retrieves all pets for a given household. -->
-
 4. **Notifications**
     - **Purpose**: Sends reminders to users when pets need to be fed and alerts them when a feeding is logged, also users to send requests to other users. Implementing notifications with users directly would bloat the user component and unnecessarily tie mass notifications to individual users.
     - **Interfaces**: 
         1. ```POST /notify/:email```
            - **Purpose**: Notifies the user with specified email address to feed the animals.
-
-         <!-- 1. sendNotifcations(message, recipients[])
-            - **Purpose**: interacts with the notification service. Sent by application
-        2. sendNotifcations(message, senderID, recipients[])
-            - **Purpose**: interacts with the notification service. Used when sending request to feed. -->
-
-
 
 ### **4.2. Databases**  
 1. **MongoDB (PetTrackerDB)**  
@@ -465,24 +427,24 @@ The app will support multiple languages, clear navigation, large readable fonts,
 - **Matthew Fung *(16 hours)***: MD File, Functional Requirements, Dependency Diagram, Other
 
 ### **Milestone 4**
-- **Tjammie Ko *(35 hours)***:
+- **Tjammie Ko *(40 hours)***:
 Created the majority of the frontend interface,
 created pages for managing households, feeding pets, making new households, viewing logs, and more,
 worked on getting frontend to communicate with backend,
 other.
-- **Dean McCarthy *(25 hours)***:
+- **Dean McCarthy *(35 hours)***:
 Worked on various aspects of frontend and backend code,
 created UI to add pets,
 handled managing users on the front and back end,
 smart notifications,
 other.
-- **Aidan Cotsakis *(20 hours)***:
+- **Aidan Cotsakis *(30 hours)***:
 Setup User authentication,
 updated Documentation,
 wrote Reflections,
 modified Various UI components,
 other.
-- **Matthew Fung *(35 hours)***:
+- **Matthew Fung *(40 hours)***:
 Created the majority of the backend,
 worked on deploying server,
 created notification system,
