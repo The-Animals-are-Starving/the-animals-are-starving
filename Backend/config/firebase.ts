@@ -8,7 +8,7 @@ const serviceAccountKey: ServiceAccount = {
   clientEmail: serviceAccount.client_email,
 };
 
-initializeApp({
+admin.initializeApp({
   credential: cert(serviceAccountKey),
 });
 

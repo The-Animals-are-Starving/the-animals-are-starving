@@ -30,18 +30,18 @@ router.post("/:email", async (req: Request, res: Response): Promise<void> => {
     }
   
     try {
-      const token = await getUserDeviceToken(email);
-      if (!token) {
+      const fcmtoken = await getUserDeviceToken(email);
+      if (!fcmtoken) {
         res.status(404).json({ error: "User token not found" });
         return;
       }
   
       const message = {
-        token,
         notification: {
           title,
           body,
         },
+        token: fcmtoken
       };
   
       const response = await admin.messaging().send(message);
