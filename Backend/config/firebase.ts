@@ -2,15 +2,20 @@ import admin, { ServiceAccount } from "firebase-admin";
 import { cert } from "firebase-admin/app";
 require('dotenv').config();
 
-const firebaseServiceAccount = process.env.FIREBASE_SERVICE_ACCOUNT;
-if (!firebaseServiceAccount) {
-  throw new Error("FIREBASE_SERVICE_ACCOUNT is not defined in the environment variables.");
+const { FIREBASE_PROJECT_ID, FIREBASE_PRIVATE_KEY, FIREBASE_CLIENT_EMAIL } = process.env;
+
+if (!FIREBASE_PROJECT_ID || !FIREBASE_PRIVATE_KEY || !FIREBASE_CLIENT_EMAIL) {
+  throw new Error("Missing Firebase configuration in environment variables.");
 }
 
-const serviceAccountKey: ServiceAccount = JSON.parse(firebaseServiceAccount);
+const serviceAccount: ServiceAccount = {
+  projectId: FIREBASE_PROJECT_ID,
+  privateKey: FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+  clientEmail: FIREBASE_CLIENT_EMAIL,
+};
 
 admin.initializeApp({
-  credential: cert(serviceAccountKey),
+  credential: cert(serviceAccount),
 });
 
 export default admin;
