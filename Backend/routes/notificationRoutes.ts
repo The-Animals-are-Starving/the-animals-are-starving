@@ -47,8 +47,9 @@ router.post("/:email", async (req: Request, res: Response): Promise<void> => {
       const response = await admin.messaging().send(message);
       res.status(200).json({ message: "Notification sent", response });
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
       console.error("Error sending notification:", error);
-      res.status(500).json({ error: "Failed to send notification" });
+      res.status(500).json({ error: "Failed to send notification", details: errorMessage });
     }
   });
   
