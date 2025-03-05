@@ -102,31 +102,22 @@ class FeedingActivity : AppCompatActivity() {
 
         //TODO: I dont think this is dynamic? Send this to backend
 
-        val repository = PetRepository
-        repository.feedPet(petName) { success ->
-
-        }
-
-
-        feedingButton.setOnClickListener {
-            // Launch a coroutine in the main scope
-            CoroutineScope(Dispatchers.Main).launch {
-                // Call the suspend function feedPet inside the coroutine
-                PetRepository.feedPet(petName) { success ->
-                    if (success) {
-                        // Update UI after feeding the pet
-                        fedStatusText.text = "FED"
-                        petCircle.setColorFilter(
-                            ContextCompat.getColor(
-                                this@FeedingActivity,
-                                R.color.base_green
-                            )
+        feedingButton.setOnClickListener{
+            val repository = PetRepository
+            repository.feedPet(petName) { success ->
+                if (success) {
+                    // Update UI after feeding the pet
+                    fedStatusText.text = "FED"
+                    petCircle.setColorFilter(
+                        ContextCompat.getColor(
+                            this@FeedingActivity,
+                            R.color.base_green
                         )
-                        feedingButton.visibility = View.GONE
-                        feedingInfo.visibility = View.VISIBLE
-                    } else {
-                        alertMessage("Failed to feed pet. Please try again.", petContainer)
-                    }
+                    )
+                    feedingButton.visibility = View.GONE
+                    feedingInfo.visibility = View.VISIBLE
+                } else {
+                    alertMessage("Failed to feed pet. Please try again.", petContainer)
                 }
             }
         }
