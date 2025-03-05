@@ -38,10 +38,10 @@ jobs:
             echo "Current directory: $(pwd)"
             ls -al
 
-            # Write secrets into .env 
             cat > .env << EOF
             PORT=${{ secrets.PROD_PORT }}
             DB_URI=${{ secrets.PROD_DB_URI }}
+            FIREBASE_SERVICE_ACCOUNT=${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
             EOF
 
             # Set proper permissions for .env

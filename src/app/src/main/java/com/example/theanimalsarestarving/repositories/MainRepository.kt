@@ -77,11 +77,8 @@ class MainRepository(private val apiService: ApiService) {
     }
 
     fun updateUserToken(email: String, token: String, callback: (Boolean) -> Unit) {
-        val reqBody = mapOf(
-            "email" to email,
-            "token" to token
-        )
-        apiService.updateUserRole(email, reqBody).enqueue(object : retrofit2.Callback<User> {
+        val reqBody = mapOf("FCMToken" to token)
+        apiService.updateUserToken(email, reqBody).enqueue(object : retrofit2.Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 callback(response.isSuccessful)
             }
@@ -92,6 +89,7 @@ class MainRepository(private val apiService: ApiService) {
             }
         })
     }
+
 
     fun getAllPets(householdId: String, callback: (List<Pet>?) -> Unit) {
         apiService.getAllPets(householdId).enqueue(object: retrofit2.Callback<List<Pet>> {

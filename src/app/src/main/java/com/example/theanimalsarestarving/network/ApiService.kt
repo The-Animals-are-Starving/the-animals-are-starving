@@ -43,7 +43,7 @@ interface ApiService {
         @Body body: Map<String, String> = mapOf("role" to "restricted")
     ): Call<User>
 
-    @PATCH("user/{email}/token")
+    @PATCH("user/{email}/")
     fun updateUserToken(
         @Path("email") email: String,
         @Body body: Map<String, String>
@@ -85,6 +85,9 @@ interface ApiService {
 
     @GET("log/household/{householdId}")
     fun getLogs(@Path("householdId") householdId: String): Call<List<FeedingLog>>
+
+    @POST("notify/{email}")
+    fun sendNotification(@Path("email") email: String): Call<Void>
 
 
 }
