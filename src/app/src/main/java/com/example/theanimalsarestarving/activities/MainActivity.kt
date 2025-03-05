@@ -38,6 +38,8 @@ import com.example.theanimalsarestarving.repositories.PetRepository
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -176,6 +178,18 @@ class MainActivity : AppCompatActivity() {
             val msg = getString(R.string.msg_token_fmt, token)
             Log.d(TAG, msg)
             Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+
+
+            val repository = MainRepository(NetworkManager.apiService)
+            repository.updateUserToken(email, token) { success ->
+
+                if (success) {
+                    Log.d("UpdateUserToken", "User token updated successfully")
+                } else {
+                    Log.e("MainRepository", "Error: Failed to update user token")
+                }
+
+            }
         })
 
         feedingButton.setOnClickListener {
@@ -357,7 +371,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun sendNotif(email: String) { // May pass user as object instead
-        //TODO: Implement Firebase api call
+        apiService.sendNotification(email).enqueue(object : retrofit2.Callback<Void> {
+            override fun onResponse(
+                call: Call<Void>,
+                response: Response<Void>
+            ) {
+                if (response.isSuccessful) {
+                    Toast.makeText(this@MainActivity, "Notification sent.", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this@MainActivity, "Failed to send notification.", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Toast.makeText(this@MainActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
 

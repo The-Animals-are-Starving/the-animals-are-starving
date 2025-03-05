@@ -98,7 +98,7 @@ class LoginActivity : AppCompatActivity() {
     private fun skipLogin() {
         // Save login state
         val sharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
-        sharedPreferences.edit().putBoolean("isLoggedIn", true).putString("userEmail", "a@b.c").putString("userName", "John").apply()
+        sharedPreferences.edit().putBoolean("isLoggedIn", true).putString("userEmail", "testeremail@gmail.com").putString("userName", "Jimbo").apply()
 
         // Navigate to MainActivity after login
         val intent = Intent(this, MainActivity::class.java)

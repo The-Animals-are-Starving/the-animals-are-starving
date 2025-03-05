@@ -36,7 +36,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     override fun onNewToken(token: String) {
-        Log.d(TAG, "Refreshed token: $token")
+        Log.d("Firebase Messaging", "Refreshed token: $token")
 
         val email = CurrUserRepository.getCurrUser()?.email.toString()
 
