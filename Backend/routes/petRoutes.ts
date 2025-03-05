@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post("/", addPet);
 router.get("/:householdId", getPetsByHousehold);
-router.patch("/:petId/feed", updatePetFeedingStatus);
-router.delete("/:petId", removePet);
+router.patch("/:petName/feed", updatePetFeedingStatus);
+router.delete("/:petName", removePet);
 
 export default router;
