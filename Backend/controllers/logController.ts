@@ -8,18 +8,20 @@ import Household from "../models/Household";
 // Log a feeding event
 export const logFeeding = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { petId, userEmail, amount, householdId } = req.body;
+        const { petName, userEmail, householdId } = req.body;
 
         // Validate user
         const user = await User.findOne({ email: userEmail });
         if (!user) {
+            console.log("User not found")
             res.status(404).json({ message: "User not found" });
             return;
         }
 
         // Validate pet
-        const pet = await Pet.findById(petId);
+        const pet = await Pet.findOne({name: petName});
         if (!pet) {
+            console.log("Pet not found")
             res.status(404).json({ message: "Pet not found" });
             return;
         }
@@ -36,7 +38,7 @@ export const logFeeding = async (req: Request, res: Response): Promise<void> => 
         // Create log entry
         const log = new Log({
             householdId: householdId ? new mongoose.Types.ObjectId(householdId) : undefined,
-            petId,
+            petId: pet._id,
             userId: user._id,
             timestamp: new Date(),
         });

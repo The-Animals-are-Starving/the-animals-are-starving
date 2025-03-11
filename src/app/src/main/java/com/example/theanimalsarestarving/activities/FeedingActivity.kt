@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.models.Pet
@@ -119,6 +120,16 @@ class FeedingActivity : AppCompatActivity() {
                 } else {
                     alertMessage("Failed to feed pet. Please try again.", petContainer)
                 }
+            }
+            repository.logFeed(petName, CurrUserRepository.getCurrUser()?.email.toString())
+            { success ->
+                if (success) {
+                    Toast.makeText(this, "Feeding logged successfully", Toast.LENGTH_SHORT).show()
+
+                } else {
+                    Toast.makeText(this, "Failed to log feeding", Toast.LENGTH_SHORT).show()
+                }
+
             }
         }
 

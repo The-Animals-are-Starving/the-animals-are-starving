@@ -8,7 +8,7 @@ import {
 
 const router = express.Router();
 
-router.post("/", logFeeding);
+router.post("/:petName", logFeeding);
 router.get("/pet/:petId", getPetFeedingHistory);
 router.get("/household/:householdId", getHouseholdFeedingHistory);
 router.get("/user/:userEmail", getUserFeedingHistory);

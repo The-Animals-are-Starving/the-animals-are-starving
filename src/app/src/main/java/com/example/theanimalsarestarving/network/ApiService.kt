@@ -72,11 +72,18 @@ interface ApiService {
     @GET("pet/{householdId}")
     fun getAllPets(@Path("householdId") householdId: String): Call<List<Pet>>  // Return a list of pets
 
-    @PATCH("pet/{petId}/feed")
+    @PATCH("pet/{petName}/feed")
     fun feedPet(
-        @Path("petId") petId: String,
+        @Path("petName") petName: String,
         @Body body: Map<String, Boolean> = mapOf("fed" to true)
     ): Call<Pet>
+
+    @POST("log/{petName}")
+    fun logFeed(
+        @Path("petName") petName: String,
+        @Body body: Map<String,String>
+    ): Call<FeedingLog>
+
 
     @POST("household/create")
     suspend fun createHousehold(

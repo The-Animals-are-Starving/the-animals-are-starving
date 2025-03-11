@@ -1,5 +1,6 @@
 import express from "express";
 import { addPet, getPetsByHousehold, updatePetFeedingStatus, removePet } from "../controllers/petController";
+import { logFeeding } from "../controllers/logController";
 
 const router = express.Router();
 

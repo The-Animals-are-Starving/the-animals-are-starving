@@ -1,6 +1,7 @@
 package com.example.theanimalsarestarving.repositories
 
 import android.util.Log
+import com.example.theanimalsarestarving.models.FeedingLog
 import com.example.theanimalsarestarving.models.Pet
 import com.example.theanimalsarestarving.models.User
 import retrofit2.Response
@@ -36,6 +37,21 @@ object PetRepository {
         } catch (t: Throwable) {
             Log.e(TAG, "Failure: ${t.message}")
         }
+    }
+
+    fun logFeed(petName: String, userEmail: String, callback: (Boolean) -> Unit) {
+        Log.d("PetRepository", "Attempting to log feeding: $petName")
+        val body = mapOf("user" to "userEmail")
+        apiService.logFeed(petName, body).enqueue(object : retrofit2.Callback<FeedingLog> {
+            override fun onResponse(call: Call<FeedingLog>, response: Response<FeedingLog>) {
+                callback(response.isSuccessful)
+            }
+
+            override fun onFailure(call: Call<FeedingLog>, t: Throwable) {
+                Log.d("PetRepository", "Error logging feeding: ${t.message}")
+                callback(false)
+            }
+        })
     }
 
 
