@@ -19,10 +19,11 @@ export const addPet = async (req: Request, res: Response): Promise<void> => {
             }
         }
 
+        const feedingTimeValid = `1969-04-20T${feedingTime}:00`;
         const pet = new Pet({
             name,
             householdId: householdId,
-            feedingTime: new Date(feedingTime),
+            feedingTime: new Date(feedingTimeValid).toISOString(),
             fed: false
         });
 
