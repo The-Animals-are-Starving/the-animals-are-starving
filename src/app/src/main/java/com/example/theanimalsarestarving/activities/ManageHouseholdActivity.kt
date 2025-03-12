@@ -14,6 +14,7 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.theanimalsarestarving.R
@@ -118,17 +119,6 @@ class ManageHouseholdActivity : AppCompatActivity() {
 
                 Log.d("AddUser", "User added successfully: $addedUser")
                 refreshUsers()
-
-
-                // no need to actually add user to household bc household is a param on the user we can just search by household TODO: maybe optimize later
-                /*Log.d("AddUserToHousehold","Attempting to add user to household: $newUser")
-                repository.addUserToHousehold(newUser, newUser.householdId) { includedUser -> //adds user
-                    if (includedUser != null) {
-                        Log.d("AddUserToHousehold", "User added to household successfully: $includedUser")
-                    } else {
-                        alertMessage("Failed to add user to household. Please try again.", container)
-                    }
-                }*/
 
             } else {
                 alertMessage("Failed to add user. Please try again.", container)
@@ -311,6 +301,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
                         roleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                                 val selectedRole = roleOptions[position]
+                                Log.d("RefreshUser", user.toString())
 
                                 // Prevent unnecessary API calls if role is unchanged
                                 val role = if (user.role == null) UserRole.REGULAR else UserRole.fromBackendRole(user.role.toString())
@@ -323,8 +314,28 @@ class ManageHouseholdActivity : AppCompatActivity() {
                             override fun onNothingSelected(parent: AdapterView<*>) {}
                         }
 
+                        val deleteButton = Button(this).apply {
+                            text = "Delete"
+                            setOnClickListener {
+                                AlertDialog.Builder(this@ManageHouseholdActivity)
+                                    .setTitle("Confirm Deletion")
+                                    .setMessage("Are you sure you want to delete this user?")
+                                    .setPositiveButton("YES") {_, _ ->
+                                        deleteUser(user.email) { success ->
+                                            if (success) {
+                                                Toast.makeText(this@ManageHouseholdActivity, "User Deleted", Toast.LENGTH_SHORT).show()
+                                                refreshUsers()
+                                            } else {
+                                                alertMessage("Failed to delete user. Please try again.", userListContainer)
+                                            }
+                                        }
+                                    }
+                            }
+                        }
+
                         userRow.addView(nameView)
                         userRow.addView(roleSpinner)
+                        userRow.addView(deleteButton)
                         userListContainer.addView(userRow)
 
                     }
@@ -413,6 +424,13 @@ class ManageHouseholdActivity : AppCompatActivity() {
             spinner.isEnabled = true
 
         }
+    }
+
+    private fun deleteUser(userEmail: String, callback: (Boolean) -> Unit) {
+        val repository = MainRepository(apiService)
+        Log.d("ManageHousehold", "Attempting to delete user $userEmail")
+        callback(true)
+        //TODO: Make backend call
     }
 
 
