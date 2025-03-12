@@ -27,6 +27,8 @@ import com.example.theanimalsarestarving.repositories.HouseholdRepository
 import com.example.theanimalsarestarving.repositories.PetRepository
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import retrofit2.Call
+import retrofit2.Response
 
 private val testHouseholdId: String = "67c2aa855a9890c0f183efa4"
 
@@ -323,6 +325,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
                                             }
                                         }
                                     }
+                                    .show()
                             }
                         }
 
@@ -420,8 +423,24 @@ class ManageHouseholdActivity : AppCompatActivity() {
     }
 
     private fun deleteUser(userEmail: String, callback: (Boolean) -> Unit) {
-        val repository = MainRepository(apiService)
         Log.d("ManageHousehold", "Attempting to delete user $userEmail")
+        apiService.deleteUser(userEmail).enqueue(object : retrofit2.Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                if(response.isSuccessful) {
+                    val success = response.body() ?: false
+                    if (success) {
+                        Log.d("DeleteUser", "User deleted successfully")
+                    } else {
+                        Log.d("DeleteUser", "User not found or already deleted")
+                    }
+                } else {
+                    Log.e("DeleteUser", "Failed with code: ${response.code()}")
+                }
+            }
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                Log.e("DeleteUser", "Error: ${t.message}")
+            }
+        })
         callback(true)
         //TODO: Make backend call
     }
