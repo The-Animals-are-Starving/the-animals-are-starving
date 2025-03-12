@@ -42,8 +42,8 @@ export const logFeeding = async (req: Request, res: Response): Promise<void> => 
         // Create log entry
         const log = new Log({
             householdId: householdId ? new mongoose.Types.ObjectId(householdId) : undefined,
-            petId: pet._id,
-            userId: user._id,
+            petName: petName,
+            userName: user.name,
             timestamp: new Date(),
             amount: 5
         });
@@ -71,8 +71,9 @@ export const getPetFeedingHistory = async (req: Request, res: Response) => {
 export const getHouseholdFeedingHistory = async (req: Request, res: Response) => {
     try {
         const { householdId } = req.params;
+        console.log("Fetching logs from household %s", householdId)
         const logs = await Log.find({ householdId }).sort({ timestamp: -1 });
-
+        console.log(logs)
         res.json(logs);
     } catch (error) {
         res.status(500).json({ message: "Error retrieving household feeding history", error });

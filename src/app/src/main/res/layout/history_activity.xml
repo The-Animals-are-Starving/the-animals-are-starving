@@ -34,16 +34,13 @@
                 android:textStyle="bold" />
 
             <!-- Box for Feedings Logs -->
-            <LinearLayout
+            <TableLayout
                 android:id="@+id/feedingsLogBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:stretchColumns="*"
                 android:padding="16dp"
-                android:layout_marginBottom="16dp">
-
-
-            </LinearLayout>
+                android:layout_marginBottom="16dp"/>
 
         </LinearLayout>
 
