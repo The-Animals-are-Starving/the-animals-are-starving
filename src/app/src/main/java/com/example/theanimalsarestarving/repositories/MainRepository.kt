@@ -59,10 +59,10 @@ class MainRepository(private val apiService: ApiService) {
     }
 
 
-    fun updateUserRole(email: String, newRole: UserRole, callback: (Boolean) -> Unit) {
+    fun updateUserRole(email: String, newRole: String, callback: (Boolean) -> Unit) {
         val reqBody = mapOf(
             "email" to email,
-            "role" to UserRole.toBackendRole(newRole)
+            "role" to newRole
             )
         apiService.updateUserRole(email, reqBody).enqueue(object : retrofit2.Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {

@@ -16,9 +16,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.example.theanimalsarestarving.R
-import com.example.theanimalsarestarving.models.Household
 import com.example.theanimalsarestarving.models.User
 import com.example.theanimalsarestarving.models.UserRole
 import com.example.theanimalsarestarving.models.Pet
@@ -29,9 +27,6 @@ import com.example.theanimalsarestarving.repositories.HouseholdRepository
 import com.example.theanimalsarestarving.repositories.PetRepository
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 private val testHouseholdId: String = "67c2aa855a9890c0f183efa4"
 
@@ -270,7 +265,6 @@ class ManageHouseholdActivity : AppCompatActivity() {
             repository.getAllUsers(currHouseholdId.toString()) { users ->
                 if (users != null) {
                     for (user in users) {
-
                         val userRow = LinearLayout(this).apply {
                             orientation = LinearLayout.HORIZONTAL
                             layoutParams = LinearLayout.LayoutParams(
@@ -290,7 +284,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
                         }
 
                         val roleSpinner = Spinner(this)
-                        val roleOptions = arrayOf(UserRole.REGULAR, UserRole.RESTRICTED, UserRole.ADMIN)
+                        val roleOptions = arrayOf("normal", "restricted", "manager")
                         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, roleOptions)
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) // Set dropdown item style
                         roleSpinner.adapter = adapter
@@ -301,10 +295,9 @@ class ManageHouseholdActivity : AppCompatActivity() {
                         roleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                                 val selectedRole = roleOptions[position]
-                                Log.d("RefreshUser", user.toString())
 
                                 // Prevent unnecessary API calls if role is unchanged
-                                val role = if (user.role == null) UserRole.REGULAR else UserRole.fromBackendRole(user.role.toString())
+                                val role = user.role
                                 if (selectedRole != role) {
                                     roleSpinner.isEnabled = false
                                     updateUserRole(user.email, selectedRole, roleSpinner)
@@ -395,7 +388,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateUserRole(userId: String, newRole: UserRole, spinner: Spinner) {
+    private fun updateUserRole(userId: String, newRole: String, spinner: Spinner) {
         val repository = MainRepository(apiService)
         Log.d("UpdateUserRole", "Updating user role for user: $userId to role: $newRole")
 
@@ -410,7 +403,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
             } else {
                 alertMessage("Failed to update role. Try again.", spinner.parent as LinearLayout)
                 // Reset the spinner to its previous role (in case of failure)
-                val roleOptions = arrayOf(UserRole.REGULAR, UserRole.RESTRICTED, UserRole.ADMIN)
+                val roleOptions = arrayOf("normal", "restricted", "manager")
                 val adapter = ArrayAdapter(spinner.context, android.R.layout.simple_spinner_item, roleOptions)
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 spinner.adapter = adapter
