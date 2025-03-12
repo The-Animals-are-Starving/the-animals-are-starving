@@ -16,8 +16,8 @@
         app:layout_constraintBottom_toTopOf="@+id/restricted_feed_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintTop_toTopOf="parent"
+/>
 
     <Button
         android:id="@+id/restricted_feed_button"

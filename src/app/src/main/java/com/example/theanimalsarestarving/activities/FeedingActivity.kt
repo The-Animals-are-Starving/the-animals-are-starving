@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.models.Pet
+import com.example.theanimalsarestarving.models.UserRole
 import com.example.theanimalsarestarving.network.ApiService
 import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.network.NetworkManager
@@ -42,6 +43,17 @@ class FeedingActivity : AppCompatActivity() {
 
         petContainer = findViewById(R.id.petContainer)
 
+        val currUser = CurrUserRepository.getCurrUser() //TODO: ensure this works after fixing userRole
+
+        if (currUser != null) {
+            if (currUser.role == UserRole.RESTRICTED) {
+                val defaultTitle = findViewById<TextView>(R.id.title)
+                val restrictedTitle = findViewById<TextView>(R.id.title_restricted)
+                restrictedTitle.visibility = View.VISIBLE
+                defaultTitle.visibility = View.GONE
+
+            }
+        }
         checkNetworkManager()
 
         Log.d(TAG, "Current Household: ${HouseholdRepository.getCurrentHousehold()}\n Current User: ${CurrUserRepository.getCurrUser()}\n Current pets: ${PetRepository.getPets()}")

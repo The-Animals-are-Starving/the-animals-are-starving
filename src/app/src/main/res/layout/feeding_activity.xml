@@ -36,7 +36,24 @@
                     android:textAlignment="center"
                     android:textColor="@color/subtitle_color"
                     android:letterSpacing="0.15"
-                    android:lineSpacingExtra="-30sp" />
+                    android:lineSpacingExtra="-30sp"
+                    android:visibility="visible"/>
+
+<!--                only for restricted users-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="73dp"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Feeding Page"
+                    android:textSize="55sp"
+                    android:id="@+id/title_restricted"
+                    android:layout_marginBottom="16dp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    android:textAlignment="center"
+                    android:visibility="gone"
+                 />
+
 
                 <!-- Add more dynamic content here in the LinearLayout -->
 
