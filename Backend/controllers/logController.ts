@@ -8,9 +8,11 @@ import Household from "../models/Household";
 // Log a feeding event
 export const logFeeding = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { petName, userEmail, householdId } = req.body;
+        const { petName } = req.params;
+        const {userEmail, householdId } = req.body;
 
         // Validate user
+        console.log("Searching for user with email, %s", userEmail);
         const user = await User.findOne({ email: userEmail });
         if (!user) {
             console.log("User not found")
@@ -27,12 +29,14 @@ export const logFeeding = async (req: Request, res: Response): Promise<void> => 
         }
 
         // Validate household if provided
+        console.log("Searching for household, %s", householdId)
         if (householdId) {
             const household = await Household.findById(householdId);
             if (!household) {
                 res.status(404).json({ message: "Household not found" });
                 return;
             }
+            console.log("Found household, %s", household);
         }
 
         // Create log entry

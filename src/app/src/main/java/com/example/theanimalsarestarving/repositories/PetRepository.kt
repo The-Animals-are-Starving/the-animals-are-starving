@@ -40,8 +40,11 @@ object PetRepository {
     }
 
     fun logFeed(petName: String, userEmail: String, callback: (Boolean) -> Unit) {
-        Log.d("PetRepository", "Attempting to log feeding: $petName")
-        val body = mapOf("user" to "userEmail")
+        val houseId = HouseholdRepository.getCurrentHousehold()?._id.toString();
+        val body = mapOf(
+            "userEmail" to userEmail,
+            "householdId" to houseId);
+        Log.d("PetRepository", "Attempting to log feeding: $petName, $userEmail, $houseId")
         apiService.logFeed(petName, body).enqueue(object : retrofit2.Callback<FeedingLog> {
             override fun onResponse(call: Call<FeedingLog>, response: Response<FeedingLog>) {
                 callback(response.isSuccessful)

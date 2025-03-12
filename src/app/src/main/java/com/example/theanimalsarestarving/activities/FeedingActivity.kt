@@ -121,7 +121,9 @@ class FeedingActivity : AppCompatActivity() {
                     alertMessage("Failed to feed pet. Please try again.", petContainer)
                 }
             }
-            repository.logFeed(petName, CurrUserRepository.getCurrUser()?.email.toString())
+            val currUser = CurrUserRepository.getCurrUser()
+            Log.d("FeedingActivity", "Attempting to log feeding for pet $petName, from user $currUser")
+            repository.logFeed(petName, currUser?.email.toString())
             { success ->
                 if (success) {
                     Toast.makeText(this, "Feeding logged successfully", Toast.LENGTH_SHORT).show()
