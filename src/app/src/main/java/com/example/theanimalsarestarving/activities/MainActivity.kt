@@ -56,10 +56,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var notifyButton: Button
     private lateinit var manageButton: Button
     private lateinit var feedingHistoryButton: Button
-    private lateinit var adminViewButton: Button
-    private lateinit var regularViewButton: Button
-    private lateinit var restrictedViewButton: Button
-    private lateinit var openCreateHouseholdButton: Button
+//    private lateinit var adminViewButton: Button
+//    private lateinit var regularViewButton: Button
+//    private lateinit var restrictedViewButton: Button
+//    private lateinit var openCreateHouseholdButton: Button
     private lateinit var logoutButton: Button
 
     private val requestPermissionLauncher = registerForActivityResult(
@@ -95,9 +95,6 @@ class MainActivity : AppCompatActivity() {
 
         val email = sharedPreferences.getString("userEmail", "").toString()
         val name = sharedPreferences.getString("userName", "").toString()
-
-        //TODO: !!FROM TJ!! REMOVE THIS HARD CODED EMAIL IF YOU WANT TO TEST
-//        val email = "test1234@gmail.com"
 
         lifecycleScope.launch {
             try {
@@ -135,8 +132,24 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        val userRole = CurrUserRepository.getCurrUser()?.role
 
-        setContentView(R.layout.activity_main)
+        when (userRole) {
+            UserRole.ADMIN -> {
+                setContentView(R.layout.activity_main)
+            }
+            UserRole.REGULAR -> {
+                setContentView(R.layout.activity_main) //TODO: change this
+            }
+            UserRole.RESTRICTED-> {
+                setContentView(R.layout.activity_main_restricted)
+            }
+            else -> {
+                Log.e(TAG, "Unknown Role")
+                setContentView(R.layout.activity_main)
+
+            }
+        }
 
 
         Log.d(TAG, "Current Household: ${HouseholdRepository.getCurrentHousehold()}\n Current User: ${CurrUserRepository.getCurrUser()}\n Current pets: ${PetRepository.getPets()}")
@@ -146,10 +159,10 @@ class MainActivity : AppCompatActivity() {
         notifyButton = findViewById(R.id.notify_button)
         manageButton = findViewById(R.id.manage_button)
         feedingHistoryButton = findViewById(R.id.feeding_history_button)
-        adminViewButton = findViewById(R.id.admin_view_button)
-        regularViewButton = findViewById(R.id.regular_view_button)
-        restrictedViewButton = findViewById(R.id.restricted_view_button)
-        openCreateHouseholdButton = findViewById(R.id.openCreateHouseholdButton)
+//        adminViewButton = findViewById(R.id.admin_view_button)
+//        regularViewButton = findViewById(R.id.regular_view_button)
+//        restrictedViewButton = findViewById(R.id.restricted_view_button)
+//        openCreateHouseholdButton = findViewById(R.id.openCreateHouseholdButton)
         logoutButton = findViewById(R.id.logoutButton)
 
         val userRoleViewModel: UserRoleViewModel by viewModels()
@@ -160,10 +173,10 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        userRoleViewModel.userRole.observe(this, Observer { role ->
-            updateRoleBasedUI(role)
-        })
-        userRoleViewModel.setUserRole(UserRole.ADMIN)
+//        userRoleViewModel.userRole.observe(this, Observer { role ->
+//            updateRoleBasedUI(role)
+//        })
+//        userRoleViewModel.setUserRole(UserRole.ADMIN)
 
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
@@ -207,10 +220,10 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, HistoryActivity::class.java)
             startActivity(intent)
         }
-        openCreateHouseholdButton.setOnClickListener() {
-            val intent = Intent(this, CreateHouseholdActivity::class.java)
-            startActivity(intent)
-        }
+//        openCreateHouseholdButton.setOnClickListener() {
+//            val intent = Intent(this, CreateHouseholdActivity::class.java)
+//            startActivity(intent)
+//        }
 
         logoutButton.setOnClickListener() {
             val sharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
@@ -218,49 +231,49 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
-
-        adminViewButton.setOnClickListener {
-            userRoleViewModel.setUserRole(UserRole.ADMIN)
-            Log.d(TAG, "adminViewButton clicked")
-        }
-
-        regularViewButton.setOnClickListener {
-            userRoleViewModel.setUserRole(UserRole.REGULAR)
-            Log.d(TAG, "regularViewButton clicked")
-
-        }
-
-        restrictedViewButton.setOnClickListener {
-            userRoleViewModel.setUserRole(UserRole.RESTRICTED)
-            Log.d(TAG, "restrictedViewButton clicked")
-        }
+//
+//        adminViewButton.setOnClickListener {
+//            userRoleViewModel.setUserRole(UserRole.ADMIN)
+//            Log.d(TAG, "adminViewButton clicked")
+//        }
+//
+//        regularViewButton.setOnClickListener {
+//            userRoleViewModel.setUserRole(UserRole.REGULAR)
+//            Log.d(TAG, "regularViewButton clicked")
+//
+//        }
+//
+//        restrictedViewButton.setOnClickListener {
+//            userRoleViewModel.setUserRole(UserRole.RESTRICTED)
+//            Log.d(TAG, "restrictedViewButton clicked")
+//        }
 
 
     }
 
-    private fun updateRoleBasedUI(role: UserRole) {
-        when (role) {
-            UserRole.ADMIN -> {
-                notifyButton.visibility = View.VISIBLE
-                manageButton.visibility = View.VISIBLE
-                feedingHistoryButton.visibility = View.VISIBLE
-            }
-
-            UserRole.REGULAR -> {
-                notifyButton.visibility = View.VISIBLE
-                manageButton.visibility = View.INVISIBLE
-                feedingHistoryButton.visibility = View.INVISIBLE
-
-            }
-
-            UserRole.RESTRICTED -> {
-                notifyButton.visibility = View.INVISIBLE
-                manageButton.visibility = View.INVISIBLE
-                feedingHistoryButton.visibility = View.INVISIBLE
-
-            }
-        }
-    }
+//    private fun updateRoleBasedUI(role: UserRole) {
+//        when (role) {
+//            UserRole.ADMIN -> {
+//                notifyButton.visibility = View.VISIBLE
+//                manageButton.visibility = View.VISIBLE
+//                feedingHistoryButton.visibility = View.VISIBLE
+//            }
+//
+//            UserRole.REGULAR -> {
+//                notifyButton.visibility = View.VISIBLE
+//                manageButton.visibility = View.INVISIBLE
+//                feedingHistoryButton.visibility = View.INVISIBLE
+//
+//            }
+//
+//            UserRole.RESTRICTED -> {
+//                notifyButton.visibility = View.INVISIBLE
+//                manageButton.visibility = View.INVISIBLE
+//                feedingHistoryButton.visibility = View.INVISIBLE
+//
+//            }
+//        }
+//    }
 
     private fun askNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
