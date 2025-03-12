@@ -311,28 +311,38 @@ class ManageHouseholdActivity : AppCompatActivity() {
                                 }
                             }
 
-                            override fun onNothingSelected(parent: AdapterView<*>) {}
-                        }
+                                override fun onNothingSelected(parent: AdapterView<*>) {}
+                            }
 
-                        val deleteButton = Button(this).apply {
-                            text = "Delete"
-                            setOnClickListener {
-                                AlertDialog.Builder(this@ManageHouseholdActivity)
-                                    .setTitle("Confirm Deletion")
-                                    .setMessage("Are you sure you want to delete this user?")
-                                    .setPositiveButton("YES") {_, _ ->
-                                        deleteUser(user.email) { success ->
-                                            if (success) {
-                                                Toast.makeText(this@ManageHouseholdActivity, "User Deleted", Toast.LENGTH_SHORT).show()
-                                                refreshUsers()
-                                            } else {
-                                                alertMessage("Failed to delete user. Please try again.", userListContainer)
+                            val deleteButton = Button(this).apply {
+                                text = "Delete"
+                                setOnClickListener {
+                                    AlertDialog.Builder(this@ManageHouseholdActivity)
+                                        .setTitle("Confirm Deletion")
+                                        .setMessage("Are you sure you want to delete this user?")
+                                        .setPositiveButton("YES") { _, _ ->
+                                            deleteUser(user.email) { success ->
+                                                if (success) {
+                                                    Toast.makeText(
+                                                        this@ManageHouseholdActivity,
+                                                        "User Deleted",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                    refreshUsers()
+                                                } else {
+                                                    alertMessage(
+                                                        "Failed to delete user. Please try again.",
+                                                        userListContainer
+                                                    )
+                                                }
                                             }
                                         }
-                                    }
                                         .setNegativeButton("NO") { dialog, _ -> dialog.cancel() }
-                                    .show()
+                                        .show()
+                                }
                             }
+                            userRow.addView(roleSpinner)
+                            userRow.addView(deleteButton)
                         } else {
                             val loggedInBox = TextView(this).apply {
                                 text = "LOGGED IN"
@@ -350,8 +360,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
                             }
                             userRow.addView(loggedInBox)
                         }
-                        userRow.addView(roleSpinner)
-                        userRow.addView(deleteButton)
+
                         userListContainer.addView(userRow)
 
                     }
