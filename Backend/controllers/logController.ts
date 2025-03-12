@@ -45,6 +45,7 @@ export const logFeeding = async (req: Request, res: Response): Promise<void> => 
             petId: pet._id,
             userId: user._id,
             timestamp: new Date(),
+            amount: 5
         });
 
         await log.save();

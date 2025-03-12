@@ -1,4 +1,3 @@
-// routes/notificationRoutes.js
 import express, { Request, Response } from "express";
 import admin from "../config/firebase";
 import User from "../models/User";
