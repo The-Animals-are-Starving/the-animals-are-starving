@@ -2,9 +2,12 @@ package com.example.theanimalsarestarving.activities
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
+import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
@@ -285,9 +288,9 @@ class ManageHouseholdActivity : AppCompatActivity() {
                                 1f
                             )
                         }
+                        userRow.addView(nameView)
 
-
-                        if (user.email == CurrUserRepository.getCurrUser()?.email) {
+                        if (user.email != CurrUserRepository.getCurrUser()?.email) {
                             val roleSpinner = Spinner(this)
                             val roleOptions = arrayOf("normal", "restricted", "manager")
                             val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, roleOptions)
@@ -328,15 +331,30 @@ class ManageHouseholdActivity : AppCompatActivity() {
                                                 }
                                             }
                                         }
+                                        .setNegativeButton("NO") { dialog, _ -> dialog.cancel() }
                                         .show()
                                 }
                             }
 
                             userRow.addView(roleSpinner)
                             userRow.addView(deleteButton)
+                        } else {
+                            val loggedInBox = TextView(this).apply {
+                                text = "LOGGED IN"
+                                layoutParams = LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT
+                                ).apply {
+                                    setMargins(0, 0, 10, 0)
+                                }
+                                setPadding(20, 15, 20, 15)
+                                setBackgroundColor(Color.parseColor("#ADD8E6"))
+                                gravity = Gravity.CENTER
+                                textSize = 16f
+                                setTypeface(null, Typeface.BOLD)
+                            }
+                            userRow.addView(loggedInBox)
                         }
-
-                        userRow.addView(nameView)
                         userListContainer.addView(userRow)
 
                     }
