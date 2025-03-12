@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node index.ts",
-    "dev": "dotenv -e .env -- npx nodemon -e .ts index.ts"
+    "dev": "dotenv -e .env -- npx nodemon -e .ts index.ts",
+    "test": "jest",
+    "test:coverage": "jest --coverage"
   },
   "keywords": [],
   "author": "",
@@ -32,9 +34,12 @@
     "@types/jsonwebtoken": "^9.0.8",
     "@types/mongoose": "^5.11.97",
     "@types/passport-google-oauth20": "^2.0.16",
+    "@types/supertest": "^6.0.2",
     "jest": "^29.7.0",
     "mongodb-memory-server": "^10.1.4",
     "nodemon": "^3.1.9",
+    "supertest": "^7.0.0",
+    "ts-jest": "^29.2.6",
     "typescript": "^5.7.3"
   }
 }
