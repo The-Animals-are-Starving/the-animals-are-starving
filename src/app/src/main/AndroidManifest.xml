@@ -35,6 +35,10 @@
             android:exported="false"
             android:label="FeedingActivity" />
         <activity
+            android:name=".activities.RestrictedMainActivity"
+            android:exported="false"
+            android:label="RestrictedMainActivity" />
+        <activity
             android:name=".activities.HistoryActivity"
             android:exported="false"
             android:label="HistoryActivity" />

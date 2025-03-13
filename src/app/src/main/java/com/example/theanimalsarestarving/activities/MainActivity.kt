@@ -127,7 +127,9 @@ class MainActivity : AppCompatActivity() {
 
                     // Now set content view based on the user's role
                     if (CurrUserRepository.getCurrUser()?.role == "restricted") {
-                        setContentView(R.layout.activity_main_restricted)
+                        val intent = Intent(this@MainActivity, RestrictedMainActivity::class.java)
+                        startActivity(intent)
+
                     } else {
                         setContentView(R.layout.activity_main)
                         setUpButtons()
