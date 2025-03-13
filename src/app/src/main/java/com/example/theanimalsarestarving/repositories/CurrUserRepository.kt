@@ -19,6 +19,7 @@ object CurrUserRepository {
         currUser = user
     }
 
+
     suspend fun fetchCurrUser(userEmail: String): User? {
         return try {
             // Switch to the IO dispatcher for the blocking network call

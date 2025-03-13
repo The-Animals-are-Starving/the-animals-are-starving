@@ -76,9 +76,7 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         askNotificationPermission()
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
 
         if (!isUserLoggedIn()) {
@@ -107,14 +105,16 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     Log.d(TAG, "Unable to find user in db, redirecting to limbo")
                     redirectToLimbo()
+                    return@launch  // Exit early if the user is not found
                 }
 
                 // This block will now run after the above logic has finished
                 if (CurrUserRepository.getCurrUser()?.householdId.isNullOrEmpty()) {
                     Log.d(TAG, "current user has a null or empty houseid, redirecting to limbo")
                     redirectToLimbo()
+                    return@launch  // Exit early if householdId is null or empty
                 } else {
-                    //set current household TODO: FETCH CURR HOUSEHOLD - do this later if necessary
+                    // set current household TODO: FETCH CURR HOUSEHOLD - do this later if necessary
                     val currHousehold = Household(
                         _id = CurrUserRepository.getCurrUser()?.householdId.toString(),
                         name = "",
@@ -125,85 +125,62 @@ class MainActivity : AppCompatActivity() {
 
                     HouseholdRepository.setCurrentHousehold(currHousehold)
 
+                    // Now set content view based on the user's role
+                    if (CurrUserRepository.getCurrUser()?.role == "restricted") {
+                        setContentView(R.layout.activity_main_restricted)
+                    } else {
+                        setContentView(R.layout.activity_main)
+                        setUpButtons()
+                        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+                            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+                            insets
+                        }
+
+                    }
                 }
 
             } catch (e: Exception) {
                 Log.e(TAG, "Error fetching user: ${e.message}")
             }
+
+
+
+
+            FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                    return@OnCompleteListener
+                }
+
+                // Get new FCM registration token
+                val token = task.result
+
+                // Log and toast
+                val msg = getString(R.string.msg_token_fmt, token)
+                Log.d(TAG, msg)
+                Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+
+                val repository = MainRepository(NetworkManager.apiService)
+                repository.updateUserToken(email, token) { success ->
+                    if (success) {
+                        Log.d("UpdateUserToken", "User token updated successfully")
+                    } else {
+                        Log.e("MainRepository", "Error: Failed to update user token")
+                    }
+                }
+            })
         }
 
-        val userRole = CurrUserRepository.getCurrUser()?.role
+    }
 
-        when (userRole) {
-            UserRole.ADMIN -> {
-                setContentView(R.layout.activity_main)
-            }
-            UserRole.REGULAR -> {
-                setContentView(R.layout.activity_main) //TODO: change this
-            }
-            UserRole.RESTRICTED-> {
-                setContentView(R.layout.activity_main_restricted)
-            }
-            else -> {
-                Log.e(TAG, "Unknown Role")
-                setContentView(R.layout.activity_main)
-
-            }
-        }
-
-
-        Log.d(TAG, "Current Household: ${HouseholdRepository.getCurrentHousehold()}\n Current User: ${CurrUserRepository.getCurrUser()}\n Current pets: ${PetRepository.getPets()}")
-
+    private fun setUpButtons(){
 
         feedingButton = findViewById(R.id.feed_button)
         notifyButton = findViewById(R.id.notify_button)
         manageButton = findViewById(R.id.manage_button)
         feedingHistoryButton = findViewById(R.id.feeding_history_button)
-//        adminViewButton = findViewById(R.id.admin_view_button)
-//        regularViewButton = findViewById(R.id.regular_view_button)
-//        restrictedViewButton = findViewById(R.id.restricted_view_button)
-//        openCreateHouseholdButton = findViewById(R.id.openCreateHouseholdButton)
         logoutButton = findViewById(R.id.logoutButton)
-
-        val userRoleViewModel: UserRoleViewModel by viewModels()
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-
-//        userRoleViewModel.userRole.observe(this, Observer { role ->
-//            updateRoleBasedUI(role)
-//        })
-//        userRoleViewModel.setUserRole(UserRole.ADMIN)
-
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
-                return@OnCompleteListener
-            }
-
-            // Get new FCM registration token
-            val token = task.result
-
-            // Log and toast
-            val msg = getString(R.string.msg_token_fmt, token)
-            Log.d(TAG, msg)
-            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-
-
-            val repository = MainRepository(NetworkManager.apiService)
-            repository.updateUserToken(email, token) { success ->
-
-                if (success) {
-                    Log.d("UpdateUserToken", "User token updated successfully")
-                } else {
-                    Log.e("MainRepository", "Error: Failed to update user token")
-                }
-
-            }
-        })
 
         feedingButton.setOnClickListener {
             val intent = Intent(this, FeedingActivity::class.java)
@@ -220,10 +197,6 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, HistoryActivity::class.java)
             startActivity(intent)
         }
-//        openCreateHouseholdButton.setOnClickListener() {
-//            val intent = Intent(this, CreateHouseholdActivity::class.java)
-//            startActivity(intent)
-//        }
 
         logoutButton.setOnClickListener() {
             val sharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
@@ -231,49 +204,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
-//
-//        adminViewButton.setOnClickListener {
-//            userRoleViewModel.setUserRole(UserRole.ADMIN)
-//            Log.d(TAG, "adminViewButton clicked")
-//        }
-//
-//        regularViewButton.setOnClickListener {
-//            userRoleViewModel.setUserRole(UserRole.REGULAR)
-//            Log.d(TAG, "regularViewButton clicked")
-//
-//        }
-//
-//        restrictedViewButton.setOnClickListener {
-//            userRoleViewModel.setUserRole(UserRole.RESTRICTED)
-//            Log.d(TAG, "restrictedViewButton clicked")
-//        }
-
-
     }
-
-//    private fun updateRoleBasedUI(role: UserRole) {
-//        when (role) {
-//            UserRole.ADMIN -> {
-//                notifyButton.visibility = View.VISIBLE
-//                manageButton.visibility = View.VISIBLE
-//                feedingHistoryButton.visibility = View.VISIBLE
-//            }
-//
-//            UserRole.REGULAR -> {
-//                notifyButton.visibility = View.VISIBLE
-//                manageButton.visibility = View.INVISIBLE
-//                feedingHistoryButton.visibility = View.INVISIBLE
-//
-//            }
-//
-//            UserRole.RESTRICTED -> {
-//                notifyButton.visibility = View.INVISIBLE
-//                manageButton.visibility = View.INVISIBLE
-//                feedingHistoryButton.visibility = View.INVISIBLE
-//
-//            }
-//        }
-//    }
 
     private fun askNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -401,7 +332,6 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
-
 
     private fun retrofitInit() {
         Log.d(TAG, "retrofitInit()")

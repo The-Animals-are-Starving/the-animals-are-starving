@@ -35,7 +35,7 @@ class FeedingActivity : AppCompatActivity() {
     private lateinit var mainRepository: MainRepository
     private lateinit var apiService: ApiService
 
-    private val testHouseholdId: String = "67c2aa855a9890c0f183efa4"
+//    private val testHouseholdId: String = "67c2aa855a9890c0f183efa4"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +46,7 @@ class FeedingActivity : AppCompatActivity() {
         val currUser = CurrUserRepository.getCurrUser() //TODO: ensure this works after fixing userRole
 
         if (currUser != null) {
-            if (currUser.role == UserRole.RESTRICTED) {
+            if (UserRole.fromBackendRole(currUser.role) == UserRole.RESTRICTED) {
                 val defaultTitle = findViewById<TextView>(R.id.title)
                 val restrictedTitle = findViewById<TextView>(R.id.title_restricted)
                 restrictedTitle.visibility = View.VISIBLE
