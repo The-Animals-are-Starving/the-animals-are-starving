@@ -2,8 +2,13 @@ package com.example.theanimalsarestarving.activities
 
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.RelativeSizeSpan
 import android.util.Log
+import android.util.TypedValue
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -49,12 +54,16 @@ class RestrictedMainActivity : AppCompatActivity() {
         }
     }
 
-    // Function to show the confirmation dialog for logging out
     private fun showLogoutConfirmationDialog() {
         Log.d(TAG, "showLogoutConfirmationDialog: Showing confirmation dialog")
 
         val builder = AlertDialog.Builder(this)
-        builder.setMessage("Are you sure you want to logout?")
+
+        // Set message text size using SpannableString (if needed)
+        val message = SpannableString("Do you want to log out?")
+        message.setSpan(RelativeSizeSpan(1.5f), 0, message.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        builder.setMessage(message)
             .setCancelable(false)
             .setPositiveButton("Yes") { dialog, id ->
                 Log.d(TAG, "showLogoutConfirmationDialog: User confirmed logout")
@@ -68,7 +77,24 @@ class RestrictedMainActivity : AppCompatActivity() {
                 Log.d(TAG, "showLogoutConfirmationDialog: User cancelled logout")
                 dialog.dismiss()  // Dismiss the dialog if the user presses "No"
             }
+
+        // Create the dialog
         val alert = builder.create()
+
+        // Customize the buttons when the dialog is shown
+        alert.setOnShowListener {
+            // Find the "Yes" button by its ID and make it grey and bigger
+            val yesButton = alert.getButton(AlertDialog.BUTTON_POSITIVE)
+            yesButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)  // Set text size to 18sp
+
+            // Find the "No" button by its ID and make it red, bold, and bigger
+            val noButton = alert.getButton(AlertDialog.BUTTON_NEGATIVE)
+            noButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)  // Set text size to 18sp
+            noButton.setTypeface(null, Typeface.BOLD)  // Make the text bold
+        }
+
+        // Show the alert dialog
         alert.show()
     }
+
 }

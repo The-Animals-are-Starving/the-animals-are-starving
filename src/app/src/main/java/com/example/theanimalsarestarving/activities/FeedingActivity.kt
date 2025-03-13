@@ -43,7 +43,7 @@ class FeedingActivity : AppCompatActivity() {
 
         petContainer = findViewById(R.id.petContainer)
 
-        val currUser = CurrUserRepository.getCurrUser() //TODO: ensure this works after fixing userRole
+        val currUser = CurrUserRepository.getCurrUser()
 
         if (currUser != null) {
             if (UserRole.fromBackendRole(currUser.role) == UserRole.RESTRICTED) {
