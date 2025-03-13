@@ -7,6 +7,7 @@ import com.example.theanimalsarestarving.models.FeedingLog
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -65,6 +66,9 @@ interface ApiService {
 
     @PATCH("user/{email}")
     fun updateUserRole(@Path("email") email: String, @Body body: Map<String, String>): Call<User>  // Single user response
+
+    @DELETE("user/{email}")
+    fun deleteUser(@Path("email") email: String): Call<Boolean>
 
     @POST("pet")
     fun addPet(@Body body: Map<String, String?>): Call<Pet> //Adds pet to db

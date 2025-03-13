@@ -2,9 +2,12 @@ package com.example.theanimalsarestarving.activities
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
+import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
@@ -16,9 +19,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.example.theanimalsarestarving.R
-import com.example.theanimalsarestarving.models.Household
 import com.example.theanimalsarestarving.models.User
 import com.example.theanimalsarestarving.models.UserRole
 import com.example.theanimalsarestarving.models.Pet
@@ -29,9 +30,8 @@ import com.example.theanimalsarestarving.repositories.HouseholdRepository
 import com.example.theanimalsarestarving.repositories.PetRepository
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import retrofit2.Call
+import retrofit2.Response
 
 private val testHouseholdId: String = "67c2aa855a9890c0f183efa4"
 
@@ -270,7 +270,6 @@ class ManageHouseholdActivity : AppCompatActivity() {
             repository.getAllUsers(currHouseholdId.toString()) { users ->
                 if (users != null) {
                     for (user in users) {
-
                         val userRow = LinearLayout(this).apply {
                             orientation = LinearLayout.HORIZONTAL
                             layoutParams = LinearLayout.LayoutParams(
@@ -288,12 +287,14 @@ class ManageHouseholdActivity : AppCompatActivity() {
                                 1f
                             )
                         }
+                        userRow.addView(nameView)
 
-                        val roleSpinner = Spinner(this)
-                        val roleOptions = arrayOf(UserRole.REGULAR, UserRole.RESTRICTED, UserRole.ADMIN)
-                        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, roleOptions)
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) // Set dropdown item style
-                        roleSpinner.adapter = adapter
+                        if (user.email != CurrUserRepository.getCurrUser()?.email) {
+                            val roleSpinner = Spinner(this)
+                            val roleOptions = arrayOf("normal", "restricted", "manager")
+                            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, roleOptions)
+                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) // Set dropdown item style
+                            roleSpinner.adapter = adapter
 
                         // Set current role
                         roleSpinner.setSelection(roleOptions.indexOf(user.role))
@@ -301,41 +302,65 @@ class ManageHouseholdActivity : AppCompatActivity() {
                         roleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                                 val selectedRole = roleOptions[position]
-                                Log.d("RefreshUser", user.toString())
 
                                 // Prevent unnecessary API calls if role is unchanged
-                                val role = if (user.role == null) UserRole.REGULAR else UserRole.fromBackendRole(user.role.toString())
+                                val role = user.role
                                 if (selectedRole != role) {
                                     roleSpinner.isEnabled = false
                                     updateUserRole(user.email, selectedRole, roleSpinner)
                                 }
                             }
 
-                            override fun onNothingSelected(parent: AdapterView<*>) {}
-                        }
+                                override fun onNothingSelected(parent: AdapterView<*>) {}
+                            }
 
-                        val deleteButton = Button(this).apply {
-                            text = "Delete"
-                            setOnClickListener {
-                                AlertDialog.Builder(this@ManageHouseholdActivity)
-                                    .setTitle("Confirm Deletion")
-                                    .setMessage("Are you sure you want to delete this user?")
-                                    .setPositiveButton("YES") {_, _ ->
-                                        deleteUser(user.email) { success ->
-                                            if (success) {
-                                                Toast.makeText(this@ManageHouseholdActivity, "User Deleted", Toast.LENGTH_SHORT).show()
-                                                refreshUsers()
-                                            } else {
-                                                alertMessage("Failed to delete user. Please try again.", userListContainer)
+                            val deleteButton = Button(this).apply {
+                                text = "Delete"
+                                setOnClickListener {
+                                    AlertDialog.Builder(this@ManageHouseholdActivity)
+                                        .setTitle("Confirm Deletion")
+                                        .setMessage("Are you sure you want to delete this user?")
+                                        .setPositiveButton("YES") { _, _ ->
+                                            deleteUser(user.email) { success ->
+                                                if (success) {
+                                                    Toast.makeText(
+                                                        this@ManageHouseholdActivity,
+                                                        "User Deleted",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                    refreshUsers()
+                                                } else {
+                                                    alertMessage(
+                                                        "Failed to delete user. Please try again.",
+                                                        userListContainer
+                                                    )
+                                                }
                                             }
                                         }
-                                    }
+                                        .setNegativeButton("NO") { dialog, _ -> dialog.cancel() }
+                                        .show()
+                                }
                             }
+                            userRow.addView(roleSpinner)
+                            userRow.addView(deleteButton)
+                        } else {
+                            val loggedInBox = TextView(this).apply {
+                                text = "LOGGED IN"
+                                layoutParams = LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT
+                                ).apply {
+                                    setMargins(0, 0, 10, 0)
+                                }
+                                setPadding(20, 15, 20, 15)
+                                setBackgroundColor(Color.parseColor("#ADD8E6"))
+                                gravity = Gravity.CENTER
+                                textSize = 16f
+                                setTypeface(null, Typeface.BOLD)
+                            }
+                            userRow.addView(loggedInBox)
                         }
 
-                        userRow.addView(nameView)
-                        userRow.addView(roleSpinner)
-                        userRow.addView(deleteButton)
                         userListContainer.addView(userRow)
 
                     }
@@ -395,7 +420,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateUserRole(userId: String, newRole: UserRole, spinner: Spinner) {
+    private fun updateUserRole(userId: String, newRole: String, spinner: Spinner) {
         val repository = MainRepository(apiService)
         Log.d("UpdateUserRole", "Updating user role for user: $userId to role: $newRole")
 
@@ -410,7 +435,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
             } else {
                 alertMessage("Failed to update role. Try again.", spinner.parent as LinearLayout)
                 // Reset the spinner to its previous role (in case of failure)
-                val roleOptions = arrayOf(UserRole.REGULAR, UserRole.RESTRICTED, UserRole.ADMIN)
+                val roleOptions = arrayOf("normal", "restricted", "manager")
                 val adapter = ArrayAdapter(spinner.context, android.R.layout.simple_spinner_item, roleOptions)
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 spinner.adapter = adapter
@@ -427,8 +452,24 @@ class ManageHouseholdActivity : AppCompatActivity() {
     }
 
     private fun deleteUser(userEmail: String, callback: (Boolean) -> Unit) {
-        val repository = MainRepository(apiService)
         Log.d("ManageHousehold", "Attempting to delete user $userEmail")
+        apiService.deleteUser(userEmail).enqueue(object : retrofit2.Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                if(response.isSuccessful) {
+                    val success = response.body() ?: false
+                    if (success) {
+                        Log.d("DeleteUser", "User deleted successfully")
+                    } else {
+                        Log.d("DeleteUser", "User not found or already deleted")
+                    }
+                } else {
+                    Log.e("DeleteUser", "Failed with code: ${response.code()}")
+                }
+            }
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                Log.e("DeleteUser", "Error: ${t.message}")
+            }
+        })
         callback(true)
         //TODO: Make backend call
     }

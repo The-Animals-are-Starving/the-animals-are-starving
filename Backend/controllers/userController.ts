@@ -31,6 +31,7 @@ export const getAllUsers = async (req: Request, res: Response): Promise<void> =>
     try {
         const { householdId } = req.params;
         const users = await User.find({householdId: householdId}).sort({ name: 1 });
+        console.log(users);
         res.json(users);
     } catch (error) {
         res.status(500).json({ message: "Error retrieving users", error });

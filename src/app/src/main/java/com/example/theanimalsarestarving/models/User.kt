@@ -4,6 +4,6 @@ data class User(
     val email: String,
     val name: String,
     var householdId: String,
-    val role: UserRole = UserRole.REGULAR, // Default role is "REGULAR"
+    val role: String = "normal", // Default role is "normal"
     val fcmToken: String? = null
 )
