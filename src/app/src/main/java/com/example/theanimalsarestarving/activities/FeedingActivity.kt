@@ -1,6 +1,5 @@
 package com.example.theanimalsarestarving.activities
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -99,12 +98,12 @@ class FeedingActivity : AppCompatActivity() {
 
         if (!isFed) {
             // Set fed status (this can be dynamic too)
-            fedStatusText.text = "NOT FED"
+            fedStatusText.text = getString(R.string.not_fed_text)
             petCircle.setColorFilter(ContextCompat.getColor(this, R.color.dark_pink))
             feedingButton.visibility = View.VISIBLE
             feedingInfo.visibility = View.GONE
         } else {
-            fedStatusText.text = "FED"
+            fedStatusText.text = getString(R.string.fed_text)
             petCircle.setColorFilter(ContextCompat.getColor(this, R.color.base_green))
             feedingButton.visibility = View.GONE
             feedingInfo.visibility = View.VISIBLE
@@ -115,7 +114,7 @@ class FeedingActivity : AppCompatActivity() {
             repository.feedPet(petName) { success ->
                 if (success) {
                     // Update UI after feeding the pet
-                    fedStatusText.text = "FED"
+                    fedStatusText.text = getString(R.string.fed_text)
                     petCircle.setColorFilter(
                         ContextCompat.getColor(
                             this@FeedingActivity,

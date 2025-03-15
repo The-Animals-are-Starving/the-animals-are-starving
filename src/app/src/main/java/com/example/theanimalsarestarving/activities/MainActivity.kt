@@ -36,11 +36,11 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+private const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
 
 
-    private val TAG = "MainActivity"
     private lateinit var mainRepository: MainRepository
     private lateinit var apiService: ApiService
 
@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity() {
 
                 // This block will now run after the above logic has finished
                 if (CurrUserRepository.getCurrUser()?.householdId.isNullOrEmpty()) {
-                    Log.d(TAG, "current user has a null or empty houseid, redirecting to limbo")
+                    Log.d(TAG, "current user has a null or empty houseId, redirecting to limbo")
                     redirectToLimbo()
                     return@launch  // Exit early if householdId is null or empty
                 } else {
@@ -185,7 +185,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        logoutButton.setOnClickListener() {
+        logoutButton.setOnClickListener {
             val sharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
             sharedPreferences.edit().putBoolean("isLoggedIn", false).apply()
             val intent = Intent(this, LoginActivity::class.java)
@@ -276,7 +276,7 @@ class MainActivity : AppCompatActivity() {
 
                         }
                         val notifyUserButton = Button(this).apply {
-                            text = "Notify"
+                            text = getString(R.string.notify_text)
                             layoutParams = LinearLayout.LayoutParams(
                                 LinearLayout.LayoutParams.WRAP_CONTENT,
                                 LinearLayout.LayoutParams.WRAP_CONTENT

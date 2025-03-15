@@ -37,7 +37,7 @@ class HistoryActivity : AppCompatActivity() {
         val repository = MainRepository(apiService)
 
         repository.getLogs(householdId) { logs ->
-            Log.d("HistoryActivity", logs.toString());
+            Log.d("HistoryActivity", logs.toString())
             historyTable.removeAllViews()
 
             // Initialize Table
@@ -59,7 +59,7 @@ class HistoryActivity : AppCompatActivity() {
             if (logs != null) {
                 if (logs.isEmpty()) {
                     val noticeText = TextView(this).apply {
-                        text = "No Logs Available"
+                        text = getString(R.string.no_logs_text)
                         textSize = 20f
                         setPadding(10, 10, 10, 10)
                     }
@@ -72,12 +72,12 @@ class HistoryActivity : AppCompatActivity() {
                         }
 
                         val petNameView = TextView(this).apply {
-                            text = log.petName ?: "Unknown Pet"
+                            text = log.petName
                             layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
                         }
 
                         val userNameView = TextView(this).apply {
-                            text = log.userName ?: "Unknown User"
+                            text = log.userName
                             layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
                         }
 

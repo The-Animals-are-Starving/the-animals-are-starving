@@ -2,6 +2,14 @@
     <string name="app_name">The Animals Are Starving</string>
     <string name="title_activity_manage_household">ManageHouseholdActivity</string>
 
+    <string name="fed_text">FED</string>
+    <string name="not_fed_text">NOT FED</string>
+    <string name="no_logs_text">No Logs Available</string>
+    <string name="delete_text">Delete</string>
+    <string name="logged_in_text">Logged In</string>
+    <string name="edit_text">Edit</string>
+    <string name="notify_text">Notify</string>
+
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>

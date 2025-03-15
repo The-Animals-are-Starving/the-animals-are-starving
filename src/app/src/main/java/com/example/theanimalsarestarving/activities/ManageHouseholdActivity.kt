@@ -299,7 +299,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
                             }
 
                             val deleteButton = Button(this).apply {
-                                text = "Delete"
+                                text = getString(R.string.delete_text)
                                 setOnClickListener {
                                     AlertDialog.Builder(this@ManageHouseholdActivity)
                                         .setTitle("Confirm Deletion")
@@ -327,7 +327,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
                             userRow.addView(deleteButton)
                         } else {
                             val loggedInBox = TextView(this).apply {
-                                text = "LOGGED IN"
+                                text = getString(R.string.logged_in_text)
                                 layoutParams = LinearLayout.LayoutParams(
                                     LinearLayout.LayoutParams.WRAP_CONTENT,
                                     LinearLayout.LayoutParams.WRAP_CONTENT
@@ -382,7 +382,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
                         }
 
                         val editButton = Button(this).apply {
-                            text = "Edit"
+                            text = getString(R.string.edit_text)
                             layoutParams = LinearLayout.LayoutParams(
                                 LinearLayout.LayoutParams.WRAP_CONTENT,
                                 LinearLayout.LayoutParams.WRAP_CONTENT
