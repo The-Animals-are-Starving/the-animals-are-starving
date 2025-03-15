@@ -9,14 +9,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
-        android:text="HOME PAGE"
+        android:text="@string/home_page"
         android:textSize="55sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/restricted_feed_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/restricted_feed_button"
@@ -24,7 +23,7 @@
         android:layout_height="346dp"
         android:backgroundTint="@color/base_green"
         android:fontFamily="sans-serif-medium"
-        android:text="Feed Pets"
+        android:text="@string/feed_pets"
         android:textSize="60sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -38,7 +37,7 @@
         android:layout_weight="1"
         android:backgroundTint="@color/grey"
         android:fontFamily="sans-serif-medium"
-        android:text="Logout"
+        android:text="@string/logout"
         android:textSize="48sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

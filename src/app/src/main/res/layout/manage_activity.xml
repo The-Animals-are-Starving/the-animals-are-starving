@@ -3,138 +3,137 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    >
-
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="73dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="16dp"
-        android:fontFamily="@font/paw_font"
-        android:letterSpacing="0.15"
-        android:lineSpacingExtra="-30sp"
-        android:text="Manage Household"
-        android:textAlignment="center"
-        android:textColor="@color/subtitle_color"
-        android:textSize="30sp"
-        android:textStyle="bold" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/colo_household_members"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15sp"
-        android:layout_marginBottom="15sp"
-        android:background="@drawable/rounded_corners"
-        android:backgroundTint="@color/light_blue"
-        android:backgroundTintMode="src_in">
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <TextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Household Members"
-            android:textColor="@color/dark_blue"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/userListContainer"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.084"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="73dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/paw_font"
+            android:letterSpacing="0.15"
+            android:lineSpacingExtra="-30sp"
+            android:text="@string/manage_household"
+            android:textAlignment="center"
+            android:textColor="@color/subtitle_color"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
-        <LinearLayout
-            android:id="@+id/userListContainer"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/colo_household_members"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="30sp"
-            android:paddingVertical="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.434" />
+            android:layout_marginTop="15sp"
+            android:layout_marginBottom="15sp"
+            android:background="@drawable/rounded_corners"
+            android:backgroundTint="@color/light_blue"
+            android:backgroundTintMode="src_in">
 
-        <Button
-            android:id="@+id/newUserButton"
-            android:layout_width="294dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="10sp"
-            android:backgroundTint="@color/dark_blue"
-            android:text="New User"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.494"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userListContainer"
-            app:layout_constraintVertical_bias="1.0" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/household_members"
+                android:textColor="@color/dark_blue"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/userListContainer"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.084"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/colo_pet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15sp"
-        android:layout_marginBottom="15sp"
-        android:background="@drawable/rounded_corners"
-        android:backgroundTint="@color/base_green">
+            <LinearLayout
+                android:id="@+id/userListContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="30sp"
+                android:paddingVertical="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.434" />
 
-        <LinearLayout
-            android:id="@+id/petListContainer"
+            <Button
+                android:id="@+id/newUserButton"
+                android:layout_width="294dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10sp"
+                android:backgroundTint="@color/dark_blue"
+                android:text="@string/new_user"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.494"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/userListContainer"
+                app:layout_constraintVertical_bias="1.0" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/colo_pet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="30sp"
-            android:paddingVertical="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.434">
+            android:layout_marginTop="15sp"
+            android:layout_marginBottom="15sp"
+            android:background="@drawable/rounded_corners"
+            android:backgroundTint="@color/base_green">
 
-        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/petListContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="30sp"
+                android:paddingVertical="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.434">
 
-        <Button
-            android:id="@+id/newPetButton"
-            android:layout_width="294dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="10sp"
-            android:backgroundTint="@color/extra_dark_green"
-            android:text="New Pet"
+            </LinearLayout>
 
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.494"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/petListContainer"
-            app:layout_constraintVertical_bias="0.915" />
+            <Button
+                android:id="@+id/newPetButton"
+                android:layout_width="294dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10sp"
+                android:backgroundTint="@color/extra_dark_green"
+                android:text="@string/new_pet"
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Pets"
-            android:textColor="@color/extra_dark_green"
-            android:backgroundTintMode="add"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/petListContainer"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.04"
-            app:layout_constraintStart_toStartOf="@+id/petListContainer"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.494"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/petListContainer"
+                app:layout_constraintVertical_bias="0.915" />
 
-</LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTintMode="add"
+                android:text="@string/pets"
+                android:textColor="@color/extra_dark_green"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/petListContainer"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.04"
+                app:layout_constraintStart_toStartOf="@+id/petListContainer"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
 </ScrollView>

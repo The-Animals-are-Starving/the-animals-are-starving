@@ -27,4 +27,22 @@
     <string name="limbo_instructions_text">Or have your manager add you to a household and reopen the app to continue.</string>
 
     <string name="msg_token_fmt">FCM Registration Token: %s</string>
+    <string name="manage_household">Manage Household</string>
+    <string name="household_members">Household Members</string>
+    <string name="new_user">New User</string>
+    <string name="new_pet">New Pet</string>
+    <string name="pets">Pets</string>
+    <string name="home_page">HOME PAGE</string>
+    <string name="feed_pets">Feed Pets</string>
+    <string name="logout">Logout</string>
+    <string name="feeding_page">Feeding Page</string>
+    <string name="feed_da_dawgs">Feed Da Dawgs!</string>
+    <string name="the_animals_are_starving">The Animals Are Starving!</string>
+    <string name="home_page_lowercase">Home Page</string>
+    <string name="feed_da_dawg">Feed Da Dawg</string>
+    <string name="notify_other_users">Notify Other Users</string>
+    <string name="feeding_history">Feeding History</string>
+    <string name="create_household">Create Household</string>
+    <string name="you_are_currently_logged_in_as_email">You are currently logged in as: [email]</string>
+    <string name="hello_name">Hello, [name]!</string>
 </resources>

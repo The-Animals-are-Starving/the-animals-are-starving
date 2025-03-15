@@ -9,65 +9,45 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- Wrap both LinearLayout and Button inside a FrameLayout or RelativeLayout -->
         <LinearLayout
+            android:id="@+id/petContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="10dp">
 
-            <LinearLayout
-                android:id="@+id/petContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="10dp">
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="73dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/paw_font"
+                android:letterSpacing="0.15"
+                android:lineSpacingExtra="-30sp"
+                android:text="@string/feed_da_dawgs"
+                android:textAlignment="center"
+                android:textColor="@color/subtitle_color"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:visibility="visible" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="73dp"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Feed Da Dawgs!"
-                    android:textSize="30sp"
-                    android:textStyle="bold"
-                    android:id="@+id/title"
-                    android:layout_marginBottom="16dp"
-                    android:fontFamily="@font/paw_font"
-                    android:textAlignment="center"
-                    android:textColor="@color/subtitle_color"
-                    android:letterSpacing="0.15"
-                    android:lineSpacingExtra="-30sp"
-                    android:visibility="visible"/>
-
-<!--                only for restricted users-->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="73dp"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Feeding Page"
-                    android:textSize="55sp"
-                    android:id="@+id/title_restricted"
-                    android:layout_marginBottom="16dp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-medium"
-                    android:textAlignment="center"
-                    android:visibility="gone"
-                 />
-
-
-                <!-- Add more dynamic content here in the LinearLayout -->
-
-            </LinearLayout>
-
-<!--            <Button-->
-<!--                android:id="@+id/undo_button"-->
-<!--                android:layout_width="105dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="bottom|center_horizontal"-->
-<!--                android:backgroundTint="@color/base_pink"-->
-<!--                android:text="Undo"-->
-<!--                />-->
+            <!--only for restricted users-->
+            <TextView
+                android:id="@+id/title_restricted"
+                android:layout_width="wrap_content"
+                android:layout_height="73dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/feeding_page"
+                android:textAlignment="center"
+                android:textSize="55sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
 
         </LinearLayout>
+
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

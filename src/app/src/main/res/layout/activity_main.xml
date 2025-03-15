@@ -7,13 +7,12 @@
     android:padding="16dp"
     tools:context=".activities.MainActivity">
 
-    <!-- LinearLayout inside ScrollView -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:fontFamily="sans-serif-smallcaps"
         android:gravity="center"
-        android:fontFamily="sans-serif-smallcaps">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/title"
@@ -21,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:lineSpacingExtra="-30sp"
-            android:text="The Animals Are Starving!"
+            android:text="@string/the_animals_are_starving"
             android:textAlignment="center"
             android:textAppearance="@style/TitleTextStyle" />
 
@@ -30,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:text="Home Page"
+            android:text="@string/home_page_lowercase"
             android:textAppearance="@style/SubtitleTextStyle" />
 
         <Button
@@ -40,7 +39,7 @@
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/base_green"
             android:fontFamily="sans-serif-medium"
-            android:text="Feed Da Dawg"
+            android:text="@string/feed_da_dawg"
             android:textSize="19sp" />
 
         <Button
@@ -50,7 +49,7 @@
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/dark_green"
             android:fontFamily="sans-serif-medium"
-            android:text="Notify Other Users"
+            android:text="@string/notify_other_users"
             android:textSize="19sp"
             android:visibility="visible" />
 
@@ -61,7 +60,7 @@
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/base_blue"
             android:fontFamily="sans-serif-medium"
-            android:text="Manage Household"
+            android:text="@string/manage_household"
             android:textSize="19sp"
             android:visibility="visible" />
 
@@ -72,85 +71,20 @@
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/dark_blue"
             android:fontFamily="sans-serif-medium"
-            android:text="Feeding History"
+            android:text="@string/feeding_history"
             android:textSize="19sp"
             android:visibility="visible" />
 
-       <!-- <LinearLayout
-            style="?android:attr/buttonBarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="5dp"
-            android:orientation="horizontal"
-            android:padding="5dp">
-
-            <Button
-                android:id="@+id/admin_view_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/grey"
-                android:fontFamily="sans-serif-medium"
-                android:text="Admin View"
-                android:textSize="15sp" />
-
-            <Button
-                android:id="@+id/regular_view_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/grey"
-                android:fontFamily="sans-serif-medium"
-                android:text="Regular View"
-                android:textSize="15sp" />
-
-            <Button
-                android:id="@+id/restricted_view_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/grey"
-                android:fontFamily="sans-serif-medium"
-                android:text="Restricted View"
-                android:textSize="15sp" />
-
-        </LinearLayout>
--->
-<!--        <LinearLayout-->
-<!--            style="?android:attr/buttonBarStyle"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:layout_margin="5dp"-->
-<!--            android:orientation="horizontal"-->
-<!--            android:padding="5dp">-->
-
-<!--            <Button-->
-<!--                android:id="@+id/openCreateHouseholdButton"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginBottom="16dp"-->
-<!--                android:layout_weight="1"-->
-<!--                android:backgroundTint="@color/grey"-->
-<!--                android:fontFamily="sans-serif-medium"-->
-<!--                android:text="View Create Household Activity"-->
-<!--                android:textSize="15sp" />-->
-
-            <Button
-                android:id="@+id/logoutButton"
-                android:layout_width="245dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/grey"
-                android:fontFamily="sans-serif-medium"
-                android:text="Logout"
-                android:textSize="15sp" />
-<!--        </LinearLayout>-->
+        <Button
+            android:id="@+id/logoutButton"
+            android:layout_width="245dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="16dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/grey"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/logout"
+            android:textSize="15sp" />
 
     </LinearLayout>
 

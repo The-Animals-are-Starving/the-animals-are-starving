@@ -22,7 +22,7 @@
             android:fontFamily="@font/paw_font"
             android:gravity="center"
             android:padding="15sp"
-            android:text="Hello, [name]!"
+            android:text="@string/hello_name"
             android:textAlignment="center"
             android:textColor="@color/dark_pink"
             android:textSize="50sp"
@@ -39,7 +39,7 @@
             android:backgroundTint="@color/base_green"
             android:fontFamily="sans-serif-medium"
             android:padding="15dp"
-            android:text="Create Household"
+            android:text="@string/create_household"
             android:textAlignment="center"
             android:textSize="22sp" />
 
@@ -65,7 +65,7 @@
             android:fontFamily="sans-serif-medium"
             android:gravity="center"
             android:padding="20sp"
-            android:text="You are currently logged in as: [email]"
+            android:text="@string/you_are_currently_logged_in_as_email"
             android:textColor="@color/base_pink" />
 
     </LinearLayout>
