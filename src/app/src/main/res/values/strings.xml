@@ -45,4 +45,9 @@
     <string name="create_household">Create Household</string>
     <string name="you_are_currently_logged_in_as_email">You are currently logged in as: [email]</string>
     <string name="hello_name">Hello, [name]!</string>
+    <string name="please_name_your_household">Please name your household</string>
+    <string name="household_name">Household Name</string>
+    <string name="create">Create</string>
+    <string name="or_wait_to_be_added_to_an_existing_household">Or wait to be added to an existing household</string>
+    <string name="previous_feedings">Previous Feedings</string>
 </resources>

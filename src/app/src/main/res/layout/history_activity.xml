@@ -25,7 +25,7 @@
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/paw_font"
                 android:letterSpacing="0.15"
-                android:text="Previous Feedings"
+                android:text="@string/previous_feedings"
                 android:textAlignment="center"
                 android:textColor="@color/subtitle_color"
                 android:textSize="30sp"

@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:lineSpacingExtra="-30sp"
-        android:text="Create Household"
+        android:text="@string/create_household"
         android:textAlignment="center"
         android:textAppearance="@style/TitleTextStyle"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30sp"
-            android:text="Please name your household"
+            android:text="@string/please_name_your_household"
             android:textAlignment="center"
             android:textAppearance="@style/SubtitleTextStyle" />
 
@@ -45,7 +45,7 @@
             android:layout_marginLeft="50sp"
             android:layout_marginRight="50sp"
             android:autofillHints="Enter a name for your household"
-            android:hint="Household Name"
+            android:hint="@string/household_name"
             android:inputType="text"
             android:padding="20dp"
             android:textSize="15sp" />
@@ -58,7 +58,7 @@
             android:layout_margin="40sp"
             android:backgroundTint="@color/base_green"
             android:fontFamily="sans-serif-medium"
-            android:text="Create"
+            android:text="@string/create"
             android:textSize="19sp" />
 
 
@@ -68,7 +68,7 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Or wait to be added to an existing household"
+        android:text="@string/or_wait_to_be_added_to_an_existing_household"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
