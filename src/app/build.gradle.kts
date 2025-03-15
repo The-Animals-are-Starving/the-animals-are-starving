@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.androidx.preference)
     implementation(libs.googleid)
     implementation(libs.androidx.junit.ktx)
+    implementation(libs.androidx.espresso.core)
 
     // Testing Libraries
     testImplementation(libs.junit)
@@ -98,6 +99,7 @@ dependencies {
     implementation("androidx.credentials:credentials:1.3.0")
     implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
 
+    // Espresso Setup
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
     androidTestImplementation("androidx.test:runner:1.6.1")
     androidTestImplementation("androidx.test:rules:1.6.1")
