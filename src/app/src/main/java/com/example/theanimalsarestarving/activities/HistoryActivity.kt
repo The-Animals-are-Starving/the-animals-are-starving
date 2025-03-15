@@ -1,10 +1,8 @@
 package com.example.theanimalsarestarving.activities
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
-import android.widget.LinearLayout
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
@@ -13,6 +11,7 @@ import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.network.NetworkManager.apiService
 import com.example.theanimalsarestarving.repositories.HouseholdRepository
 import com.example.theanimalsarestarving.repositories.MainRepository
+import com.example.theanimalsarestarving.utils.AppUtils
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
@@ -96,7 +95,7 @@ class HistoryActivity : AppCompatActivity() {
                     }
                 }
             } else {
-                alertMessage("Failed to fetch logs. Please try again.", historyTable)
+                AppUtils.alertMessage(this, "Failed to fetch logs. Please try again.")
 
             }
         }
@@ -117,15 +116,5 @@ class HistoryActivity : AppCompatActivity() {
             "Invalid Time"
         }
     }
-
-    private fun alertMessage(message: String, container: LinearLayout) {
-        val warning = AlertDialog.Builder(this)
-        warning.setTitle("Error")
-        warning.setMessage(message)
-        warning.setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
-        warning.show()
-    }
-
-
 }
 

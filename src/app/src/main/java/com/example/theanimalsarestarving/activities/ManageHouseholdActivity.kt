@@ -21,20 +21,17 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.models.User
-import com.example.theanimalsarestarving.models.UserRole
 import com.example.theanimalsarestarving.models.Pet
 import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.network.NetworkManager.apiService
 import com.example.theanimalsarestarving.repositories.CurrUserRepository
 import com.example.theanimalsarestarving.repositories.HouseholdRepository
 import com.example.theanimalsarestarving.repositories.PetRepository
+import com.example.theanimalsarestarving.utils.AppUtils
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import retrofit2.Call
 import retrofit2.Response
-
-private val testHouseholdId: String = "67c2aa855a9890c0f183efa4"
-
 
 class ManageHouseholdActivity : AppCompatActivity() {
     val currHouseholdId = if (HouseholdRepository.getCurrentHousehold() != null) HouseholdRepository.getCurrentHousehold()?._id else 1
@@ -92,19 +89,17 @@ class ManageHouseholdActivity : AppCompatActivity() {
             val userName = nameIn.text.toString().trim().replace("\n", "")
             val email = emailIn.text.toString().trim().replace("\n", "")
 
-
             if (!isValidEmail(email)) {
-                alertMessage("Please Enter a Valid Email", container)
+                AppUtils.alertMessage(this, "Please Enter a Valid Email")
             } else if (userName.isNotEmpty() && email.isNotEmpty()) {
                 addUser(userName, email, container)
             } else {
-                alertMessage("Please Enter all User Info", container)
+                AppUtils.alertMessage(this, "Please Enter all User Info")
             }
         }
 
         // Set negative button (cancel)
         builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
-
 
         builder.show()
     }
@@ -121,7 +116,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
                 refreshUsers()
 
             } else {
-                alertMessage("Failed to add user. Please try again.", container)
+                AppUtils.alertMessage(this, "Failed to add user. Please try again.")
             }
         }
     }
@@ -166,7 +161,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
             if (petName.isNotEmpty() || petType != "Select Pet Type") {
                 addPet(petName, petType, petFeedTime ,container)
             } else {
-                alertMessage("Please Enter all Pet Info", container)
+                AppUtils.alertMessage(this, "Please Enter all Pet Info")
             }
         }
 
@@ -177,9 +172,8 @@ class ManageHouseholdActivity : AppCompatActivity() {
         builder.show()
     }
 
-    /**
-     * Shows addPet popup for entering pet data
-     */
+    //Shows addPet popup for entering pet data
+
     private fun addPet(name: String, type: String, time: String, container: LinearLayout) {
         val newPet = Pet(name = name, feedingTime = time, householdId = currHouseholdId.toString())
 
@@ -191,15 +185,13 @@ class ManageHouseholdActivity : AppCompatActivity() {
                 refreshPets()
 
             } else {
-                alertMessage("Failed to add pet. Please try again.", container)
+                AppUtils.alertMessage(this, "Failed to add pet. Please try again.")
             }
 
         }
     }
 
-    /**
-     * Shows clock popup for selecting feeding time
-     */
+    //Shows clock popup for selecting feeding time
     @SuppressLint("DefaultLocale")
     private fun showTimePicker(editText: EditText) {
         val timePicker = MaterialTimePicker.Builder()
@@ -247,14 +239,6 @@ class ManageHouseholdActivity : AppCompatActivity() {
         }
 
         builder.show()
-    }
-
-    private fun alertMessage(message: String, container: LinearLayout) {
-        val warning = AlertDialog.Builder(this)
-        warning.setTitle("Error")
-        warning.setMessage(message)
-        warning.setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
-        warning.show()
     }
 
     private fun isValidEmail(email: String): Boolean {
@@ -330,10 +314,8 @@ class ManageHouseholdActivity : AppCompatActivity() {
                                                     ).show()
                                                     refreshUsers()
                                                 } else {
-                                                    alertMessage(
-                                                        "Failed to delete user. Please try again.",
-                                                        userListContainer
-                                                    )
+                                                    AppUtils.alertMessage(this@ManageHouseholdActivity,
+                                                        "Failed to delete user. Please try again.")
                                                 }
                                             }
                                         }
@@ -365,7 +347,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
 
                     }
                 } else {
-                    alertMessage("Failed to fetch users. Please try again.", userListContainer)
+                    AppUtils.alertMessage(this,"Failed to fetch users. Please try again.")
                 }
             }
         }
@@ -411,10 +393,9 @@ class ManageHouseholdActivity : AppCompatActivity() {
                         petRow.addView(petNameView)
                         petRow.addView(editButton)
                         petListContainer.addView(petRow)
-                        //                        Log.d(TAG, "Pet added successfully: $addedPet") //TODO: Broken Log
                     }
                 } else {
-                    alertMessage("Failed to fetch pets. Please try again.", petListContainer)
+                    AppUtils.alertMessage(this, "Failed to fetch pets. Please try again.")
                 }
             }
         }
@@ -433,7 +414,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
             if (success) {
                 Log.d("UpdateUserRole", "User role updated successfully")
             } else {
-                alertMessage("Failed to update role. Try again.", spinner.parent as LinearLayout)
+                AppUtils.alertMessage(this, "Failed to update role. Try again.")
                 // Reset the spinner to its previous role (in case of failure)
                 val roleOptions = arrayOf("normal", "restricted", "manager")
                 val adapter = ArrayAdapter(spinner.context, android.R.layout.simple_spinner_item, roleOptions)

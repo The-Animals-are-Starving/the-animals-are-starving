@@ -1,13 +1,11 @@
 package com.example.theanimalsarestarving.activities
 
-import com.example.theanimalsarestarving.models.UserRoleViewModel
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -18,23 +16,18 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import android.Manifest
 import androidx.lifecycle.lifecycleScope
 import com.example.theanimalsarestarving.R
-import com.example.theanimalsarestarving.activities.FeedingActivity.Companion
 import com.example.theanimalsarestarving.models.Household
-import com.example.theanimalsarestarving.models.User
-import com.example.theanimalsarestarving.models.UserRole
 import com.example.theanimalsarestarving.network.ApiService
 import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.network.NetworkManager
 import com.example.theanimalsarestarving.network.RetrofitClient
 import com.example.theanimalsarestarving.repositories.CurrUserRepository
 import com.example.theanimalsarestarving.repositories.HouseholdRepository
-import com.example.theanimalsarestarving.repositories.PetRepository
+import com.example.theanimalsarestarving.utils.AppUtils
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.launch
@@ -56,10 +49,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var notifyButton: Button
     private lateinit var manageButton: Button
     private lateinit var feedingHistoryButton: Button
-//    private lateinit var adminViewButton: Button
-//    private lateinit var regularViewButton: Button
-//    private lateinit var restrictedViewButton: Button
-//    private lateinit var openCreateHouseholdButton: Button
     private lateinit var logoutButton: Button
 
     private val requestPermissionLauncher = registerForActivityResult(
@@ -92,7 +81,6 @@ class MainActivity : AppCompatActivity() {
         val sharedPreferences: SharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
 
         val email = sharedPreferences.getString("userEmail", "").toString()
-        val name = sharedPreferences.getString("userName", "").toString()
 
         lifecycleScope.launch {
             try {
@@ -145,9 +133,6 @@ class MainActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 Log.e(TAG, "Error fetching user: ${e.message}")
             }
-
-
-
 
             FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
@@ -306,10 +291,9 @@ class MainActivity : AppCompatActivity() {
                 }
 
             } else {
-                alertMessage("Failed to fetch users. Please try again.", layout)
+                AppUtils.alertMessage(this, "Failed to fetch users. Please try again.")
             }
         }
-
 
         builder.setView(layout)
         builder.setPositiveButton("Done") { dialog, _ -> dialog.dismiss() }
@@ -352,18 +336,6 @@ class MainActivity : AppCompatActivity() {
 
         // Initialize the singleton with the instances
         NetworkManager.initialize(apiService, mainRepository)
-//
-//        // Call the getUser method with a callback to handle the response
-//        val email = "test@gmail.com"
-//
-//        // Make an asynchronous API call
-//        mainRepository.getUser(email) { user ->
-//            if (user != null) {
-//                Log.d(TAG, "retrofitInit: Fetched user: $user")
-//            } else {
-//                Log.d(TAG, "retrofitInit: No user found or error occurred.")
-//            }
-//        }
     }
 
     private fun isUserLoggedIn(): Boolean {
@@ -381,13 +353,5 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, CreateHouseholdActivity::class.java)
         startActivity(intent)
         finish() // Finish MainActivity so user can't come back by pressing back
-    }
-
-    private fun alertMessage(message: String, container: LinearLayout) {
-        val warning = AlertDialog.Builder(this)
-        warning.setTitle("Error")
-        warning.setMessage(message)
-        warning.setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
-        warning.show()
     }
 }

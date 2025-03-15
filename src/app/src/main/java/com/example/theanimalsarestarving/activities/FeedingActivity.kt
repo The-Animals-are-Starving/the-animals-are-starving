@@ -13,7 +13,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.theanimalsarestarving.R
-import com.example.theanimalsarestarving.models.Pet
 import com.example.theanimalsarestarving.models.UserRole
 import com.example.theanimalsarestarving.network.ApiService
 import com.example.theanimalsarestarving.repositories.MainRepository
@@ -21,6 +20,7 @@ import com.example.theanimalsarestarving.network.NetworkManager
 import com.example.theanimalsarestarving.repositories.CurrUserRepository
 import com.example.theanimalsarestarving.repositories.HouseholdRepository
 import com.example.theanimalsarestarving.repositories.PetRepository
+import com.example.theanimalsarestarving.utils.AppUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,8 +34,6 @@ class FeedingActivity : AppCompatActivity() {
     private lateinit var petContainer: LinearLayout
     private lateinit var mainRepository: MainRepository
     private lateinit var apiService: ApiService
-
-//    private val testHouseholdId: String = "67c2aa855a9890c0f183efa4"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +49,6 @@ class FeedingActivity : AppCompatActivity() {
                 val restrictedTitle = findViewById<TextView>(R.id.title_restricted)
                 restrictedTitle.visibility = View.VISIBLE
                 defaultTitle.visibility = View.GONE
-
             }
         }
         checkNetworkManager()
@@ -100,7 +97,7 @@ class FeedingActivity : AppCompatActivity() {
         val feedingInfo: TextView = petLayout.findViewById(R.id.feeding_info)
 
 
-        if (isFed == false) {
+        if (!isFed) {
             // Set fed status (this can be dynamic too)
             fedStatusText.text = "NOT FED"
             petCircle.setColorFilter(ContextCompat.getColor(this, R.color.dark_pink))
@@ -112,8 +109,6 @@ class FeedingActivity : AppCompatActivity() {
             feedingButton.visibility = View.GONE
             feedingInfo.visibility = View.VISIBLE
         }
-
-        //TODO: I dont think this is dynamic? Send this to backend
 
         feedingButton.setOnClickListener{
             val repository = PetRepository
@@ -130,7 +125,7 @@ class FeedingActivity : AppCompatActivity() {
                     feedingButton.visibility = View.GONE
                     feedingInfo.visibility = View.VISIBLE
                 } else {
-                    alertMessage("Failed to feed pet. Please try again.", petContainer)
+                    AppUtils.alertMessage(this, "Failed to feed pet. Please try again.")
                 }
             }
             val currUser = CurrUserRepository.getCurrUser()
@@ -164,14 +159,4 @@ class FeedingActivity : AppCompatActivity() {
             throw IllegalStateException("NetworkManager is not initialized.")
         }
     }
-
-    private fun alertMessage(message: String, container: LinearLayout) {
-        val warning = AlertDialog.Builder(this)
-        warning.setTitle("Error")
-        warning.setMessage(message)
-        warning.setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
-        warning.show()
-    }
-
-
 }
