@@ -46,7 +46,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        skipLogin()
+//        skipLogin("bob@gmail.com", "Bob")
 
         setContentView(R.layout.activity_login)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -95,11 +95,10 @@ class LoginActivity : AppCompatActivity() {
         Toast.makeText(this, "Error getting credential", Toast.LENGTH_SHORT).show()
     }
 
-    private fun skipLogin() {
+    private fun skipLogin(email: String, name: String) {
         // Save login state
         val sharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
-//        sharedPreferences.edit().putBoolean("isLoggedIn", true).putString("userEmail", "testeremail@gmail.com").putString("userName", "Jimbo").apply()
-        sharedPreferences.edit().putBoolean("isLoggedIn", true).putString("userEmail", "bob@gmail.com").putString("userName", "Bob").apply()
+        sharedPreferences.edit().putBoolean("isLoggedIn", true).putString("userEmail", email).putString("userName", name).apply()
 
         // Navigate to MainActivity after login
         val intent = Intent(this, MainActivity::class.java)
