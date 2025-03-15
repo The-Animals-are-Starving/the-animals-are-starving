@@ -1,9 +1,9 @@
 package com.example.theanimalsarestarving.network
 
+import com.example.theanimalsarestarving.models.FeedingLog
 import com.example.theanimalsarestarving.models.Household
 import com.example.theanimalsarestarving.models.Pet
 import com.example.theanimalsarestarving.models.User
-import com.example.theanimalsarestarving.models.FeedingLog
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body

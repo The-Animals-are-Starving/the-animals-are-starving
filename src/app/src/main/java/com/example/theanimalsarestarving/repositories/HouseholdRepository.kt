@@ -1,8 +1,6 @@
 package com.example.theanimalsarestarving.repositories
 
 import android.util.Log
-import com.example.theanimalsarestarving.activities.CreateHouseholdActivity
-import com.example.theanimalsarestarving.activities.CreateHouseholdActivity.Companion
 import com.example.theanimalsarestarving.models.Household
 import com.example.theanimalsarestarving.network.NetworkManager.apiService
 import kotlinx.coroutines.Dispatchers

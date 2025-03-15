@@ -1,5 +1,6 @@
 package com.example.theanimalsarestarving.activities
 
+import android.Manifest
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -14,19 +15,18 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.content.ContextCompat
-import android.Manifest
 import androidx.lifecycle.lifecycleScope
 import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.models.Household
 import com.example.theanimalsarestarving.network.ApiService
-import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.network.NetworkManager
 import com.example.theanimalsarestarving.network.RetrofitClient
 import com.example.theanimalsarestarving.repositories.CurrUserRepository
 import com.example.theanimalsarestarving.repositories.HouseholdRepository
+import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.utils.AppUtils
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging

@@ -3,12 +3,11 @@ package com.example.theanimalsarestarving.repositories
 import android.util.Log
 import com.example.theanimalsarestarving.models.FeedingLog
 import com.example.theanimalsarestarving.models.Pet
-import com.example.theanimalsarestarving.models.User
-import retrofit2.Response
 import com.example.theanimalsarestarving.network.NetworkManager.apiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Call
+import retrofit2.Response
 
 
 private const val TAG = "PetRepository"

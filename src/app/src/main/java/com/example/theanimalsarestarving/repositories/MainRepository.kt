@@ -1,11 +1,9 @@
 package com.example.theanimalsarestarving.repositories
 
-import android.provider.ContactsContract.CommonDataKinds.Email
 import android.util.Log
+import com.example.theanimalsarestarving.models.FeedingLog
 import com.example.theanimalsarestarving.models.Pet
 import com.example.theanimalsarestarving.models.User
-import com.example.theanimalsarestarving.models.UserRole
-import com.example.theanimalsarestarving.models.FeedingLog
 import com.example.theanimalsarestarving.network.ApiService
 import retrofit2.Call
 import retrofit2.Response

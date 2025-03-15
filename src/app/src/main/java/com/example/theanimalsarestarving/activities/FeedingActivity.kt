@@ -2,22 +2,22 @@ package com.example.theanimalsarestarving.activities
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import androidx.appcompat.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.models.UserRole
 import com.example.theanimalsarestarving.network.ApiService
-import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.network.NetworkManager
 import com.example.theanimalsarestarving.repositories.CurrUserRepository
 import com.example.theanimalsarestarving.repositories.HouseholdRepository
+import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.repositories.PetRepository
 import com.example.theanimalsarestarving.utils.AppUtils
 import kotlinx.coroutines.CoroutineScope

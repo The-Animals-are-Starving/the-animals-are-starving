@@ -1,6 +1,5 @@
 package com.example.theanimalsarestarving.activities
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle

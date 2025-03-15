@@ -1,13 +1,9 @@
 package com.example.theanimalsarestarving.activities
 
 import android.content.Intent
-import androidx.credentials.exceptions.GetCredentialException
-import androidx.credentials.GetCredentialRequest
-import androidx.credentials.GetCredentialResponse
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -15,21 +11,19 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.GetCredentialResponse
+import androidx.credentials.exceptions.GetCredentialException
 import com.example.theanimalsarestarving.BuildConfig
 import com.example.theanimalsarestarving.R
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
-
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.net.URL
 import java.security.MessageDigest
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 import java.util.UUID
-
 
 
 class LoginActivity : AppCompatActivity() {

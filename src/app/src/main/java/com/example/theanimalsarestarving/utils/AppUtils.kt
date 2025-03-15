@@ -1,7 +1,7 @@
 package com.example.theanimalsarestarving.utils
 
-import android.content.Context
 import android.app.AlertDialog
+import android.content.Context
 
 object AppUtils {
 

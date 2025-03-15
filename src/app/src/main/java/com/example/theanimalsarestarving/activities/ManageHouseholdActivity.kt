@@ -20,12 +20,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.theanimalsarestarving.R
-import com.example.theanimalsarestarving.models.User
 import com.example.theanimalsarestarving.models.Pet
-import com.example.theanimalsarestarving.repositories.MainRepository
+import com.example.theanimalsarestarving.models.User
 import com.example.theanimalsarestarving.network.NetworkManager.apiService
 import com.example.theanimalsarestarving.repositories.CurrUserRepository
 import com.example.theanimalsarestarving.repositories.HouseholdRepository
+import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.repositories.PetRepository
 import com.example.theanimalsarestarving.utils.AppUtils
 import com.google.android.material.timepicker.MaterialTimePicker

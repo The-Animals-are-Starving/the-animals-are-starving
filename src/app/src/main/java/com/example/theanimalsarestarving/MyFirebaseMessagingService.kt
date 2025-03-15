@@ -1,22 +1,16 @@
 package com.example.theanimalsarestarving
 
 import android.annotation.SuppressLint
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.os.Message
 import android.util.Log
-import android.widget.ArrayAdapter
-import android.widget.LinearLayout
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.example.theanimalsarestarving.activities.MainActivity
-import com.example.theanimalsarestarving.models.UserRole
 import com.example.theanimalsarestarving.network.NetworkManager.apiService
 import com.example.theanimalsarestarving.repositories.CurrUserRepository
 import com.example.theanimalsarestarving.repositories.MainRepository

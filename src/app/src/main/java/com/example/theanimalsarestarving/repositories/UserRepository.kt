@@ -1,7 +1,6 @@
 package com.example.theanimalsarestarving.repositories
 
 import android.util.Log
-import com.example.theanimalsarestarving.models.Pet
 import com.example.theanimalsarestarving.models.User
 import com.example.theanimalsarestarving.models.UserRole
 import com.example.theanimalsarestarving.network.NetworkManager.apiService
