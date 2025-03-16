@@ -1,0 +1,26 @@
+name: Mirror Repository
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Mirror Repository
+        env:
+          MIRROR_REPO: https://matthewfung04:${{ secrets.MIRROR_REPO_TOKEN }}@github.com/The-Animals-are-Starving/the-animals-are-starving.git
+        run: |
+          # Remove existing mirror remote if it exists
+          git remote remove mirror || true
+          # Add the mirror remote
+          git remote add mirror "$MIRROR_REPO"
+          # Push all branches to the mirror (force to ensure complete sync)
+          git push mirror --all --force
+          # Push all tags to the mirror
+          git push mirror --tags --force
