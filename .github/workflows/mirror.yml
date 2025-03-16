@@ -25,8 +25,8 @@ jobs:
         env:
           MIRROR_REPO: https://matthewfung04:${{ secrets.MIRROR_REPO_TOKEN }}@github.com/The-Animals-are-Starving/the-animals-are-starving.git
         run: |
-          # Unset the default credential helper so that the provided URL credentials are used
-          git config --global --unset credential.helper
+          # Unset the default credential helper; ignore error if none exists
+          git config --global --unset credential.helper || true
           # Remove existing mirror remote if it exists (ignore error if not)
           git remote remove mirror || true
           # Add the mirror remote with the PAT in the URL
