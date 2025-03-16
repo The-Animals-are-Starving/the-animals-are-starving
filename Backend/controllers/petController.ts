@@ -45,10 +45,11 @@ export const addPet = async (req: Request, res: Response): Promise<void> => {
 export const getPetsByHousehold = async (req: Request, res: Response) => {
     try {
         const { householdId } = req.params;
-        const pets = await Pet.find({ householdId }).sort({ name: 1 });
+        const pets = await Pet.find({ householdId: householdId });
 
         res.json(pets);
     } catch (error) {
+        console.error("Error retrieving pets:", error);
         res.status(500).json({ message: "Error retrieving pets", error });
     }
 };

@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 export interface IHousehold extends Document {
+    _id: unknown;
     name: string;
     managerId: mongoose.Types.ObjectId;
     users: mongoose.Types.ObjectId[];

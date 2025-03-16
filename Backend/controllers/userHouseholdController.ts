@@ -23,8 +23,8 @@ export const createHousehold = async (req: Request, res: Response): Promise<void
             pets: [],
         });
 
-        await household.save();
-        res.status(201).json(household);
+        const savedHouse = await household.save();
+        res.status(201).json(savedHouse);
     } catch (error) {
         console.error("Error:", error);
         res.status(500).json({ message: "An internal server error occurred" });
