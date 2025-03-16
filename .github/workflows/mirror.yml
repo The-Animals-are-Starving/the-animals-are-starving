@@ -9,30 +9,18 @@ jobs:
   mirror:
     runs-on: ubuntu-latest
     steps:
-      - name: Check if token is set
-        run: |
-          if [ -z "${{ secrets.MIRROR_REPO_TOKEN }}" ]; then
-            echo "MIRROR_REPO_TOKEN is empty!";
-            exit 1;
-          else
-            echo "MIRROR_REPO_TOKEN is set.";
-          fi
-          
       - name: Checkout Repository
         uses: actions/checkout@v3
+        with:
+          persist-credentials: false
 
       - name: Mirror Repository
         env:
           MIRROR_REPO: https://matthewfung04:${{ secrets.MIRROR_REPO_TOKEN }}@github.com/The-Animals-are-Starving/the-animals-are-starving.git
         run: |
-          # Unset the default credential helper; ignore error if none exists
-          git config --global --unset credential.helper || true
-          # Remove existing mirror remote if it exists (ignore error if not)
-          git remote remove mirror || true
           # Add the mirror remote with the PAT in the URL
           git remote add mirror "$MIRROR_REPO"
           # Push all branches to the mirror (force to ensure complete sync)
           git push mirror --all --force
           # Push all tags to the mirror
           git push mirror --tags --force
-
