@@ -11,14 +11,15 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          persist-credentials: false
 
       - name: Mirror Repository
         env:
           MIRROR_REPO: https://matthewfung04:${{ secrets.MIRROR_REPO_TOKEN }}@github.com/The-Animals-are-Starving/the-animals-are-starving.git
         run: |
-          # Remove existing mirror remote if it exists
-          git remote remove mirror || true
-          # Add the mirror remote
+          # Add the mirror remote with the PAT in the URL
           git remote add mirror "$MIRROR_REPO"
           # Push all branches to the mirror (force to ensure complete sync)
           git push mirror --all --force
