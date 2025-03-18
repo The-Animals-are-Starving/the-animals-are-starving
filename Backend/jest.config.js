@@ -4,8 +4,7 @@ module.exports = {
     collectCoverageFrom: [
       "controllers/**/*.ts",
       "routes/**/*.ts",
-      "models/**/*.ts",
-      "logs/**/*.ts"
+      "models/**/*.ts"
     ],
   };
   
