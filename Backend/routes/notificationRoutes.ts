@@ -23,11 +23,6 @@ router.post("/:email", async (req: Request, res: Response): Promise<void> => {
     const title = "The Animals are Starving";
     const body = "Please feed the animals before they die of hunger!";
   
-    if (!email) {
-      res.status(400).json({ error: "email is required" });
-      return;
-    }
-  
     try {
       const fcmtoken = await getUserDeviceToken(email);
       if (!fcmtoken) {

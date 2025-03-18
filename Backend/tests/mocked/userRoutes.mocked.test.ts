@@ -1,4 +1,3 @@
-// userRoutes.unit.test.ts
 import request from "supertest";
 import express from "express";
 import router from "../../routes/userRoutes";
