@@ -76,6 +76,7 @@ export const updatePetFeedingStatus = async (req: Request, res: Response): Promi
             res.status(404).json({ message: "Pet not found" });
             return;
         }
+        console.log("Found pet: %s", petObj)
         console.log("Found pet id: %s", petObj._id)
 
         const petId = petObj._id;
@@ -88,7 +89,7 @@ export const updatePetFeedingStatus = async (req: Request, res: Response): Promi
         const pet = await Pet.findByIdAndUpdate(petId, updateFields, { new: true });
 
         if (!pet) {
-            res.status(404).json({ message: "Pet not found" });
+            res.status(404).json({ message: "Pet not found from id" });
             return;
         }
 

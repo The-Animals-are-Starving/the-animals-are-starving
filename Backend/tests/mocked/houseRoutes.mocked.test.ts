@@ -51,4 +51,20 @@ describe("Household Management Tests", () => {
         expect(res.status).toBe(404);
         expect(res.body.message).toBe("Managing user not found");
     });
+
+    // ========================== ERROR TESTS ==========================
+    it("should return 500 if saving the household fails", async () => {
+        const reqBody = { householdName: "Test House", managerEmail: "manager@example.com" };
+
+        (User.findOne as jest.Mock).mockResolvedValue({ _id: "manager123" });
+
+        const saveMock = jest.fn().mockRejectedValue(new Error("Database save error"));
+        (Household as unknown as jest.Mock).mockImplementation(() => ({ save: saveMock }));
+
+        const res = await request(app).post("/household/create").send(reqBody);
+
+        expect(res.status).toBe(500);
+        expect(res.body.message).toBe("An internal server error occurred");
+        expect(saveMock).toHaveBeenCalled();
+    });
 });

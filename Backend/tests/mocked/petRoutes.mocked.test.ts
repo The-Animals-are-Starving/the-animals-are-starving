@@ -29,6 +29,9 @@ describe("Full Flow: Create User ➔ Create Household ➔ Add/Manage Pets", () =
         users: [createdUserId],
     });
   });
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
 
   // ========================== USER CREATION TEST ==========================
@@ -119,6 +122,21 @@ describe("Full Flow: Create User ➔ Create Household ➔ Add/Manage Pets", () =
     expect(res.body.message).toBe("Household not found");
   });
 
+  // ========================== PET FAILED CREATION TEST: FAILED SAVE ==========================
+  it("should return 500 if the database fails to save", async () => {
+    const petData = { name: "Fideo", householdId: "invalidHouseholdId", feedingTime: "08:00" };
+
+    (Household.findById as jest.Mock).mockResolvedValue({ _id: createdHouseholdId });
+
+    const saveMock = jest.fn().mockRejectedValue(new Error("Database save error"));
+    (Pet as unknown as jest.Mock).mockImplementation(() => ({ save: saveMock }));
+
+    const res = await request(app).post("/pet").send(petData);
+
+    expect(res.status).toBe(500);
+    expect(res.body.message).toBe("Error adding pet");
+  });
+
   // ========================== GET PETS BY HOUSEHOLD TEST ==========================
   it("should return a list of pets for a household", async () => {
 
@@ -136,6 +154,21 @@ describe("Full Flow: Create User ➔ Create Household ➔ Add/Manage Pets", () =
     expect(Pet.find).toHaveBeenCalledWith({ householdId: houseId });
   });
 
+    // ========================== GET PETS BY HOUSEHOLD TEST: DATABASE FAIL ==========================
+    it("should return a list of pets for a household", async () => {
+
+      const houseId = "67cfc99116ca0bfb944f50ec"
+      console.log("GET PETS: %s", houseId);
+  
+      const pets = [{ name: "Fluffy", householdId: houseId }, { name: "Bella", householdId: houseId }];
+  
+      (Pet.find as jest.Mock).mockRejectedValue(new Error("Database query error"));
+  
+      const res = await request(app).get(`/pet/${houseId}`);
+      console.log("GET PETS: %s", res.body.message);
+      expect(res.status).toBe(500);
+      expect(res.body.message).toBe("Error retrieving pets");
+    });
 
   // ========================== FEED PET TEST ==========================
   it("should update the pet's feeding status to true", async () => {
@@ -157,7 +190,7 @@ describe("Full Flow: Create User ➔ Create Household ➔ Add/Manage Pets", () =
   });
 
   // ========================== FEED PET TEST FAILURE: NO FED ==========================
-  it("should return 404 if no household is found when adding a pet", async () => {
+  it("should return 400 if no fed field", async () => {
     const petData = { name: "Fideo", householdId: "invalidHouseholdId", feedingTime: "08:00" };
 
     (Household.findById as jest.Mock).mockResolvedValue(null); // Simulate no household found
@@ -170,11 +203,10 @@ describe("Full Flow: Create User ➔ Create Household ➔ Add/Manage Pets", () =
   });
 
   // ========================== FEED PET TEST FAILURE: BAD FED ==========================
-  it("should return 404 if no household is found when adding a pet", async () => {
+  it("should return 400 if fed is not a boolean", async () => {
     const petData = { name: "Fideo", householdId: "invalidHouseholdId", feedingTime: "08:00" };
     const updates = { fed: "hello" };
 
-    (Household.findById as jest.Mock).mockResolvedValue(null); // Simulate no household found
 
     const res = await request(app).patch(`/pet/${petData.name}/feed`).send(updates);
 
@@ -183,17 +215,53 @@ describe("Full Flow: Create User ➔ Create Household ➔ Add/Manage Pets", () =
   });
 
   // ========================== FEED PET TEST FAILURE: PET NOT FOUND ==========================
-  it("should return 404 if no household is found when adding a pet", async () => {
-    const petData = { name: "Fideo", householdId: "invalidHouseholdId", feedingTime: "08:00" };
+  it("should return 404 if no pet is found", async () => {
+    const petName = "Fluffy";
     const updates = { fed: true };
 
-    (Household.findById as jest.Mock).mockResolvedValue(null); // Simulate no household found
-    (Pet.findByIdAndUpdate as jest.Mock).mockResolvedValue(null);
+    const petData = { name: petName, fed: false };
 
-    const res = await request(app).patch(`/pet/${petData.name}/feed`).send(updates);
+    (Pet.findOne as jest.Mock).mockResolvedValue(null);
 
+    const res = await request(app).patch(`/pet/${petName}/feed`).send(updates);
     expect(res.status).toBe(404);
     expect(res.body.message).toBe("Pet not found");
+    expect(Pet.findOne).toHaveBeenCalledWith({name: petName});
+  });
+
+
+  // ========================== FEED PET TEST FAILURE: PET NOT FOUND FROM ID==========================
+  it("should return 404 if no pet is found during update", async () => {
+    const petName = "Fluffy";
+    const updates = { fed: true };
+
+    const petData = {_id: "pet123", name: petName, fed: false };
+
+    (Pet.findOne as jest.Mock).mockResolvedValue(petData);
+    (Pet.findByIdAndUpdate as jest.Mock).mockResolvedValue(null);
+
+    const res = await request(app).patch(`/pet/${petName}/feed`).send(updates);
+    expect(res.status).toBe(404);
+    expect(res.body.message).toBe("Pet not found from id");
+    expect(Pet.findOne).toHaveBeenCalledWith({ name: petName });
+    expect(Pet.findByIdAndUpdate).toHaveBeenCalled();
+  });
+
+  // ========================== FEED PET TEST FAIL: DATABASE UPDATE FAILURE ==========================
+  it("should update the pet's feeding status to true", async () => {
+    const petName = "Fluffy";
+    const updates = { fed: true };
+
+    const petData = { name: petName, fed: false };
+
+    (Pet.findOne as jest.Mock).mockResolvedValue(petData);
+    (Pet.findByIdAndUpdate as jest.Mock).mockRejectedValue(new Error("Database query error"));
+
+    const res = await request(app).patch(`/pet/${petName}/feed`).send(updates);
+    expect(res.status).toBe(500);
+    expect(res.body.message).toBe("Error updating pet feeding status");
+    expect(Pet.findOne).toHaveBeenCalledWith({ name: petName });
+    expect(Pet.findByIdAndUpdate).toHaveBeenCalled();
   });
 
 
@@ -243,6 +311,22 @@ describe("Full Flow: Create User ➔ Create Household ➔ Add/Manage Pets", () =
       expect(Pet.findOne).toHaveBeenCalledWith({ name: petName });
       expect(Pet.findByIdAndDelete).toHaveBeenCalledWith("pet123");
     });
+
+    // ========================== REMOVE PET TEST FAIL: DATABASE ERROR==========================
+  it("should remove the pet successfully", async () => {
+    const petName = "Fluffy";
+    const petData = { name: petName, _id:"pet123" };
+
+    (Pet.findOne as jest.Mock).mockResolvedValue(petData);
+    const removeMock = jest.fn().mockResolvedValue(petData);
+    (Pet.findByIdAndDelete as jest.Mock).mockRejectedValue(new Error("Database query error"));
+
+    const res = await request(app).delete(`/pet/${petName}`);
+    expect(res.status).toBe(500);
+    expect(res.body.message).toBe("Error removing pet");
+    expect(Pet.findOne).toHaveBeenCalledWith({ name: petName });
+    expect(Pet.findByIdAndDelete).toHaveBeenCalledWith("pet123");
+  });
 });
 
 
