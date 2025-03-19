@@ -59,8 +59,8 @@ export const logFeeding = async (req: Request, res: Response): Promise<void> => 
 // Get feeding history for a pet
 export const getPetFeedingHistory = async (req: Request, res: Response) => {
     try {
-        const { petId } = req.params;
-        const logs = await Log.find({ petId }).populate("userId", "email name").sort({ timestamp: -1 });
+        const { petName } = req.params;
+        const logs = await Log.find({ petName }).sort({ timestamp: -1 });
 
         res.json(logs);
     } catch (error) {
@@ -92,7 +92,7 @@ export const getUserFeedingHistory = async (req: Request, res: Response): Promis
             return;
         }
 
-        const logs = await Log.find({ userId: user._id }).populate("petId", "name").sort({ timestamp: -1 });
+        const logs = await Log.find({ userName: user.name }).sort({ timestamp: -1 });
 
         res.json(logs);
     } catch (error) {

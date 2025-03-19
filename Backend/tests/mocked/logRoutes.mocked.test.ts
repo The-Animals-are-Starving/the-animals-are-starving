@@ -99,10 +99,10 @@ describe("Log Tests", () => {
     });
 
     it("should return the pet's feeding history", async () => {
-        const petId = "pet123";
+        const petName = "fido";
         const logs = [
-            { petId, userName: "User1", timestamp: "2025-03-17T10:00:00Z", amount: 5 },
-            { petId, userName: "User2", timestamp: "2025-03-16T10:00:00Z", amount: 3 }
+            { petName, userName: "User1", timestamp: "2025-03-17T10:00:00Z", amount: 5 },
+            { petName, userName: "User2", timestamp: "2025-03-16T10:00:00Z", amount: 3 }
         ];
 
         (Log.find as jest.Mock).mockReturnValue({
@@ -111,11 +111,11 @@ describe("Log Tests", () => {
             })
         });
 
-        const res = await request(app).get(`/log/pet/${petId}`);
+        const res = await request(app).get(`/log/pet/${petName}`);
 
         expect(res.status).toBe(200);
         expect(res.body).toEqual(logs);
-        expect(Log.find).toHaveBeenCalledWith({ petId });
+        expect(Log.find).toHaveBeenCalledWith({ petName });
     });
 
     it("should fail to return the pet's feeding history when db fails", async () => {
