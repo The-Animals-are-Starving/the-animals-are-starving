@@ -46,18 +46,21 @@
    - Open your terminal and run:
      ```
      git clone https://github.com/matthewfung04/the-animals-are-starving.git
-     ```
-
-2. **Enter the Back-end Directory**:
-   - Use:
-     ```
      cd the-animals-are-starving/Backend
      ```
 
-3. **Enter the Back-end Directory**:
+2. **Environment File for Running the Server**:
+   - If you want to run the server locally, create a .env file with the following:
+     ```
+     DB_URI=mongodb://localhost:27017
+     PORT=5000
+     ```
+   - If you wish to run the firebase notifications, you will need to create a key or get ours, but we recommend just using our server.  
+
+3. **Install the relevant packages**:
    - First install the packages needed with the command below. This may take a while (multiple minutes) as some packages are large.
      ```
-     cd the-animals-are-starving/Backend
+     npm install
      ```
 
 4. **Running the Test(s)**
