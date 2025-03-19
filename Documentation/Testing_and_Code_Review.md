@@ -20,7 +20,7 @@
 | **GET /user/:householdId** | ...                                                  | ...                                                | HouseDB                     |
 | **GET /user/:householdId** | ...                                                  | ...                                                | HouseDB                     |
 | **GET /user/specific-user/:email** | ...                                                  | ...                                                | HouseDB                     |
-| **Patch /user/:email** | ...                                                  | ...                                                | HouseDB                     |
+| **PATCH /user/:email** | ...                                                  | ...                                                | HouseDB                     |
 | **DELETE /user/:email** | ...                                                  | ...                                                | HouseDB                     |
 | **POST /household/create** | ...                                                  | ...                                                | HouseDB                     |
 | **POST /househld/add-user** | ...                                                  | ...                                                | HouseDB                     |
