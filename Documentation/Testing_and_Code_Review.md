@@ -36,8 +36,7 @@
 
 #### 2.1.2. Commit Hash Where Tests Run
 
-`SEE LATEST COMMIT`
-<mark>TO DO: FINALIZE FOR SUBMISSION</mark>
+`93ad171ef876a1b9d8443d47e2f9fb6f7b71e0c1`
 
 #### 2.1.3. Explanation on How to Run the Tests
 
@@ -89,7 +88,7 @@
 
 ### 2.4. Jest Coverage Report Screenshots Without Mocks
 
-_(Placeholder for Jest coverage screenshot without mocks)_ <mark>TO DO: Make it...</mark>
+![image](https://github.com/user-attachments/assets/16f387ad-50f0-4b1a-9828-c3f68c5b35e1)
 
 ### 2.5 Missing Coverage Justification (Without Mocks)
 
@@ -232,8 +231,7 @@ _(Placeholder for Jest coverage screenshot without mocks)_ <mark>TO DO: Make it.
 
 ### 5.1. Commit Hash Where Codacy Ran
 
-`[Insert Commit SHA here]` `SEE LATEST COMMIT`
-<mark>TO DO: FINALIZE FOR SUBMISSION</mark>
+`93ad171ef876a1b9d8443d47e2f9fb6f7b71e0c1`
 
 ### 5.2. Unfixed Issues per Codacy Category
 
