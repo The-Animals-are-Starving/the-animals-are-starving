@@ -34,33 +34,35 @@ import retrofit2.Call
 import retrofit2.Response
 
 class ManageHouseholdActivity : AppCompatActivity() {
-    val currHouseholdId = if (HouseholdRepository.getCurrentHousehold() != null) HouseholdRepository.getCurrentHousehold()?._id else 1
+    val currHouseholdId =
+        if (HouseholdRepository.getCurrentHousehold() != null) HouseholdRepository.getCurrentHousehold()?._id else 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.manage_activity)
 
-        val userListContainer = findViewById<LinearLayout>(R.id.userListContainer)
         val newUserButton = findViewById<Button>(R.id.newUserButton)
 
-        val petListContainer = findViewById<LinearLayout>(R.id.petListContainer)
         val newPetButton = findViewById<Button>(R.id.newPetButton)
 
         newUserButton.setOnClickListener {
-            showAddUserDialog(userListContainer)
+            showAddUserDialog()
         }
         newPetButton.setOnClickListener {
-            showAddPetDialog(petListContainer)
+            showAddPetDialog()
         }
 
-        Log.d("ManageHouseholdActivity", "Current Household: ${currHouseholdId}\n Current User: ${CurrUserRepository.getCurrUser()}\n Current pets: ${PetRepository.getPets()}")
+        Log.d(
+            "ManageHouseholdActivity",
+            "Current Household: ${currHouseholdId}\n Current User: ${CurrUserRepository.getCurrUser()}\n Current pets: ${PetRepository.getPets()}"
+        )
 
         refreshUsers()
         refreshPets()
     }
 
-    private fun showAddUserDialog(container: LinearLayout) { //Popup for new user
+    private fun showAddUserDialog() { //Popup for new user
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Add New User")
 
@@ -92,7 +94,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
             if (!isValidEmail(email)) {
                 AppUtils.alertMessage(this, "Please Enter a Valid Email")
             } else if (userName.isNotEmpty() && email.isNotEmpty()) {
-                addUser(userName, email, container)
+                addUser(userName, email)
             } else {
                 AppUtils.alertMessage(this, "Please Enter all User Info")
             }
@@ -104,11 +106,11 @@ class ManageHouseholdActivity : AppCompatActivity() {
         builder.show()
     }
 
-    private fun addUser(name: String, email: String, container: LinearLayout) {
+    private fun addUser(name: String, email: String) {
         val newUser = User(name = name, email = email, householdId = currHouseholdId.toString())
 
         val repository = MainRepository(apiService)
-        Log.d("AddUser","Attempting to add user: $newUser")
+        Log.d("AddUser", "Attempting to add user: $newUser")
         repository.addUser(newUser) { addedUser -> //adds user
             if (addedUser != null) {
 
@@ -122,7 +124,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
     }
 
 
-    private fun showAddPetDialog(container: LinearLayout) { //Popup for new pet
+    private fun showAddPetDialog() { //Popup for new pet
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Add New Pet")
 
@@ -142,13 +144,24 @@ class ManageHouseholdActivity : AppCompatActivity() {
         val feedingTime = EditText(this).apply {
             hint = "Feeding Time"
             isFocusable = false
-            setOnClickListener{ showTimePicker(this) }
+            setOnClickListener { showTimePicker(this) }
         }
         layout.addView(feedingTime)
 
         val typeIn = Spinner(this)
-        val petTypeOptions = arrayOf("Select Pet Type","Dog", "Cat", "Rabbit", "Hamster", "Fish", "Lizard", "Bird", "Other")
-        typeIn.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, petTypeOptions)
+        val petTypeOptions = arrayOf(
+            "Select Pet Type",
+            "Dog",
+            "Cat",
+            "Rabbit",
+            "Hamster",
+            "Fish",
+            "Lizard",
+            "Bird",
+            "Other"
+        )
+        typeIn.adapter =
+            ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, petTypeOptions)
 
         layout.addView(typeIn)
 
@@ -159,7 +172,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
             val petType = typeIn.selectedItem.toString()
             val petFeedTime = feedingTime.text.toString()
             if (petName.isNotEmpty() || petType != "Select Pet Type") {
-                addPet(petName, petType, petFeedTime ,container)
+                addPet(petName, petFeedTime)
             } else {
                 AppUtils.alertMessage(this, "Please Enter all Pet Info")
             }
@@ -174,7 +187,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
 
     //Shows addPet popup for entering pet data
 
-    private fun addPet(name: String, type: String, time: String, container: LinearLayout) {
+    private fun addPet(name: String, time: String) {
         val newPet = Pet(name = name, feedingTime = time, householdId = currHouseholdId.toString())
 
         val repository = MainRepository(apiService)
@@ -203,7 +216,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
 
         timePicker.show(supportFragmentManager, "time_picker")
 
-        timePicker.addOnPositiveButtonClickListener{
+        timePicker.addOnPositiveButtonClickListener {
             val formattedTime = String.format("%02d:%02d", timePicker.hour, timePicker.minute)
             editText.setText(formattedTime)
         }
@@ -228,12 +241,12 @@ class ManageHouseholdActivity : AppCompatActivity() {
         val editTime = EditText(this).apply {
             hint = "Change Feeding Time"
             isFocusable = false
-            setOnClickListener{ showTimePicker(this) }
+            setOnClickListener { showTimePicker(this) }
         }
         layout.addView(editTime)
         builder.setView(layout)
 
-        builder.setPositiveButton("Save"){_, _ ->
+        builder.setPositiveButton("Save") { _, _ ->
             petTextView.text = editName.text.toString()
             //TODO: Change this to send to backend
         }
@@ -245,6 +258,90 @@ class ManageHouseholdActivity : AppCompatActivity() {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
+
+    private fun createNameView(user: User): TextView {
+
+        val nameView = TextView(this).apply {
+            text = user.name
+            layoutParams = LinearLayout.LayoutParams(
+                0,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                1f
+            )
+        }
+        return nameView
+
+    }
+
+
+    private fun createDeleteButton(user: User): Button {
+
+        val deleteButton = Button(this).apply {
+            text = getString(R.string.delete_text)
+            setOnClickListener {
+                AlertDialog.Builder(this@ManageHouseholdActivity)
+                    .setTitle("Confirm Deletion")
+                    .setMessage("Are you sure you want to delete this user?")
+                    .setPositiveButton("YES") { _, _ ->
+                        deleteUser(user.email) { success ->
+                            if (success) {
+                                Toast.makeText(
+                                    this@ManageHouseholdActivity,
+                                    "User Deleted",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                refreshUsers()
+                            } else {
+                                AppUtils.alertMessage(
+                                    this@ManageHouseholdActivity,
+                                    "Failed to delete user. Please try again."
+                                )
+                            }
+                        }
+                    }
+                    .setNegativeButton("NO") { dialog, _ -> dialog.cancel() }
+                    .show()
+            }
+        }
+        return deleteButton
+    }
+
+    private fun createRollSpinner(user: User): Spinner{
+        val roleSpinner = Spinner(this)
+        val roleOptions = arrayOf("normal", "restricted", "manager")
+        val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            roleOptions
+        )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) // Set dropdown item style
+        roleSpinner.adapter = adapter
+
+        // Set current role
+        roleSpinner.setSelection(roleOptions.indexOf(user.role))
+
+        roleSpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    val selectedRole = roleOptions[position]
+
+                    // Prevent unnecessary API calls if role is unchanged
+                    val role = user.role
+                    if (selectedRole != role) {
+                        roleSpinner.isEnabled = false
+                        updateUserRole(user.email, selectedRole, roleSpinner)
+                    }
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>) {}
+            }
+        return roleSpinner
+    }
     private fun refreshUsers() {
         val userListContainer = findViewById<LinearLayout>(R.id.userListContainer)
         userListContainer.removeAllViews() // Clear existing user list
@@ -254,6 +351,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
             repository.getAllUsers(currHouseholdId.toString()) { users ->
                 if (users != null) {
                     for (user in users) {
+
                         val userRow = LinearLayout(this).apply {
                             orientation = LinearLayout.HORIZONTAL
                             layoutParams = LinearLayout.LayoutParams(
@@ -263,67 +361,14 @@ class ManageHouseholdActivity : AppCompatActivity() {
                             setPadding(10, 10, 10, 10)
                         }
 
-                        val nameView = TextView(this).apply {
-                            text = user.name
-                            layoutParams = LinearLayout.LayoutParams(
-                                0,
-                                LinearLayout.LayoutParams.WRAP_CONTENT,
-                                1f
-                            )
-                        }
+                        val nameView = createNameView(user)
                         userRow.addView(nameView)
 
                         if (user.email != CurrUserRepository.getCurrUser()?.email) {
-                            val roleSpinner = Spinner(this)
-                            val roleOptions = arrayOf("normal", "restricted", "manager")
-                            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, roleOptions)
-                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) // Set dropdown item style
-                            roleSpinner.adapter = adapter
 
-                        // Set current role
-                        roleSpinner.setSelection(roleOptions.indexOf(user.role))
-
-                        roleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                                val selectedRole = roleOptions[position]
-
-                                // Prevent unnecessary API calls if role is unchanged
-                                val role = user.role
-                                if (selectedRole != role) {
-                                    roleSpinner.isEnabled = false
-                                    updateUserRole(user.email, selectedRole, roleSpinner)
-                                }
-                            }
-
-                                override fun onNothingSelected(parent: AdapterView<*>) {}
-                            }
-
-                            val deleteButton = Button(this).apply {
-                                text = getString(R.string.delete_text)
-                                setOnClickListener {
-                                    AlertDialog.Builder(this@ManageHouseholdActivity)
-                                        .setTitle("Confirm Deletion")
-                                        .setMessage("Are you sure you want to delete this user?")
-                                        .setPositiveButton("YES") { _, _ ->
-                                            deleteUser(user.email) { success ->
-                                                if (success) {
-                                                    Toast.makeText(
-                                                        this@ManageHouseholdActivity,
-                                                        "User Deleted",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                    refreshUsers()
-                                                } else {
-                                                    AppUtils.alertMessage(this@ManageHouseholdActivity,
-                                                        "Failed to delete user. Please try again.")
-                                                }
-                                            }
-                                        }
-                                        .setNegativeButton("NO") { dialog, _ -> dialog.cancel() }
-                                        .show()
-                                }
-                            }
+                            val roleSpinner = createRollSpinner(user)
                             userRow.addView(roleSpinner)
+                            val deleteButton = createDeleteButton(user)
                             userRow.addView(deleteButton)
                         } else {
                             val loggedInBox = TextView(this).apply {
@@ -347,7 +392,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
 
                     }
                 } else {
-                    AppUtils.alertMessage(this,"Failed to fetch users. Please try again.")
+                    AppUtils.alertMessage(this, "Failed to fetch users. Please try again.")
                 }
             }
         }
@@ -356,7 +401,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
     private fun refreshPets() {
 
         val petListContainer = findViewById<LinearLayout>(R.id.petListContainer)
-        petListContainer.removeAllViews() 
+        petListContainer.removeAllViews()
 
         val repository = MainRepository(apiService)
         if (currHouseholdId != null) {
@@ -417,7 +462,8 @@ class ManageHouseholdActivity : AppCompatActivity() {
                 AppUtils.alertMessage(this, "Failed to update role. Try again.")
                 // Reset the spinner to its previous role (in case of failure)
                 val roleOptions = arrayOf("normal", "restricted", "manager")
-                val adapter = ArrayAdapter(spinner.context, android.R.layout.simple_spinner_item, roleOptions)
+                val adapter =
+                    ArrayAdapter(spinner.context, android.R.layout.simple_spinner_item, roleOptions)
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 spinner.adapter = adapter
 
@@ -436,7 +482,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
         Log.d("ManageHousehold", "Attempting to delete user $userEmail")
         apiService.deleteUser(userEmail).enqueue(object : retrofit2.Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
-                if(response.isSuccessful) {
+                if (response.isSuccessful) {
                     val success = response.body() ?: false
                     if (success) {
                         Log.d("DeleteUser", "User deleted successfully")
@@ -447,6 +493,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
                     Log.e("DeleteUser", "Failed with code: ${response.code()}")
                 }
             }
+
             override fun onFailure(call: Call<Boolean>, t: Throwable) {
                 Log.e("DeleteUser", "Error: ${t.message}")
             }
