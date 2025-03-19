@@ -159,6 +159,8 @@ _(Placeholder for Jest coverage screenshot without mocks)_ <mark>TO DO: Make it.
     | 2. User presses the corresponding “Feed Pet” button to confirm that the pet has been fed. | Locate the feed button with accociated pet and press it. |
     | 3. System updates the feeding log with the pet's ID, user ID, date, and amount of food. | Exit feeding menu.<br>Checks log button exists.<br>Clicks log button.<br>Checks that new log appeared. |
     | 4. User is prompted with a success message indicating that the log has been updated successfully. | While on feed screen, check clicked pet for "FED" text. |
+    
+    No failure scenarios as they all relate to server issues which requires mocking.
 
 - **Use Case: Requesting Others to do Feeding (Test Success)**
 
@@ -169,6 +171,8 @@ _(Placeholder for Jest coverage screenshot without mocks)_ <mark>TO DO: Make it.
     | 2. The sender then presses the “Notify” button next to the name of the recipient. | First check that the a row with "Bob" appears with a "Notify" button. |
     | 3. App sends a request to the server to notify the recipient. | Verify that the button is pressable by clicking "Nofity" |
     | 4. User 2 (the recipient) receives a notification indicating that they are responsible for feeding the pet. | This cannot be tested explicitly as we only have one device |
+
+     No failure scenarios as they all relate to server issues which requires mocking.
 
 - **Use Case: History Management (Test Success)**
 
