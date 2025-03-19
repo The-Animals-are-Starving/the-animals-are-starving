@@ -22,17 +22,15 @@
 | **PATCH /user/update-household/:email** | [`tests/mockFree/userRoutes.mockFree.test.ts#L104`](#) | [`tests/mocked/userRoutes.mockFed.test.ts#L171`](#) | HouseDB                     |
 | **PATCH /user/:email** | [`tests/mockFree/userRoutes.mockFree.test.ts#L129`](#) | [`tests/mocked/userRoutes.mockFed.test.ts#L219`](#) | HouseDB                     |
 | **DELETE /user/:email** | [`tests/mockFree/userRoutes.mockFree.test.ts#L166`](#) | [`tests/mocked/userRoutes.mockFed.test.ts#L279`](#) | HouseDB                     |
-| **POST /household/create** | ...                                                  | ...                                                | HouseDB                     |
-| **POST /househld/add-user** | ...                                                  | ...                                                | HouseDB                     |
-| **POST /household/remove-user** | ...                                                  | ...                                                | HouseDB                     |
-| **POST /pet/** | ...                                                  | ...                                                | HouseDB                     |
-| **GET /pet/:householdId** | ...                                                  | ...                                                | HouseDB                     |
-| **PATCH /pet/:petName/feed** | ...                                                  | ...                                                | HouseDB                     |
-| **DELETE /pet/:petName** | ...                                                  | ...                                                | HouseDB                     |
-| **POST /log/:petName** | ...                                                  | ...                                                | HouseDB                     |
-| **GET /log/pet/:petId** | ...                                                  | ...                                                | HouseDB                     |
-| **GET /log/household/:householdId** | ...                                                  | ...                                                | HouseDB                     |
-| **GET /log/:user/:userEmail** | ...                                                  | ...                                                | HouseDB                     |
+| **POST /household/create** | [`tests/mockFree/houseRoutes.mockFree.test.ts#L???`](#) | [`tests/mocked/houseRoutes.mockFed.test.ts#L19`](#) | HouseDB                     |
+| **POST /pet/** | [`tests/mockFree/petRoutes.mockFree.test.ts#L???`](#) | [`tests/mocked/petRoutes.mockFed.test.ts#L88`](#) | HouseDB                     |
+| **GET /pet/:householdId** | [`tests/mockFree/petRoutes.mockFree.test.ts#L???`](#) | [`tests/mocked/petRoutes.mockFed.test.ts#L141`](#) | HouseDB                     |
+| **PATCH /pet/:petName/feed** | [`tests/mockFree/petRoutes.mockFree.test.ts#L???`](#) | [`tests/mocked/petRoutes.mockFed.test.ts#L174`](#) | HouseDB                     |
+| **DELETE /pet/:petName** | [`tests/mockFree/petRoutes.mockFree.test.ts#L???`](#) | [`tests/mocked/petRoutes.mockFed.test.ts#L269`](#) | HouseDB                     |
+| **POST /log/:petName** | [`tests/mockFree/logRoutes.mockFree.test.ts#L???`](#) | [`tests/mocked/logRoutes.mockFed.test.ts#L24`](#) | HouseDB                     |
+| **GET /log/pet/:petId** | [`tests/mockFree/logRoutes.mockFree.test.ts#L???`](#) | [`tests/mocked/logRoutes.mockFed.test.ts#L101`](#) |HouseDB                     |
+| **GET /log/household/:householdId** | [`tests/mockFree/logRoutes.mockFree.test.ts#L???`](#) | [`tests/mocked/logRoutes.mockFed.test.ts#L142`](#) |HouseDB                     |
+| **GET /log/:user/:userEmail** | [`tests/mockFree/logRoutes.mockFree.test.ts#L???`](#) | [`tests/mocked/logRoutes.mockFed.test.ts#L174`](#) | HouseDB                     |
 | **GET /analytics/rankings/:householdId** | [`tests/mockFree/analyticsRoutes.mockFree.test.ts#L32`](#) | [`tests/mocked/analyticsRoutes.mockFed.test.ts#L15`](#) | HouseDB                     |
 | **POST /notify/:email** | [`tests/mockFree/notificationsRoutes.mockFree.test.ts#L38`](#) | [`tests/mocked/notificationsRoutes.mockFed.test.ts#L17`](#) | HouseDB, Firebase Messaging                     |
 
@@ -80,7 +78,7 @@
 
 ### 2.2. GitHub Actions Configuration Location
 
-`~/.github/workflows/backend-tests.yml` <mark>TO DO: Make it...</mark>
+`~/.github/workflows/jest-tests.yml`
 
 ### 2.3. Jest Coverage Report Screenshots With Mocks
 
@@ -98,25 +96,27 @@ _(Placeholder for Jest coverage screenshot without mocks)_ <mark>TO DO: Make it.
 
 | **Non-Functional Requirement**  | **Location in Git**                              |
 | ------------------------------- | ------------------------------------------------ |
-| **Performance (Response Time)** | [`tests/nonfunctional/response_time.test.js`](#) |
-| **Chat Data Security**          | [`tests/nonfunctional/chat_security.test.js`](#) |
+| **Performance (Response Time)** | [`tests/non-functional/performance.test.js`](#) |
 
 ### 3.2. Test Verification and Logs
 
 - **Performance (Response Time)**
 
-  - **Verification:** This test suite simulates multiple concurrent API calls using Jest along with a load-testing utility to mimic real-world user behavior. The focus is on key endpoints such as user login and study group search to ensure that each call completes within the target response time of 2 seconds under normal load. The test logs capture metrics such as average response time, maximum response time, and error rates. These logs are then analyzed to identify any performance bottlenecks, ensuring the system can handle expected traffic without degradation in user experience.
+  - **Verification:** This test suite simulates multiple concurrent API calls using Jest along with a load-testing utility to mimic real-world user behavior. The focus is on key endpoints such as retrieving user and pet data as well as household creation to ensure that each call completes within the target response time of 2 seconds under the worst loads for an app of our size (100 concurrent calls). The test logs capture metrics such as average response time, maximum response time, and error rates. These logs are then analyzed to identify any performance bottlenecks, ensuring the system can handle expected traffic without degradation in user experience.
   - **Log Output**
-    ```
-    [Placeholder for response time test logs]
-    ```
+    <pre>
+    <span style="background-color: green; color: white;">PASS</span> tests/non-functional/performance.test.ts (6.24 s)
+    Performance Non-Functional Tests
+    √ should respond quickly for concurrent calls to user endpoints (417 ms)
+    √ should respond quickly for concurrent calls to pet endpoints (233 ms)                 
+    √ should respond quickly for concurrent calls to household endpoints (344 ms)
+    Test Suites: 1 passed, 1 total
+    Tests:       3 passed, 3 total
+    Snapshots:   0 total
+    Time:        6.358 s, estimated 7 s
+    </pre>
 
-- **Chat Data Security**
-  - **Verification:** ...
-  - **Log Output**
-    ```
-    [Placeholder for chat security test logs]
-    ```
+  - Note: our second non-functional requirement was tested on the front-end
 
 ---
 
@@ -161,6 +161,22 @@ _(Placeholder for Jest coverage screenshot without mocks)_ <mark>TO DO: Make it.
     ```
 
 - **...**
+
+### 4.3. Front-end Non-Functional Test
+
+| **Non-Functional Requirement**  | **Location in Git**                              |
+| ------------------------------- | ------------------------------------------------ |
+| **Accessability (# of Clicks)** | [`where?`](#) <mark>TO DO: Make it...</mark>|
+
+#### 4.3.1. Test Verification and Logs
+
+- **Accessability (# of Clicks)**
+
+  - **Verification:** This test suite simulates a how a real-world user would access the use-case with the longest sequence of clicks. The focus is on making sure that the app should be usable by all members of the household, including those with impaired vision, language barriers, and of all mental faculties. Thus, users should be able to complete the action in <mark>TO DO: NUMBER OF CLICKS</mark> clicks or less.
+  - **Log Output**
+    ```
+    <mark>TO DO: paste in the log :).</mark>
+    ```
 
 ---
 
