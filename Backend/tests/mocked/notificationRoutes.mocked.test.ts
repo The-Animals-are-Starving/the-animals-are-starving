@@ -88,4 +88,42 @@ describe("POST /:email - Notify user to feed the animals (Mocked)", () => {
       details: errorMessage,
     });
   });
+
+  /**
+   * Additional Test: Simulate an error thrown by User.findOne
+   * Expected: HTTP 404 with error "Failed to send notification" and error details from User.findOne failure.
+   */
+  it("should return 404 if User.findOne throws an error", async () => {
+    jest.spyOn(User, "findOne").mockRejectedValueOnce(new Error("findOne error"));
+    const res = await request(app).post("/test@example.com");
+    expect(res.status).toBe(404);
+    expect(res.body).toEqual({
+      error: "User token not found"
+    });
+  });
+
+  /**
+   * Test: Firebase send failure with non-Error rejection
+   * Expected: HTTP 500 with error "Failed to send notification" and details as the string of the rejection.
+   */
+  it("should return 500 and convert a non-Error rejection to a string (messaging send)", async () => {
+    const mockFCMToken = "valid-token";
+    // Return a valid user with an FCMToken so that the controller proceeds past the 404 check.
+    (User.findOne as jest.Mock).mockResolvedValue({
+      email: "test@example.com",
+      FCMToken: mockFCMToken,
+    });
+
+    // Force admin.messaging().send to reject with a non-Error value (a string)
+    const nonErrorRejection = "non error rejection";
+    const sendMock = jest.fn().mockRejectedValue(nonErrorRejection);
+    (admin.messaging as jest.Mock).mockReturnValue({ send: sendMock });
+
+    const res = await request(app).post("/test@example.com");
+    expect(res.status).toBe(500);
+    expect(res.body).toEqual({
+      error: "Failed to send notification",
+      details: "non error rejection",
+    });
+  });
 });

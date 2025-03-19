@@ -52,6 +52,31 @@ describe("POST / - CreateUser (Mocked)", () => {
     expect(res.status).toBe(400);
     expect(res.body.message).toBe("User already exists");
   });
+
+  it("should return 500 if an error occurs during user creation (findOne error)", async () => {
+    const userData = { email: "error@example.com", name: "Error User", householdId: "house123" };
+    (User.findOne as jest.Mock).mockRejectedValue(new Error("findOne error"));
+
+    const res = await request(app).post("/").send(userData);
+    expect(res.status).toBe(500);
+    expect(res.body.message).toBe("Error creating user");
+    expect(res.body.error).toBeDefined();
+  });
+
+  it("should return 500 if an error occurs during user creation (save error)", async () => {
+    const userData = { email: "error2@example.com", name: "Error User", householdId: "house123" };
+    (User.findOne as jest.Mock).mockResolvedValue(null);
+    const saveMock = jest.fn().mockRejectedValue(new Error("save error"));
+    (User as unknown as jest.Mock).mockImplementation((data) => ({
+      ...data,
+      save: saveMock,
+    }));
+
+    const res = await request(app).post("/").send(userData);
+    expect(res.status).toBe(500);
+    expect(res.body.message).toBe("Error creating user");
+    expect(res.body.error).toBeDefined();
+  });
 });
 
 //
@@ -80,6 +105,19 @@ describe("GET /:householdId - GetAllUsers (Mocked)", () => {
     expect(res.status).toBe(200);
     expect(res.body).toEqual(users);
     expect(User.find).toHaveBeenCalledWith({ householdId });
+  });
+
+  // New test: simulate error in getAllUsers
+  it("should return 500 if an error occurs retrieving users", async () => {
+    const householdId = "house123";
+    (User.find as jest.Mock).mockReturnValue({
+      sort: jest.fn().mockRejectedValue(new Error("sort error")),
+    });
+
+    const res = await request(app).get(`/${householdId}`);
+    expect(res.status).toBe(500);
+    expect(res.body.message).toBe("Error retrieving users");
+    expect(res.body.error).toBeDefined();
   });
 });
 
@@ -114,6 +152,16 @@ describe("GET /specific-user/:email - GetUser (Mocked)", () => {
     const res = await request(app).get(`/specific-user/${email}`);
     expect(res.status).toBe(404);
     expect(res.body.message).toBe("User not found");
+  });
+
+  it("should return 500 if an error occurs retrieving the user", async () => {
+    const email = "error@example.com";
+    (User.findOne as jest.Mock).mockRejectedValue(new Error("findOne error"));
+
+    const res = await request(app).get(`/specific-user/${email}`);
+    expect(res.status).toBe(500);
+    expect(res.body.message).toBe("Error retrieving user");
+    expect(res.body.error).toBeDefined();
   });
 });
 
@@ -151,6 +199,17 @@ describe("PATCH /update-household/:email - UpdateUserHouseholdId (Mocked)", () =
     const res = await request(app).patch(`/update-household/${email}`).send(updates);
     expect(res.status).toBe(404);
     expect(res.body.message).toBe("User not found");
+  });
+
+  it("should return 500 if an error occurs updating the user's household ID", async () => {
+    const email = "error@example.com";
+    const updates = { householdId: "newHouseId" };
+    (User.findOneAndUpdate as jest.Mock).mockRejectedValue(new Error("update error"));
+
+    const res = await request(app).patch(`/update-household/${email}`).send(updates);
+    expect(res.status).toBe(500);
+    expect(res.body.message).toBe("Error updating user household ID");
+    expect(res.body.error).toBeDefined();
   });
 });
 
@@ -201,6 +260,17 @@ describe("PATCH /:email - UpdateUserRole (Mocked)", () => {
     expect(res.status).toBe(404);
     expect(res.body.message).toBe("User not found");
   });
+
+  it("should return 500 if an error occurs updating the user role", async () => {
+    const email = "error@example.com";
+    const updates = { role: "manager" };
+    (User.findOneAndUpdate as jest.Mock).mockRejectedValue(new Error("update error"));
+
+    const res = await request(app).patch(`/${email}`).send(updates);
+    expect(res.status).toBe(500);
+    expect(res.body.message).toBe("Error updating user");
+    expect(res.body.error).toBeDefined();
+  });
 });
 
 //
@@ -234,5 +304,15 @@ describe("DELETE /:email - DeleteUser (Mocked)", () => {
     const res = await request(app).delete(`/${email}`);
     expect(res.status).toBe(404);
     expect(res.body.message).toBe("User not found");
+  });
+
+  it("should return 500 if an error occurs deleting the user", async () => {
+    const email = "error@example.com";
+    (User.findOneAndDelete as jest.Mock).mockRejectedValue(new Error("delete error"));
+
+    const res = await request(app).delete(`/${email}`);
+    expect(res.status).toBe(500);
+    expect(res.body.message).toBe("Error deleting user");
+    expect(res.body.error).toBeDefined();
   });
 });
