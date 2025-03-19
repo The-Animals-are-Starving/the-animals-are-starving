@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.googleid)
     implementation(libs.androidx.junit.ktx)
     implementation(libs.androidx.espresso.core)
+    implementation(libs.androidx.espresso.contrib)
 
     // Testing Libraries
     testImplementation(libs.junit)

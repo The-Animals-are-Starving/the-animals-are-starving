@@ -1,0 +1,62 @@
+conn = new Mongo();
+db = conn.getDB("pet-tracker");
+
+db.dropDatabase();
+
+result = db.users.insertMany([
+    {
+        "_id": ObjectId("67da3f8f418676aeb4b76e63"),
+        "email": "bob@gmail.com",
+        "name": "Bob",
+        "householdId": "67da3f8f418676aeb4b76e66",
+        "role": "manager",
+        "__v": 0,
+        "FCMToken": "e9j86_L4RPGTGEHYrRfpcm:APA91bEaQ9TY_eODzV3tRF8ZkVLbaEJ07UWDxQad8yOZgoVmG6LEFZIDt95gyRcF_2zg6OG3drkzjDfu9gnCcD33_RoEo-1z4lB-VN5eJ3ynPbdrulgz1tI"
+    },
+    {
+        "_id": ObjectId("67da43d5418676aeb4b76e7e"),
+        "email": "bobette@gmail.com",
+        "name": "Bobette",
+        "householdId": "67da3f8f418676aeb4b76e66",
+        "role": "normal",
+        "__v": 0
+    }
+]);
+
+print("Inserted users:", result);
+
+result = db.pets.insertMany([
+    {
+        "_id": ObjectId("67da3fdb418676aeb4b76e75"),
+        "name": "puppy dog",
+        "householdId": ObjectId("67da3f8f418676aeb4b76e66"),
+        "feedingTime": ISODate("1969-04-20T20:00:00.000Z"),
+        "fed": false,
+        "__v": 0
+    },
+    {
+        "_id": ObjectId("67da43ac418676aeb4b76e7a"),
+        "name": "kitty cat",
+        "householdId": ObjectId("67da3f8f418676aeb4b76e66"),
+        "feedingTime": ISODate("1969-04-20T20:00:00.000Z"),
+        "fed": false,
+        "__v": 0
+    }
+]);
+
+print("Inserted pets:", result);
+
+result = db.households.insertMany([
+    {
+        "_id": ObjectId("67da3f8f418676aeb4b76e66"),
+        "name": "testHousehold",
+        "managerId": ObjectId("67da3f8f418676aeb4b76e63"),
+        "users": [
+            ObjectId("67da3f8f418676aeb4b76e63")
+        ],
+        "pets": [],
+        "__v": 0
+    }
+]);
+
+print("Inserted households:", result);
