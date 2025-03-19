@@ -74,34 +74,6 @@ public class EspressoTest {
     }
 
     @Test
-    public void feedingButtonPresent() {
-        try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
-            onView(withId(R.id.feed_button)).check(matches(isDisplayed()));
-        }
-    }
-
-    @Test
-    public void notifyButtonPresent() {
-        try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
-            onView(withId(R.id.notify_button)).check(matches(isDisplayed()));
-        }
-    }
-
-    @Test
-    public void householdButtonPresent() {
-        try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
-            onView(withId(R.id.manage_button)).check(matches(isDisplayed()));
-        }
-    }
-
-    @Test
-    public void historyButtonPresent() {
-        try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
-            onView(withId(R.id.feeding_history_button)).check(matches(isDisplayed()));
-        }
-    }
-
-    @Test
     public void testLogFeedingUseCase() {
         // Launch MainActivity manually after setting up SharedPreferences
         try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {

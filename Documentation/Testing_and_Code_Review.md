@@ -126,6 +126,10 @@ _(Placeholder for Jest coverage screenshot without mocks)_ <mark>TO DO: Make it.
 
 `src/app/src/androidTest/java/com/example/theanimalsarestarving/EspressoTest.java`
 
+#### How To Run Tests
+ - Make sure the backend is running with `npm run dev` in the `backend` folder
+ - Enter a `mongosh` shell 
+
 ### 4.2. Tests
 
 - **Use Case: Log Feeding (Test Success)**
@@ -144,9 +148,9 @@ _(Placeholder for Jest coverage screenshot without mocks)_ <mark>TO DO: Make it.
     | **Scenario Steps** | **Test Case Steps** |
     | ------------------ | ------------------- |
     | 1. Sender begins at the home page and presses "Notify Other Users". | Launch MainActivity and click notiy_button|
-    | 2. The sender then presses the “Notify” button next to the name of the recipient. | First check that the a row with "Bob" appears with a "Notify" button. Verify that the button is pressable.|
-    | 3. App sends a request to the server to notify the recipient. | 
-    | 4. User 2 (the recipient) receives a notification indicating that they are responsible for feeding the pet. |
+    | 2. The sender then presses the “Notify” button next to the name of the recipient. | First check that the a row with "Bob" appears with a "Notify" button. |
+    | 3. App sends a request to the server to notify the recipient. | Verify that the button is pressable by clicking "Nofity" |
+    | 4. User 2 (the recipient) receives a notification indicating that they are responsible for feeding the pet. | This cannot be tested explicitly as we only have one device |
 
 - **Use Case: History Management (Test Success)**
 
@@ -161,14 +165,13 @@ _(Placeholder for Jest coverage screenshot without mocks)_ <mark>TO DO: Make it.
   - **Expected Behaviors:**
     | **Scenario Steps** | **Test Case Steps** |
     | ------------------ | ------------------- |
-    | 1. Household Manager clicks the “View History” button on the main screen | Set current user to a non manager user.<br>Check that the view log button does not exist.<br>Set current user back to manager user. |
+    | 1. Household Manager clicks the “View History” button on the main screen<br> - 1a. User is not a Household Manager<br> - 1a1. User is not prompted with the "View History" button | Set current user to a non manager user.<br>Check that the view log button does not exist.<br>Set current user back to manager user. |
 
 - **Test Logs:**
   ```
   com.example.theanimalsarestarving.EspressoTest   26.92 s
   passed testLogFeedingUseCase   10.59 s 
   passed testNotifications    3.92 s
-  passed threeClickTest   8.32 s
   passed testHistoryManagementUseCaseSuccess   2.85 s
   passed testHistoryManagementUseCaseFailure   1.24 s
   ```
@@ -178,16 +181,17 @@ _(Placeholder for Jest coverage screenshot without mocks)_ <mark>TO DO: Make it.
 
 | **Non-Functional Requirement**  | **Location in Git**                              |
 | ------------------------------- | ------------------------------------------------ |
-| **Accessability (# of Clicks)** | [`where?`](#) <mark>TO DO: Make it...</mark>|
+| **Accessability (# of Clicks)** | src/app/src/androidTest/java/com/example/theanimalsarestarving/EspressoTest.java|
 
 #### 4.3.1. Test Verification and Logs
 
 - **Accessability (# of Clicks)**
 
-  - **Verification:** This test suite simulates a how a real-world user would access the use-case with the longest sequence of clicks. The focus is on making sure that the app should be usable by all members of the household, including those with impaired vision, language barriers, and of all mental faculties. Thus, users should be able to complete the action in <mark>TO DO: NUMBER OF CLICKS</mark> clicks or less.
+  - **Verification:** This test suite simulates a how a real-world user would access the use-case with the longest sequence of clicks. The focus is on making sure that the app should be usable by all members of the household, including those with impaired vision, language barriers, and of all mental faculties. Thus, users should be able to complete the action in 3 clicks or less. We did this by running tests starting from the home screen, and ensuring that we can feed a pet and view history by using less than three perform(click()) calls.
   - **Log Output**
     ```
-    <mark>TO DO: paste in the log :).</mark>
+    com.example.theanimalsarestarving.EspressoTest   26.92 s
+    passed threeClickTest   8.32 s
     ```
 
 ---

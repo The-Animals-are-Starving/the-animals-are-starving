@@ -130,6 +130,8 @@
                 1. Household Manager clicks the “View History” button on the main screen
                 2. The history is retrieved and the user is directed to a new screen displaying the feeding history in the household
             - **Failure scenario(s)**:
+                - 1a. User is not a Household Manager
+                    - 1a1. User is not prompted with the "View History" button
                 - 1b. Server is unable to retrieve the history
                     - 1b1. App displays an error message saying the history could not be retrieved and the user should try again later
                     - 1b2. The user backs out to the main screen and clicks the view history button again
