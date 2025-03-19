@@ -98,13 +98,19 @@ _(Placeholder for Jest coverage screenshot without mocks)_ <mark>TO DO: Make it.
 - (74-75) A catch block from a database error, again requires a mock
 
 #### Log Routes
-
+- (54-55, 67-68, 81, 99) All catch blocks which require a mock to test
+  
 #### Notifications Routes
-
+  
 #### UserHousehold Routes
+- (29-30) A catch block from a database error, requires a mock
 
 #### User Routes
 - (25, 37, 54, 80, 99, 117) All catch blocks which require a mock to test
+
+#### Pet Routes
+- (40-41, 53-54, 99-100, 126) All catch blocks which require a mock to test
+- (93-94, 120-121) Other type of db error where petId does not align with the one found from Pet.findOne, would need a mock to test.
 
 ---
 
