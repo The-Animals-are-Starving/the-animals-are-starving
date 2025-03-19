@@ -62,8 +62,8 @@
             - **Description**: Users can send a notification to another user, requesting them to feed the pet. The receiving user is notified of their responsibility to feed the pet. 
             - **Primary actor(s)**: Household Manager, Regular User
             - **Main success scenario**:
-                1. Sender scrolls the main page to find the pet they want fed and selects the recipient in a droplist
-                2. The sender then presses the “Notify” button
+                1. Sender begins at the home page and presses "Notify Other Users".
+                2. The sender then presses the “Notify” button next to the name of the recipient.
                 3. App sends a request to the server to notify the recipient.
                 4. User 2 (the recipient) receives a notification indicating that they are responsible for feeding the pet.
             - **Failure scenario(s)**:
@@ -82,11 +82,12 @@
             - **Description**: Household manager can add users to the household
             - **Primary actor(s)**: Household Manager
             - **Main success scenario**:
-                1. Manager clicks the "Manage Household" button on the top of the page and is directed to a page with the "Add User" button
-                2. Manager is prompted to enter the email of the person they are inviting, with the corresponding restriction level
-                3. Manger clicks "ok" 
+                1. Manager clicks the "Manage Household" button on the top of the page and is directed to a page with the "New User" button
+                2. Manager is prompted to enter the name and email of the person they are inviting.
+                3. Manger clicks "Add" 
                 4. The server adds the user to the household 
                 5. A toast message is displayed confirming that the user has been added
+                6. Manager may edit the restriction level using the drop down
             - **Failure scenario(s)**:
                 - 1d. The app is unable to update the server 
                     - 1d1. The app displays an error message and prompts the user with a message to try again
@@ -98,14 +99,14 @@
             - **Description**: Household manager can add pets and change their feeding schedules
             - **Primary actor(s)**: Household manager
             - **Main success scenario**:
-                1. Manager clicks the "Manage Household" button on the top of the page and is directed to a page with the "Manage Pets" button
-                2. Manager clicks the "Add Pet" button or selects the edit icon on the pet they want to update, and the fields becomes editable
-                3. Manger clicks "ok" 
+                1. Manager clicks the "Manage Household" button on the top of the page and is directed to a page with the "New Pet" button
+                2. Manager clicks the "New Pet" button and enters the pet name, feeding time, and pet type.
+                3. Manger clicks "Add" 
                 4. The app updates the database with these changes
                 5. A toast message is displayed confirming that the changes have been made
             - **Failure scenario(s)**:
                 - 1b. Pets could not be retrieved
-                    - 1b1. If there are no pets yet, display text saying "Add Your Pets!")in the text display. Otherwise, display "error getting pets, try again later"
+                    - 1b1. If there are no pets yet, display text saying "Add Your Pets!" in the text display. Otherwise, display "error getting pets, try again later"
                     - 1b2. The user backs out to the manage household screen and clicks manage pets to try again
                 - 1d. The changes could not be made to the server
                     - 1d1. An error message is displayed and the user is prompted to try again
