@@ -76,8 +76,6 @@ class FeedingActivity : AppCompatActivity() {
                 Log.e(TAG, "HTTP Error: ${e.code()} - ${e.message()}")
             } catch (e: IOException) {
                 Log.e(TAG, "IOException fetching pets: ${e.message}")
-            } catch (e: NullPointerException) {
-                Log.e(TAG, "NullPointerException fetching pets: ${e.message}")
             }
         }
     }

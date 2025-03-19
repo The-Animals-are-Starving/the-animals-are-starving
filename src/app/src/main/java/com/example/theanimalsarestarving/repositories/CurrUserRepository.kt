@@ -5,9 +5,12 @@ import com.example.theanimalsarestarving.models.User
 import com.example.theanimalsarestarving.network.NetworkManager.apiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import retrofit2.Response
+import java.io.IOException
 
 object CurrUserRepository {
+    private const val TAG = "CurrUserRepository"
 
     private var currUser: User? = null
 
@@ -30,19 +33,22 @@ object CurrUserRepository {
             if (response.isSuccessful) {
                 val user = response.body()
                 if (user==null) {
-                    Log.d("CurrUserRepository", "User Does Not Exist In DB: $userEmail")
+                    Log.d(TAG, "User Does Not Exist In DB: $userEmail")
                     null
                 } else {
-                    Log.d("CurrUserRepository", "Fetched User: $user")
-                    user // Return the first user matching the email (or null if not found)
+                    Log.d(TAG, "Fetched User: $user")
+                    user
                 }
             } else {
-                Log.e("CurrUserRepository", "Error: ${response.code()} ${response.message()}")
-                null // Return null if the request was unsuccessful
+                Log.e(TAG, "Error: ${response.code()} ${response.message()}")
+                null
             }
-        } catch (t: Throwable) {
-            Log.e("CurrUserRepository", "Failure in FetchCurrUser: ${t.message}")
-            null // Return null in case of an exception
+        } catch (e: HttpException) {
+            Log.e(TAG, "HttpException in FetchCurrUser: ${e.message()}")
+            null
+        } catch (e: IOException) {
+            Log.e(TAG, "IOException in FetchCurrUser: ${e.message}")
+            null
         }
     }
 }

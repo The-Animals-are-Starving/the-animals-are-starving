@@ -115,8 +115,6 @@ class HistoryActivity : AppCompatActivity() {
             date?.let { outputFormat.format(it) } ?: "Invalid Time"
         } catch (e: HttpException) {
             "HTTP Error: ${e.code()} - ${e.message()}"
-        } catch (e: NullPointerException) {
-            "NullPointerException fetching pets: ${e.message}"
         }
     }
 }
