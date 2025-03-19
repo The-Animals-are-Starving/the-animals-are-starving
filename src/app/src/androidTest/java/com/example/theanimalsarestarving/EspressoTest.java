@@ -13,6 +13,7 @@ import androidx.test.filters.LargeTest;
 
 import com.example.theanimalsarestarving.activities.MainActivity;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +24,9 @@ public class EspressoTest {
     @Rule
     public ActivityScenarioRule<MainActivity> activityRule =
             new ActivityScenarioRule<MainActivity>(MainActivity.class);
+
+//    @Before
+
 
     @Test
     public void manageHouseholdButtonPresent()

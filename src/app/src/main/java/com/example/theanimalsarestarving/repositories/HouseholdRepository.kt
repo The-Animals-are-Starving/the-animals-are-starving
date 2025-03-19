@@ -5,7 +5,9 @@ import com.example.theanimalsarestarving.models.Household
 import com.example.theanimalsarestarving.network.NetworkManager.apiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import retrofit2.Response
+import java.io.IOException
 
 object HouseholdRepository {
 
@@ -48,10 +50,12 @@ object HouseholdRepository {
                 Log.e(TAG, "Failed to create household: ${response.code()} ${response.message()}")
                 return null
             }
-        } catch (e: Exception) {
-            Log.e(TAG, "Error creating household: ${e.message}")
+        } catch (e: HttpException) {
+            Log.e(TAG, "HttpException creating household: ${e.message}")
+            return null
+        } catch (e: IOException) {
+            Log.e(TAG, "IOException creating household ${e.message}")
             return null
         }
     }
-
 }

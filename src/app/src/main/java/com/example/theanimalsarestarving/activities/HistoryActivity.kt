@@ -12,6 +12,7 @@ import com.example.theanimalsarestarving.network.NetworkManager.apiService
 import com.example.theanimalsarestarving.repositories.HouseholdRepository
 import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.utils.AppUtils
+import retrofit2.HttpException
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
@@ -112,8 +113,10 @@ class HistoryActivity : AppCompatActivity() {
             val date = inputFormat.parse(timestamp)
 
             date?.let { outputFormat.format(it) } ?: "Invalid Time"
-        } catch (e: Exception) {
-            "Invalid Time"
+        } catch (e: HttpException) {
+            "HTTP Error: ${e.code()} - ${e.message()}"
+        } catch (e: NullPointerException) {
+            "NullPointerException fetching pets: ${e.message}"
         }
     }
 }

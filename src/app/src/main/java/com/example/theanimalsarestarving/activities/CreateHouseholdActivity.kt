@@ -15,6 +15,8 @@ import com.example.theanimalsarestarving.repositories.HouseholdRepository
 import com.example.theanimalsarestarving.repositories.PetRepository
 import com.example.theanimalsarestarving.repositories.UserRepository
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
+import java.io.IOException
 
 class CreateHouseholdActivity : AppCompatActivity() {
 
@@ -29,44 +31,54 @@ class CreateHouseholdActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.create_household_activity)
         Log.d(TAG, "onCreate")
-        Log.d(TAG, "Creating household! Current Household: ${HouseholdRepository.getCurrentHousehold()}\n Current User: ${CurrUserRepository.getCurrUser()}\n Current pets: ${PetRepository.getPets()}")
+        Log.d(TAG, "Creating household! Current Household: ${HouseholdRepository.getCurrentHousehold()}\n Current User: ${CurrUserRepository.getCurrUser()}\n Current pets: ${PetRepository.getPets()}"
+        )
 
         userInputHouseholdName = findViewById(R.id.user_input_household_name)
         createButton = findViewById(R.id.create_button)
 
         createButton.setOnClickListener {
             lifecycleScope.launch {
-                val sharedPreferences: SharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
+                val sharedPreferences: SharedPreferences =
+                    getSharedPreferences("AppPrefs", MODE_PRIVATE)
                 val managerEmail = sharedPreferences.getString("userEmail", "").toString()
                 val managerName = sharedPreferences.getString("userName", "").toString()
                 val householdName = userInputHouseholdName.text.toString().trim()
-                if(householdName.isNotEmpty()) {
+                if (householdName.isNotEmpty()) {
                     try {
                         UserRepository.createUser(managerEmail, managerName, "") //null string or ""?
 
                         Log.d(TAG, "creating household with manager email: $managerEmail")
                         // Make sure the household creation completes before proceeding
-                        val householdCreated = HouseholdRepository.createHousehold(householdName, managerEmail) // Ensure this is a suspend function
+                        val householdCreated = HouseholdRepository.createHousehold(
+                            householdName,
+                            managerEmail
+                        ) // Ensure this is a suspend function
 
-                        if (householdCreated!= null) {
+                        if (householdCreated != null) {
 
                             HouseholdRepository.setCurrentHousehold(householdCreated) //sets current household singleton
 
                             //TODO: IMPLEMENT THE BACKEND FOR THIS
-                            UserRepository.updateUserHouseholdId(managerEmail, HouseholdRepository.getCurrentHousehold()?._id.toString())
+                            UserRepository.updateUserHouseholdId(
+                                managerEmail,
+                                HouseholdRepository.getCurrentHousehold()?._id.toString()
+                            )
 
                             //when you create the household, the current user is automatically added. do not add again
                             UserRepository.updateUserRole(managerEmail, UserRole.ADMIN)
 
                             // Move to the MainActivity after both tasks are done
-                            val intent = Intent(this@CreateHouseholdActivity, MainActivity::class.java)
+                            val intent =
+                                Intent(this@CreateHouseholdActivity, MainActivity::class.java)
                             startActivity(intent)
                         } else {
                             Log.e(TAG, "Household creation failed")
                         }
-
-                    } catch (e: Exception) {
-                        Log.e(TAG, "Error during household creation or user updates: ${e.message}")
+                    } catch (e: HttpException) {
+                        Log.e(TAG, "HttpException creating household: ${e.message}")
+                    } catch (e: IOException) {
+                        Log.e(TAG, "IOException creating household ${e.message}")
                     }
                 }
             }

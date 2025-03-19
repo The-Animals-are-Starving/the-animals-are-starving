@@ -6,7 +6,9 @@ import com.example.theanimalsarestarving.models.UserRole
 import com.example.theanimalsarestarving.network.NetworkManager.apiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import retrofit2.Response
+import java.io.IOException
 
 private const val TAG = "UserRepository"
 
@@ -34,9 +36,12 @@ object UserRepository {
                 Log.e(TAG, "Failed to create user: ${response.code()} ${response.message()}")
                 null
             }
-        } catch (e: Exception) {
-            Log.e(TAG, "Error creating user: ${e.message}")
-            null
+        } catch (e: HttpException) {
+            Log.e(TAG, "HttpException creating user: ${e.message}")
+            return null
+        } catch (e: IOException) {
+            Log.e(TAG, "IOException creating user ${e.message}")
+            return null
         }
     }
 
@@ -61,8 +66,10 @@ object UserRepository {
                 // If the request failed, log the error and return null
                 Log.e(TAG, "Failed to updated user's householdId: ${response.code()} ${response.message()} ")
             }
-        } catch (e: Exception) {
-            Log.e(TAG, "Error updating user's householdId: ${e.message}")
+        } catch (e: HttpException) {
+            Log.e(TAG, "HttpException updating user's householdId:: ${e.message}")
+        } catch (e: IOException) {
+            Log.e(TAG, "IOException updating user's householdId: ${e.message}")
         }
     }
 
@@ -91,10 +98,12 @@ object UserRepository {
                 Log.e(TAG, "Failed to add user to household: ${response.code()} ${response.message()} ")
                 null
             }
-        } catch (e: Exception) {
-            // Catch any exceptions and log them
-            Log.e(TAG, "Error adding user: ${e.message}")
-            null
+        } catch (e: HttpException) {
+            Log.e(TAG, "HttpException adding user: ${e.message}")
+            return null
+        } catch (e: IOException) {
+            Log.e(TAG, "IOException adding user: ${e.message}")
+            return null
         }
     }
 
