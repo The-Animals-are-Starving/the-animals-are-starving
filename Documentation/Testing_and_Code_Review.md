@@ -168,12 +168,15 @@ _(Placeholder for Jest coverage screenshot without mocks)_ <mark>TO DO: Make it.
 | ------------------------------- | ------------------------------------------------ |
 | **Accessability (# of Clicks)** | [`where?`](#) <mark>TO DO: Make it...</mark>|
 
-### 3.2. Test Verification and Logs
+#### 4.3.1. Test Verification and Logs
 
 - **Accessability (# of Clicks)**
 
   - **Verification:** This test suite simulates a how a real-world user would access the use-case with the longest sequence of clicks. The focus is on making sure that the app should be usable by all members of the household, including those with impaired vision, language barriers, and of all mental faculties. Thus, users should be able to complete the action in <mark>TO DO: NUMBER OF CLICKS</mark> clicks or less.
   - **Log Output**
+    ```
+    <mark>TO DO: paste in the log :).</mark>
+    ```
 
 ---
 
