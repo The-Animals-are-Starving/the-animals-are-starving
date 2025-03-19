@@ -32,9 +32,11 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.launch
 import retrofit2.Call
+import retrofit2.HttpException
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
 
 private const val TAG = "MainActivity"
 
@@ -130,8 +132,10 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
-            } catch (e: Exception) {
-                Log.e(TAG, "Error fetching user: ${e.message}")
+            } catch (e: HttpException) {
+                Log.e(TAG, "HttpException fetching user: ${e.message}")
+            } catch (e: IOException) {
+                Log.e("TAG", "IOException fetching user: ${e.message}")
             }
 
             FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
