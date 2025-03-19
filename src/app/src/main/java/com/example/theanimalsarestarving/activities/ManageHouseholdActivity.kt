@@ -42,17 +42,15 @@ class ManageHouseholdActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.manage_activity)
 
-        val userListContainer = findViewById<LinearLayout>(R.id.userListContainer)
         val newUserButton = findViewById<Button>(R.id.newUserButton)
 
-        val petListContainer = findViewById<LinearLayout>(R.id.petListContainer)
         val newPetButton = findViewById<Button>(R.id.newPetButton)
 
         newUserButton.setOnClickListener {
-            showAddUserDialog(userListContainer)
+            showAddUserDialog()
         }
         newPetButton.setOnClickListener {
-            showAddPetDialog(petListContainer)
+            showAddPetDialog()
         }
 
         Log.d(
@@ -64,7 +62,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
         refreshPets()
     }
 
-    private fun showAddUserDialog(container: LinearLayout) { //Popup for new user
+    private fun showAddUserDialog() { //Popup for new user
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Add New User")
 
@@ -126,7 +124,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
     }
 
 
-    private fun showAddPetDialog(container: LinearLayout) { //Popup for new pet
+    private fun showAddPetDialog() { //Popup for new pet
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Add New Pet")
 
