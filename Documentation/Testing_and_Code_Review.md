@@ -48,7 +48,6 @@
    - Open your terminal and run:
      ```
      git clone https://github.com/matthewfung04/the-animals-are-starving.git
-     
      ```
 
 2. **Enter the Back-end Directory**:
