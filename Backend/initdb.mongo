@@ -60,3 +60,43 @@ result = db.households.insertMany([
 ]);
 
 print("Inserted households:", result);
+
+result = db.logs.insertMany([
+    {
+        _id: ObjectId('67da5de4faac1a5743074912'),
+        petName: 'puppy dog',
+        userName: 'Bobette',
+        amount: 5,
+        householdId: ObjectId('67da3f8f418676aeb4b76e66'),
+        timestamp: ISODate('2025-03-13T06:02:12.000Z'),
+        __v: 0
+    },
+    {
+        _id: ObjectId('67da5de4faac1a5743074922'),
+        petName: 'kitty cat',
+        userName: 'Bobette',
+        amount: 5,
+        householdId: ObjectId('67da3f8f418676aeb4b76e66'),
+        timestamp: ISODate('2025-03-13T06:03:13.000Z'),
+        __v: 0
+    },
+    {
+        _id: ObjectId('67da5de4faac1a5743074932'),
+        petName: 'puppy dog',
+        userName: 'Bobette',
+        amount: 5,
+        householdId: ObjectId('67da3f8f418676aeb4b76e66'),
+        timestamp: ISODate('2025-03-14T06:04:14.000Z'),
+        __v: 0
+    },
+    {
+        _id: ObjectId('67da5de4faac1a5743074942'),
+        petName: 'kitty cat',
+        userName: 'Bobette',
+        amount: 5,
+        householdId: ObjectId('67da3f8f418676aeb4b76e66'),
+        timestamp: ISODate('2025-03-14T06:05:15.000Z'),
+        __v: 0
+    },
+    
+]);

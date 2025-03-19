@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -119,10 +120,15 @@ class MainActivity : AppCompatActivity() {
                     if (CurrUserRepository.getCurrUser()?.role == "restricted") {
                         val intent = Intent(this@MainActivity, RestrictedMainActivity::class.java)
                         startActivity(intent)
-
                     } else {
                         setContentView(R.layout.activity_main)
                         setUpButtons()
+                        if(CurrUserRepository.getCurrUser()?.role == "normal") {
+                            val buttonManage: Button = findViewById(R.id.manage_button)
+                            buttonManage.visibility = View.GONE
+                            val buttonLog: Button = findViewById(R.id.feeding_history_button)
+                            buttonLog.visibility = View.GONE
+                        }
                         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
                             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
                             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
