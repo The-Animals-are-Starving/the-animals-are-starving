@@ -29,7 +29,7 @@ afterEach(async () => {
   await Log.deleteMany({});
 });
 
-describe("GET /rankings/:householdId - Analytics Route (Integration Test - without mocks)", () => {
+describe("GET /rankings/:householdId - Analytics Route (without mocks)", () => {
   /**
    * Test: When no logs exist for a given household,
    * Expected: HTTP 200 and an empty userContributions object.

@@ -1,0 +1,32 @@
+name: Jest Tests
+
+on:
+  push:
+    paths:
+      - 'Backend/**'
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Backend
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Jest Tests (Mocked)
+        run: npm run test:coverage tests/mocked
+
+      - name: Run Jest Tests (Mock Free)
+        run: npm run test:coverage tests/mockFree

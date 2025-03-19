@@ -41,7 +41,7 @@ export const logFeeding = async (req: Request, res: Response): Promise<void> => 
 
         // Create log entry
         const log = new Log({
-            householdId: householdId ? new mongoose.Types.ObjectId(householdId) : undefined,
+            householdId: householdId,
             petName: petName,
             userName: user.name,
             timestamp: new Date(),
@@ -51,6 +51,7 @@ export const logFeeding = async (req: Request, res: Response): Promise<void> => 
         await log.save();
         res.status(201).json({ message: "Feeding logged successfully", log });
     } catch (error) {
+        console.log(error);
         res.status(500).json({ message: "Error logging feeding", error });
     }
 };
@@ -63,6 +64,7 @@ export const getPetFeedingHistory = async (req: Request, res: Response) => {
 
         res.json(logs);
     } catch (error) {
+        console.log(error)
         res.status(500).json({ message: "Error retrieving feeding history", error });
     }
 };

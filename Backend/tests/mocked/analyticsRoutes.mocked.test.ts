@@ -12,7 +12,7 @@ const app = express();
 app.use(express.json());
 app.use("/", router);
 
-describe("GET /rankings/:householdId - Analytics Route (Unit Tests with mocks)", () => {
+describe("GET /rankings/:householdId - Analytics Route (mocked)", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -147,7 +147,7 @@ describe("GET /rankings/:householdId - Analytics Route (Unit Tests with mocks)",
   });
 });
 
-describe("getUserRankings - Missing householdId (Unit Test with direct controller invocation)", () => {
+describe("getUserRankings - Missing householdId (mocked with direct controller invocation)", () => {
   it("should return 400 if householdId is not provided", async () => {
     // Create a fake request without householdId
     const req = { params: {} } as Request;
