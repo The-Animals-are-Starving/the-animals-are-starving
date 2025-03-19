@@ -30,3 +30,6 @@ jobs:
 
       - name: Run Jest Tests (Mock Free)
         run: npm run test:coverage tests/mockFree
+
+      - name: Run Jest Tests (Performance)
+        run: npm test tests/non-functional/performance
