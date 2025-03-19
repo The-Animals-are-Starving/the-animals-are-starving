@@ -14,6 +14,7 @@ export const addPet = async (req: Request, res: Response): Promise<void> => {
         if (householdId) {
             household = await Household.findById(householdId);
             if (!household) {
+                console.log("Household not found")
                 res.status(404).json({ message: "Household not found" });
                 return;
             }
