@@ -15,7 +15,10 @@ import com.example.theanimalsarestarving.R
 
 class RestrictedMainActivity : AppCompatActivity() {
 
-    private val TAG = "RestrictedMainActivity"
+    companion object {
+        private const val TAG = "RestrictedMainActivity"
+    }
+
     private lateinit var feedingButton: Button
     private lateinit var logoutButton: Button
 

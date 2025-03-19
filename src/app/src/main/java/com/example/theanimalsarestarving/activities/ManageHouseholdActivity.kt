@@ -34,7 +34,7 @@ import retrofit2.Call
 import retrofit2.Response
 
 class ManageHouseholdActivity : AppCompatActivity() {
-    val currHouseholdId =
+    private val currHouseholdId =
         if (HouseholdRepository.getCurrentHousehold() != null) HouseholdRepository.getCurrentHousehold()?._id else 1
 
     override fun onCreate(savedInstanceState: Bundle?) {

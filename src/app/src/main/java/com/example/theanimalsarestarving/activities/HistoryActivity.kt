@@ -32,7 +32,7 @@ class HistoryActivity : AppCompatActivity() {
 
 
     }
-    fun refreshHistory(householdId: String) {
+    private fun refreshHistory(householdId: String) {
 
         val historyTable = findViewById<TableLayout>(R.id.feedingsLogBox)
         val repository = MainRepository(apiService)
