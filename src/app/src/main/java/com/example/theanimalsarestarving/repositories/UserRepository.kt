@@ -6,14 +6,13 @@ import com.example.theanimalsarestarving.models.UserRole
 import com.example.theanimalsarestarving.network.NetworkManager.apiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import retrofit2.Response
+import java.io.IOException
 
 private const val TAG = "UserRepository"
 
-
 object UserRepository {
-    //singleton for current list of users
-    var currUsers: List<User> = emptyList()
 
     suspend fun createUser(email: String, name: String, householdId: String): User? {
         val requestBody = mapOf(
@@ -34,13 +33,16 @@ object UserRepository {
                 Log.e(TAG, "Failed to create user: ${response.code()} ${response.message()}")
                 null
             }
-        } catch (e: Exception) {
-            Log.e(TAG, "Error creating user: ${e.message}")
+        } catch (e: HttpException) {
+            Log.e(TAG, "HttpException creating user: ${e.message()}")
+            null
+        } catch (e: IOException) {
+            Log.e(TAG, "IOException creating user ${e.message}")
             null
         }
     }
 
-    suspend fun updateUserHouseholdId(email: String,householdId: String) {
+    suspend fun updateUserHouseholdId(email: String, householdId: String) {
         val requestBody = mapOf(
             "email" to email,
             "householdId" to householdId
@@ -55,61 +57,56 @@ object UserRepository {
             }
 
             if (response.isSuccessful) {
-                    Log.d(TAG, "User updated successfully: ${response.body()}")
-
+                Log.d(TAG, "User updated successfully: ${response.body()}")
             } else {
-                // If the request failed, log the error and return null
-                Log.e(TAG, "Failed to updated user's householdId: ${response.code()} ${response.message()} ")
+                Log.e(TAG, "Failed to updated user's householdId: ${response.code()} ${response.message()}")
             }
-        } catch (e: Exception) {
-            Log.e(TAG, "Error updating user's householdId: ${e.message}")
+        } catch (e: HttpException) {
+            Log.e(TAG, "HttpException updating user's householdId:: ${e.message()}")
+        } catch (e: IOException) {
+            Log.e(TAG, "IOException updating user's householdId: ${e.message}")
         }
     }
 
-    suspend fun addUserToHousehold(householdId: String, email: String): User? {
-        val requestBody = mapOf(
-            "householdId" to householdId,
-            "email" to email
-        )
-
-        return try {
-            Log.d(TAG, "Attempting to add user to household with requestBody: $requestBody")
-
-            // Make the network request asynchronously using enqueue on Dispatchers.IO
-            val response = withContext(Dispatchers.IO) {
-                // Execute the request synchronously using execute()
-                apiService.addUserToHousehold(requestBody).execute()
-            }
-
-            if (response.isSuccessful) {
-                // If the request was successful, return the user object from the response
-                response.body().also {
-                    Log.d(TAG, "User added successfully: $it")
-                }
-            } else {
-                // If the request failed, log the error and return null
-                Log.e(TAG, "Failed to add user to household: ${response.code()} ${response.message()} ")
-                null
-            }
-        } catch (e: Exception) {
-            // Catch any exceptions and log them
-            Log.e(TAG, "Error adding user: ${e.message}")
-            null
-        }
-    }
-
-
-
+//    suspend fun addUserToHousehold(householdId: String, email: String): User? {
+//        val requestBody = mapOf(
+//            "householdId" to householdId,
+//            "email" to email
+//        )
+//
+//        return try {
+//            Log.d(TAG, "Attempting to add user to household with requestBody: $requestBody")
+//
+//            // Make the network request asynchronously using enqueue on Dispatchers.IO
+//            val response = withContext(Dispatchers.IO) {
+//                // Execute the request synchronously using execute()
+//                apiService.addUserToHousehold(requestBody).execute()
+//            }
+//
+//            if (response.isSuccessful) {
+//                response.body().also {
+//                    Log.d(TAG, "User added successfully: $it")
+//                }
+//            } else {
+//                Log.e(TAG, "Failed to add user to household: ${response.code()} ${response.message()}")
+//                null
+//            }
+//        } catch (e: HttpException) {
+//            Log.e(TAG, "HttpException adding user: ${e.message()}")
+//            null
+//        } catch (e: IOException) {
+//            Log.e(TAG, "IOException adding user: ${e.message}")
+//            null
+//        }
+//    }
 
     suspend fun updateUserRole(userEmail: String, newRole: UserRole) {
         when (newRole) {
             UserRole.ADMIN -> setManager(userEmail)
             UserRole.REGULAR -> setNormal(userEmail)
             UserRole.RESTRICTED -> setRestricted(userEmail)
-            }
+        }
     }
-
-    //this is very bad code duplication but its the only way i can get it to work
 
     private suspend fun setManager(userEmail: String) {
         try {
@@ -120,13 +117,12 @@ object UserRepository {
             if (response.isSuccessful) {
                 Log.d(TAG, "Role updated successfully for $userEmail: ${response.body()}")
             } else {
-                Log.e(
-                    TAG,
-                    "Failed to update role for $userEmail: ${response.code()} ${response.message()}"
-                )
+                Log.e(TAG, "Failed to update role for $userEmail: ${response.code()} ${response.message()}")
             }
-        } catch (t: Throwable) {
-            Log.e(TAG, "Error updating role for $userEmail: ${t.message}")
+        } catch (e: HttpException) {
+            Log.e(TAG, "HTTP Error ${e.code()} updating role for $userEmail: ${e.message()}")
+        } catch (e: IOException) {
+            Log.e(TAG, "IOException updating role for $userEmail: ${e.message}")
         }
     }
 
@@ -139,13 +135,12 @@ object UserRepository {
             if (response.isSuccessful) {
                 Log.d(TAG, "Role updated successfully for $userEmail: ${response.body()}")
             } else {
-                Log.e(
-                    TAG,
-                    "Failed to update role for $userEmail: ${response.code()} ${response.message()}"
-                )
+                Log.e(TAG, "Failed to update role for $userEmail: ${response.code()} ${response.message()}")
             }
-        } catch (t: Throwable) {
-            Log.e(TAG, "Error updating role for $userEmail: ${t.message}")
+        } catch (e: HttpException) {
+            Log.e(TAG, "HTTP Error ${e.code()} updating role for $userEmail: ${e.message()}")
+        } catch (e: IOException) {
+            Log.e(TAG, "IOException updating role for $userEmail: ${e.message}")
         }
     }
 
@@ -158,32 +153,32 @@ object UserRepository {
             if (response.isSuccessful) {
                 Log.d(TAG, "Role updated successfully for $userEmail: ${response.body()}")
             } else {
-                Log.e(
-                    TAG,
-                    "Failed to update role for $userEmail: ${response.code()} ${response.message()}"
-                )
+                Log.e(TAG, "Failed to update role for $userEmail: ${response.code()} ${response.message()}")
             }
-        } catch (t: Throwable) {
-            Log.e(TAG, "Error updating role for $userEmail: ${t.message}")
+        } catch (e: HttpException) {
+            Log.e(TAG, "HTTP Error ${e.code()} updating role for $userEmail: ${e.message()}")
+        } catch (e: IOException) {
+            Log.e(TAG, "IOException updating role for $userEmail: ${e.message}")
         }
     }
-
-    //BY HOUSEHOLD
-    suspend fun fetchAllUsersFromDB(householdId: String) {
-        try {
-            val response: Response<List<User>> = withContext(Dispatchers.IO) {
-                apiService.getAllUsers(householdId).execute() // This is a blocking call
-            }
-
-            if (response.isSuccessful) {
-                currUsers = response.body() ?: emptyList()
-                Log.d(TAG, "Fetched and stored pets: ${currUsers}")
-            } else {
-                Log.e(TAG, "Error: ${response.code()} ${response.message()}")
-            }
-        } catch (t: Throwable) {
-            Log.e(TAG, "Failure: ${t.message}")
-        }
-    }
-
+//
+//    // BY HOUSEHOLD
+//    suspend fun fetchAllUsersFromDB(householdId: String) {
+//        try {
+//            val response: Response<List<User>> = withContext(Dispatchers.IO) {
+//                apiService.getAllUsers(householdId).execute() // This is a blocking call
+//            }
+//
+//            if (response.isSuccessful) {
+//                currUsers = response.body() ?: emptyList()
+//                Log.d(TAG, "Fetched and stored pets: $currUsers")
+//            } else {
+//                Log.e(TAG, "Error: ${response.code()} ${response.message()}")
+//            }
+//        } catch (e: HttpException) {
+//            Log.e(TAG, "HttpException fetching users: ${e.message()}")
+//        } catch (e: IOException) {
+//            Log.e(TAG, "IOException fetching users: ${e.message}")
+//        }
+//    }
 }

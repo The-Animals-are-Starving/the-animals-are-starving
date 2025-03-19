@@ -46,7 +46,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
     }
 
-    fun getRemoteView(title: String, message: String) : RemoteViews {
+    private fun getRemoteView(title: String, message: String) : RemoteViews {
         val remoteView = RemoteViews("com.example.theanimalsarestarving", R.layout.notification)
 
         remoteView.setTextViewText(R.id.title, title)
@@ -56,7 +56,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         return remoteView
     }
 
-    fun generateNotification(title: String, message: String) {
+    private fun generateNotification(title: String, message: String) {
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 

@@ -40,7 +40,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-//        skipLogin("bob@gmail.com", "Bob")
+        skipLogin("bob@gmail.com", "Bob")
 
         setContentView(R.layout.activity_login)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -59,7 +59,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-    fun promptLogin() {
+    private fun promptLogin() {
         val credentialManager = CredentialManager.create(this)
         val signInWithGoogleOption: GetSignInWithGoogleOption = GetSignInWithGoogleOption
             .Builder(BuildConfig.WEB_CLIENT_ID)
@@ -83,7 +83,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    fun handleFailure(exception: Exception) {
+    private fun handleFailure(exception: Exception) {
         Log.e("Error", "An error occurred: ${exception.message}")
         // You can also show a Toast or handle the failure differently
         Toast.makeText(this, "Error getting credential", Toast.LENGTH_SHORT).show()

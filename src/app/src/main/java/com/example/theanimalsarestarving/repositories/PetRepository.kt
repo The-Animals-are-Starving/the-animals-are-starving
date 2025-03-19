@@ -7,6 +7,7 @@ import com.example.theanimalsarestarving.network.NetworkManager.apiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Call
+import retrofit2.HttpException
 import retrofit2.Response
 
 
@@ -33,8 +34,8 @@ object PetRepository {
             } else {
                 Log.e(TAG, "Error: ${response.code()} ${response.message()}")
             }
-        } catch (t: Throwable) {
-            Log.e(TAG, "Failure: ${t.message}")
+        } catch (e: HttpException) {
+            Log.e(TAG, "HttpException fetching pets from database: ${e.message}")
         }
     }
 

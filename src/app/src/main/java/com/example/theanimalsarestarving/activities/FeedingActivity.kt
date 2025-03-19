@@ -23,6 +23,8 @@ import com.example.theanimalsarestarving.utils.AppUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
+import java.io.IOException
 
 class FeedingActivity : AppCompatActivity() {
 
@@ -62,16 +64,18 @@ class FeedingActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 PetRepository.fetchPetsFromDB(testHouseholdId)
-                Log.d("TAG", "Pets Fetched: ${PetRepository.currPets}")
+                Log.d(TAG, "Pets Fetched: ${PetRepository.currPets}")
 
                 val petImage = R.drawable.dog_default_icon
 
                 for (pet in PetRepository.currPets) {
-                    Log.d("TAG", "Pet: $pet")
+                    Log.d(TAG, "Pet: $pet")
                     loadPet(pet.name, pet.feedingTime, petImage, pet.fed)
                 }
-            } catch (e: Exception) {
-                Log.e("TAG", "Error fetching pets: ${e.message}")
+            } catch (e: HttpException) {
+                Log.e(TAG, "HTTP Error: ${e.code()} - ${e.message()}")
+            } catch (e: IOException) {
+                Log.e(TAG, "IOException fetching pets: ${e.message}")
             }
         }
     }
