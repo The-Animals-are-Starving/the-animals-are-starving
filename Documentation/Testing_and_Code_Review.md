@@ -107,12 +107,11 @@ _(Placeholder for Jest coverage screenshot without mocks)_ <mark>TO DO: Make it.
     <pre>
     <span style="background-color: green; color: white;">PASS</span> tests/non-functional/performance.test.ts (6.24 s)
     Performance Non-Functional Tests
-    √ should respond quickly for concurrent calls to user endpoints (417 ms)                                                                                                  
-    √ should respond quickly for concurrent calls to pet endpoints (233 ms)                                                                                                   
-    √ should respond quickly for concurrent calls to household endpoints (344 ms)                                                                                             
-                                                                                                                                                                              
-    Test Suites: 1 passed, 1 total                                                                                                                                                
-    Tests:       3 passed, 3 total                                                                                                                                                
+    √ should respond quickly for concurrent calls to user endpoints (417 ms)
+    √ should respond quickly for concurrent calls to pet endpoints (233 ms)                 
+    √ should respond quickly for concurrent calls to household endpoints (344 ms)
+    Test Suites: 1 passed, 1 total
+    Tests:       3 passed, 3 total
     Snapshots:   0 total
     Time:        6.358 s, estimated 7 s
     </pre>
