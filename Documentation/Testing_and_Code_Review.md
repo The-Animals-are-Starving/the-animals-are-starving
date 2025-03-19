@@ -22,17 +22,15 @@
 | **PATCH /user/update-household/:email** | [`tests/mockFree/userRoutes.mockFree.test.ts#L104`](#) | [`tests/mocked/userRoutes.mockFed.test.ts#L171`](#) | HouseDB                     |
 | **PATCH /user/:email** | [`tests/mockFree/userRoutes.mockFree.test.ts#L129`](#) | [`tests/mocked/userRoutes.mockFed.test.ts#L219`](#) | HouseDB                     |
 | **DELETE /user/:email** | [`tests/mockFree/userRoutes.mockFree.test.ts#L166`](#) | [`tests/mocked/userRoutes.mockFed.test.ts#L279`](#) | HouseDB                     |
-| **POST /household/create** | ...                                                  | ...                                                | HouseDB                     |
-| **POST /househld/add-user** | ...                                                  | ...                                                | HouseDB                     |
-| **POST /household/remove-user** | ...                                                  | ...                                                | HouseDB                     |
-| **POST /pet/** | ...                                                  | ...                                                | HouseDB                     |
-| **GET /pet/:householdId** | ...                                                  | ...                                                | HouseDB                     |
-| **PATCH /pet/:petName/feed** | ...                                                  | ...                                                | HouseDB                     |
-| **DELETE /pet/:petName** | ...                                                  | ...                                                | HouseDB                     |
-| **POST /log/:petName** | ...                                                  | ...                                                | HouseDB                     |
-| **GET /log/pet/:petId** | ...                                                  | ...                                                | HouseDB                     |
-| **GET /log/household/:householdId** | ...                                                  | ...                                                | HouseDB                     |
-| **GET /log/:user/:userEmail** | ...                                                  | ...                                                | HouseDB                     |
+| **POST /household/create** | [`tests/mockFree/houseRoutes.mockFree.test.ts#L19`](#) | [`tests/mocked/houseRoutes.mockFed.test.ts#L???`](#) | HouseDB                     |
+| **POST /pet/** | [`tests/mockFree/petRoutes.mockFree.test.ts#L88`](#) | [`tests/mocked/petRoutes.mockFed.test.ts#L???`](#) | HouseDB                     |
+| **GET /pet/:householdId** | [`tests/mockFree/petRoutes.mockFree.test.ts#L141`](#) | [`tests/mocked/petRoutes.mockFed.test.ts#L???`](#) | HouseDB                     |
+| **PATCH /pet/:petName/feed** | [`tests/mockFree/petRoutes.mockFree.test.ts#L174`](#) | [`tests/mocked/petRoutes.mockFed.test.ts#L???`](#) | HouseDB                     |
+| **DELETE /pet/:petName** | [`tests/mockFree/petRoutes.mockFree.test.ts#L269`](#) | [`tests/mocked/petRoutes.mockFed.test.ts#L???`](#) | HouseDB                     |
+| **POST /log/:petName** | [`tests/mockFree/logRoutes.mockFree.test.ts#L24`](#) | [`tests/mocked/logRoutes.mockFed.test.ts#L???`](#) | HouseDB                     |
+| **GET /log/pet/:petId** | [`tests/mockFree/logRoutes.mockFree.test.ts#L101`](#) | [`tests/mocked/logRoutes.mockFed.test.ts#L???`](#) |HouseDB                     |
+| **GET /log/household/:householdId** | [`tests/mockFree/logRoutes.mockFree.test.ts#L142`](#) | [`tests/mocked/logRoutes.mockFed.test.ts#L???`](#) |HouseDB                     |
+| **GET /log/:user/:userEmail** | [`tests/mockFree/logRoutes.mockFree.test.ts#L177`](#) | [`tests/mocked/logRoutes.mockFed.test.ts#L???`](#) | HouseDB                     |
 | **GET /analytics/rankings/:householdId** | [`tests/mockFree/analyticsRoutes.mockFree.test.ts#L32`](#) | [`tests/mocked/analyticsRoutes.mockFed.test.ts#L15`](#) | HouseDB                     |
 | **POST /notify/:email** | [`tests/mockFree/notificationsRoutes.mockFree.test.ts#L38`](#) | [`tests/mocked/notificationsRoutes.mockFed.test.ts#L17`](#) | HouseDB, Firebase Messaging                     |
 
