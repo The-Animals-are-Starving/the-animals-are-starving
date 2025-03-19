@@ -110,6 +110,7 @@ class MainRepository(private val apiService: ApiService) {
             }
         })
     }
+
     fun addPet(pet: Pet, callback: (Pet?) -> Unit) {
         val body = mapOf(
             "name" to pet.name,
