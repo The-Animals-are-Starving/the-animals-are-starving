@@ -124,43 +124,55 @@ _(Placeholder for Jest coverage screenshot without mocks)_ <mark>TO DO: Make it.
 
 ### 4.1. Location in Git of Front-end Test Suite:
 
-`frontend/src/androidTest/java/com/studygroupfinder/`
+`src/app/src/androidTest/java/com/example/theanimalsarestarving/EspressoTest.java`
 
 ### 4.2. Tests
 
-- **Use Case: Login**
+- **Use Case: Log Feeding (Test Success)**
 
   - **Expected Behaviors:**
     | **Scenario Steps** | **Test Case Steps** |
     | ------------------ | ------------------- |
-    | 1. The user opens â€œAdd Todo Itemsâ€ screen. | Open â€œAdd Todo Itemsâ€ screen. |
-    | 2. The app shows an input text field and an â€œAddâ€ button. The add button is disabled. | Check that the text field is present on screen.<br>Check that the button labelled â€œAddâ€ is present on screen.<br>Check that the â€œAddâ€ button is disabled. |
-    | 3a. The user inputs an ill-formatted string. | Input â€œ_^_^^OQ#$â€ in the text field. |
-    | 3a1. The app displays an error message prompting the user for the expected format. | Check that a dialog is opened with the text: â€œPlease use only alphanumeric charactersâ€. |
-    | 3. The user inputs a new item for the list and the add button becomes enabled. | Input â€œbuy milkâ€ in the text field.<br>Check that the button labelled â€œaddâ€ is enabled. |
-    | 4. The user presses the â€œAddâ€ button. | Click the button labelled â€œaddâ€. |
-    | 5. The screen refreshes and the new item is at the bottom of the todo list. | Check that a text box with the text â€œbuy milkâ€ is present on screen.<br>Input â€œbuy chocolateâ€ in the text field.<br>Click the button labelled â€œaddâ€.<br>Check that two text boxes are present on the screen with â€œbuy milkâ€ on top and â€œbuy chocolateâ€ at the bottom. |
-    | 5a. The list exceeds the maximum todo-list size. | Repeat steps 3 to 5 ten times.<br>Check that a dialog is opened with the text: â€œYou have too many items, try completing one firstâ€. |
+    | 1. User scrolls through the list of pets on the base page to find the pet being fed. | Check that the feed button is present and click it.<br>Locate the desired pet on the page and ensure it exists. |
+    | 2. User presses the corresponding “Feed Pet” button to confirm that the pet has been fed. | Locate the feed button with accociated pet and press it. |
+    | 3. System updates the feeding log with the pet's ID, user ID, date, and amount of food. | Exit feeding menu.<br>Checks log button exists.<br>Clicks log button.<br>Checks that new log appeared. |
+    | 4. User is prompted with a success message indicating that the log has been updated successfully. | While on feed screen, check clicked pet for "FED" text. |
 
-  - **Test Logs:**
-    ```
-    [Placeholder for Espresso test execution logs]
-    ```
-
-- **Use Case: ...**
+- **Use Case: Requesting Others to do Feeding (Test Success)**
 
   - **Expected Behaviors:**
-
     | **Scenario Steps** | **Test Case Steps** |
     | ------------------ | ------------------- |
-    | ...                | ...                 |
+    | 1. Sender begins at the home page and presses "Notify Other Users". | Launch MainActivity and click notiy_button|
+    | 2. The sender then presses the “Notify” button next to the name of the recipient. | First check that the a row with "Bob" appears with a "Notify" button. Verify that the button is pressable.|
+    | 3. App sends a request to the server to notify the recipient. | 
+    | 4. User 2 (the recipient) receives a notification indicating that they are responsible for feeding the pet. |
 
-  - **Test Logs:**
-    ```
-    [Placeholder for Espresso test execution logs]
-    ```
+- **Use Case: History Management (Test Success)**
 
-- **...**
+  - **Expected Behaviors:**
+    | **Scenario Steps** | **Test Case Steps** |
+    | ------------------ | ------------------- |
+    | 1. Household Manager clicks the “View History” button on the main screen | Check that the log button is present and click it. |
+    | 2. The history is retrieved and the user is directed to a new screen displaying the feeding history in the household | Check to see if existing logs in the backend appear on screen. |
+
+- **Use Case: History Management (Test Failure)**
+
+  - **Expected Behaviors:**
+    | **Scenario Steps** | **Test Case Steps** |
+    | ------------------ | ------------------- |
+    | 1. Household Manager clicks the “View History” button on the main screen | Set current user to a non manager user.<br>Check that the view log button does not exist.<br>Set current user back to manager user. |
+
+- **Test Logs:**
+  ```
+  com.example.theanimalsarestarving.EspressoTest   26.92 s
+  passed testLogFeedingUseCase   10.59 s 
+  passed testNotifications    3.92 s
+  passed threeClickTest   8.32 s
+  passed testHistoryManagementUseCaseSuccess   2.85 s
+  passed testHistoryManagementUseCaseFailure   1.24 s
+  ```
+
 
 ### 4.3. Front-end Non-Functional Test
 
