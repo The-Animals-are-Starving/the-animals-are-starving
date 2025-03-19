@@ -22,15 +22,15 @@
 | **PATCH /user/update-household/:email** | [`tests/mockFree/userRoutes.mockFree.test.ts#L104`](#) | [`tests/mocked/userRoutes.mockFed.test.ts#L171`](#) | HouseDB                     |
 | **PATCH /user/:email** | [`tests/mockFree/userRoutes.mockFree.test.ts#L129`](#) | [`tests/mocked/userRoutes.mockFed.test.ts#L219`](#) | HouseDB                     |
 | **DELETE /user/:email** | [`tests/mockFree/userRoutes.mockFree.test.ts#L166`](#) | [`tests/mocked/userRoutes.mockFed.test.ts#L279`](#) | HouseDB                     |
-| **POST /household/create** | [`tests/mockFree/houseRoutes.mockFree.test.ts#L???`](#) | [`tests/mocked/houseRoutes.mockFed.test.ts#L19`](#) | HouseDB                     |
-| **POST /pet/** | [`tests/mockFree/petRoutes.mockFree.test.ts#L???`](#) | [`tests/mocked/petRoutes.mockFed.test.ts#L88`](#) | HouseDB                     |
-| **GET /pet/:householdId** | [`tests/mockFree/petRoutes.mockFree.test.ts#L???`](#) | [`tests/mocked/petRoutes.mockFed.test.ts#L141`](#) | HouseDB                     |
-| **PATCH /pet/:petName/feed** | [`tests/mockFree/petRoutes.mockFree.test.ts#L???`](#) | [`tests/mocked/petRoutes.mockFed.test.ts#L174`](#) | HouseDB                     |
-| **DELETE /pet/:petName** | [`tests/mockFree/petRoutes.mockFree.test.ts#L???`](#) | [`tests/mocked/petRoutes.mockFed.test.ts#L269`](#) | HouseDB                     |
-| **POST /log/:petName** | [`tests/mockFree/logRoutes.mockFree.test.ts#L???`](#) | [`tests/mocked/logRoutes.mockFed.test.ts#L24`](#) | HouseDB                     |
-| **GET /log/pet/:petId** | [`tests/mockFree/logRoutes.mockFree.test.ts#L???`](#) | [`tests/mocked/logRoutes.mockFed.test.ts#L101`](#) |HouseDB                     |
-| **GET /log/household/:householdId** | [`tests/mockFree/logRoutes.mockFree.test.ts#L???`](#) | [`tests/mocked/logRoutes.mockFed.test.ts#L142`](#) |HouseDB                     |
-| **GET /log/:user/:userEmail** | [`tests/mockFree/logRoutes.mockFree.test.ts#L???`](#) | [`tests/mocked/logRoutes.mockFed.test.ts#L174`](#) | HouseDB                     |
+| **POST /household/create** | [`tests/mockFree/houseRoutes.mockFree.test.ts#L38`](#) | [`tests/mocked/houseRoutes.mockFed.test.ts#L19`](#) | HouseDB                     |
+| **POST /pet/** | [`tests/mockFree/petRoutes.mockFree.test.ts#L38`](#) | [`tests/mocked/petRoutes.mockFed.test.ts#L88`](#) | HouseDB                     |
+| **GET /pet/:householdId** | [`tests/mockFree/petRoutes.mockFree.test.ts#L67`](#) | [`tests/mocked/petRoutes.mockFed.test.ts#L141`](#) | HouseDB                     |
+| **PATCH /pet/:petName/feed** | [`tests/mockFree/petRoutes.mockFree.test.ts#L91`](#) | [`tests/mocked/petRoutes.mockFed.test.ts#L174`](#) | HouseDB                     |
+| **DELETE /pet/:petName** | [`tests/mockFree/petRoutes.mockFree.test.ts#L165`](#) | [`tests/mocked/petRoutes.mockFed.test.ts#L269`](#) | HouseDB                     |
+| **POST /log/:petName** | [`tests/mockFree/logRoutes.mockFree.test.ts#L39`](#) | [`tests/mocked/logRoutes.mockFed.test.ts#L24`](#) | HouseDB                     |
+| **GET /log/pet/:petId** | [`tests/mockFree/logRoutes.mockFree.test.ts#L115`](#) | [`tests/mocked/logRoutes.mockFed.test.ts#L101`](#) |HouseDB                     |
+| **GET /log/household/:householdId** | [`tests/mockFree/logRoutes.mockFree.test.ts#L171`](#) | [`tests/mocked/logRoutes.mockFed.test.ts#L142`](#) |HouseDB                     |
+| **GET /log/:user/:userEmail** | [`tests/mockFree/logRoutes.mockFree.test.ts#L134`](#) | [`tests/mocked/logRoutes.mockFed.test.ts#L174`](#) | HouseDB                     |
 | **GET /analytics/rankings/:householdId** | [`tests/mockFree/analyticsRoutes.mockFree.test.ts#L32`](#) | [`tests/mocked/analyticsRoutes.mockFed.test.ts#L15`](#) | HouseDB                     |
 | **POST /notify/:email** | [`tests/mockFree/notificationsRoutes.mockFree.test.ts#L38`](#) | [`tests/mocked/notificationsRoutes.mockFed.test.ts#L17`](#) | HouseDB, Firebase Messaging                     |
 
@@ -101,6 +101,8 @@ _(Placeholder for Jest coverage screenshot without mocks)_ <mark>TO DO: Make it.
 - (54-55, 67-68, 81, 99) All catch blocks which require a mock to test
   
 #### Notifications Routes
+
+- (13-14) Catch block from a database error, requires a mock
   
 #### UserHousehold Routes
 - (29-30) A catch block from a database error, requires a mock
