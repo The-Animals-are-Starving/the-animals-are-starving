@@ -8,6 +8,11 @@
 1. **Added Contributions (2025-03-03)**
     - Under **Contributions**, added the contributions made towards completing milestone 4. Reformatted milestone 3 contributions to match the look.
 
+1. **Small FR Edits (2025-03-19)**
+    - Made small adjustments to the functional requirement wordings. Removed unecessary "scrolls", changed "main page" to "home page", added more details for clairity. Changed "Add User/Pet" to "New User/Pet". Updated the way to modify restriction level to match implementation, to allow for editing. All of these changes are for clairity.
+
+
+
 ## 2. Project Description
 “Did you feed the animals?” “Are the animals fed?” “Anyone feed the animals?” These texts flood the family group chat every day. The kids don’t respond. Mom is still at work. No one knows if the beasts have been fed. The beasts also lie, as though they are starving and wasting away even if they already got dinner. Many task managing apps out there are WAY too complicated. TAS is straightforward app that indicates whether or not your beloved household pet has been fed. To go even further, there will be a minimal mode, for those living with grandparents, small children, or a grumpy father that does not want to be bothered with a new app. Simple, easy, convenient. 
 
@@ -100,7 +105,7 @@
             - **Primary actor(s)**: Household manager
             - **Main success scenario**:
                 1. Manager clicks the "Manage Household" button on the top of the page and is directed to a page with the "New Pet" button
-                2. Manager clicks the "New Pet" button and enters the pet name, feeding time, and pet type.
+                2. Manager clicks the "New Pet" button and enters the pet name, feeding time, and pet type. 
                 3. Manger clicks "Add" 
                 4. The app updates the database with these changes
                 5. A toast message is displayed confirming that the changes have been made
