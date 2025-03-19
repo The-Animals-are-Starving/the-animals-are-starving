@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - 'Backend/**'
-    workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   test:
