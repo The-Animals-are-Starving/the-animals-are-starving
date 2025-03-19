@@ -16,12 +16,12 @@
 
 | **Interface**                 | **Describe Group Location, No Mocks**                | **Describe Group Location, With Mocks**            | **Mocked Components**              |
 | ----------------------------- | ---------------------------------------------------- | -------------------------------------------------- | ---------------------------------- |
-| **POST /user/**          | [`tests/unmocked/authenticationLogin.test.js#L1`](#) | [`tests/mocked/authenticationLogin.test.js#L1`](#) | HouseDB |
-| **GET /user/:householdId** | ...                                                  | ...                                                | HouseDB                     |
-| **GET /user/:householdId** | ...                                                  | ...                                                | HouseDB                     |
-| **GET /user/specific-user/:email** | ...                                                  | ...                                                | HouseDB                     |
-| **PATCH /user/:email** | ...                                                  | ...                                                | HouseDB                     |
-| **DELETE /user/:email** | ...                                                  | ...                                                | HouseDB                     |
+| **POST /user/**          | [`tests/mockFree/userRoutes.mockFree.test.ts#L34`](#) | [`tests/mocked/userRoutes.mockFed.test.ts#L16`](#) | HouseDB |
+| **GET /user/:householdId** | [`tests/mockFree/userRoutes.mockFree.test.ts#L60`](#) | [`tests/mocked/userRoutes.mockFed.test.ts#L85`](#) | HouseDB |
+| **GET /user/specific-user/:email** | [`tests/mockFree/userRoutes.mockFree.test.ts#L81`](#) | [`tests/mocked/userRoutes.mockFed.test.ts#L127`](#) | HouseDB                     |
+| **PATCH /user/update-household/:email** | [`tests/mockFree/userRoutes.mockFree.test.ts#L104`](#) | [`tests/mocked/userRoutes.mockFed.test.ts#L171`](#) | HouseDB                     |
+| **PATCH /user/:email** | [`tests/mockFree/userRoutes.mockFree.test.ts#L129`](#) | [`tests/mocked/userRoutes.mockFed.test.ts#L219`](#) | HouseDB                     |
+| **DELETE /user/:email** | [`tests/mockFree/userRoutes.mockFree.test.ts#L166`](#) | [`tests/mocked/userRoutes.mockFed.test.ts#L279`](#) | HouseDB                     |
 | **POST /household/create** | ...                                                  | ...                                                | HouseDB                     |
 | **POST /househld/add-user** | ...                                                  | ...                                                | HouseDB                     |
 | **POST /household/remove-user** | ...                                                  | ...                                                | HouseDB                     |
@@ -33,8 +33,8 @@
 | **GET /log/pet/:petId** | ...                                                  | ...                                                | HouseDB                     |
 | **GET /log/household/:householdId** | ...                                                  | ...                                                | HouseDB                     |
 | **GET /log/:user/:userEmail** | ...                                                  | ...                                                | HouseDB                     |
-| **GET /analytics/rankings/:householdId** <mark>TO DO: Remove if not implemented!</mark>| ...                                                  | ...                                                | HouseDB                     |
-| **POST /notify/:email** | ...                                                  | ...                                                | HouseDB, Firebase Messaging                     |
+| **GET /analytics/rankings/:householdId** | [`tests/mockFree/analyticsRoutes.mockFree.test.ts#L32`](#) | [`tests/mocked/analyticsRoutes.mockFed.test.ts#L15`](#) | HouseDB                     |
+| **POST /notify/:email** | [`tests/mockFree/notificationsRoutes.mockFree.test.ts#L38`](#) | [`tests/mocked/notificationsRoutes.mockFed.test.ts#L17`](#) | HouseDB, Firebase Messaging                     |
 
 #### 2.1.2. Commit Hash Where Tests Run
 
