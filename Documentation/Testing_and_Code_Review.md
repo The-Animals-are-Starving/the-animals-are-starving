@@ -154,6 +154,7 @@ _(Placeholder for Jest coverage screenshot without mocks)_ <mark>TO DO: Make it.
  - Make sure the backend is running with `npm run dev` in the `backend` folder
  - Enter a `mongosh` shell in the `backend` folder
  - Type `use pet-tracker` and then `load("initdb.mongo")`
+ - Run the EspressoTest class from Android Studios while an emulator is active
 
 ### 4.2. Tests
 
