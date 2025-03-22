@@ -11,6 +11,8 @@
 1. **Small FR Edits (2025-03-19)**
     - Made small adjustments to the functional requirement wordings. Removed unecessary "scrolls", changed "main page" to "home page", added more details for clairity. Changed "Add User/Pet" to "New User/Pet". Updated the way to modify restriction level to match implementation, to allow for editing. All of these changes are for clairity.
 
+1.  **NFR and numbering (2025-03-21)**
+    - Adjusted the NFR and numbering of the failure scenarios based on TA feedback from M3
 
 
 ## 2. Project Description
@@ -53,9 +55,9 @@
             - **Failure scenario(s)**:
                 - 1a. App is unable retrieve the log data. 
                     - 1a1. User is redirected back to the home page and system displays an error message prompting the user to try again later.
-                - 1c. App is unable to update the system
-                    - 1c1. User is redirected back to the pet's page after the failure and prompted that the logging was unsuccesful and should try again.
-                    - 1c2. User presses the “Feed Pet” button again to attempt logging the feeding once more
+                - 3a. App is unable to update the system
+                    - 3a1. User is redirected back to the pet's page after the failure and prompted that the logging was unsuccesful and should try again.
+                    - 3a2. User presses the “Feed Pet” button again to attempt logging the feeding once more
 <a name="fr2"></a>
 
 2. **Requesting Others to do Feeding** 
@@ -72,9 +74,9 @@
                 3. App sends a request to the server to notify the recipient.
                 4. User 2 (the recipient) receives a notification indicating that they are responsible for feeding the pet.
             - **Failure scenario(s)**:
-                - 1c. App is unable to send the request to the server.
-                    - 1c1. System displays and error message prompting the user to try again later
-                    - 1c2. User dismisses the message and is sent back to the list of pets to try again
+                - 3a. App is unable to send the request to the server.
+                    - 3a1. System displays and error message prompting the user to try again later
+                    - 3a2. User dismisses the message and is sent back to the home page to try again
 <a name="fr3"></a>
 
 3. **Managing The Household** 
@@ -94,12 +96,12 @@
                 5. A toast message is displayed confirming that the user has been added
                 6. Manager may edit the restriction level using the drop down
             - **Failure scenario(s)**:
-                - 1d. The app is unable to update the server 
-                    - 1d1. The app displays an error message and prompts the user with a message to try again
-                    - 1d2. The input form is re-displayed, and the user types in the code again
-                - 2d. The user does not exist
-                    - 2d1. The app displays an error message saying that the user does not exist and should make sure they typed in the ID correct and the person has an account on the app
-                    - 2d2. The user dismisses the message and is redirected back to the manage household page
+                - 4a. The app is unable to update the server 
+                    - 4a1. The app displays an error message and prompts the user with a message to try again
+                    - 4a2. The input form is re-displayed, and the user types in the code again
+                - 4b. The user does not exist
+                    - 4b1. The app displays an error message saying that the user does not exist and should make sure they typed in the ID correct and the person has an account on the app
+                    - 4b2. The user dismisses the message and is redirected back to the manage household page
         2. **Manage Pets**:
             - **Description**: Household manager can add pets and change their feeding schedules
             - **Primary actor(s)**: Household manager
@@ -110,12 +112,12 @@
                 4. The app updates the database with these changes
                 5. A toast message is displayed confirming that the changes have been made
             - **Failure scenario(s)**:
-                - 1b. Pets could not be retrieved
-                    - 1b1. If there are no pets yet, display text saying "Add Your Pets!" in the text display. Otherwise, display "error getting pets, try again later"
-                    - 1b2. The user backs out to the manage household screen and clicks manage pets to try again
-                - 1d. The changes could not be made to the server
-                    - 1d1. An error message is displayed and the user is prompted to try again
-                    - 1d2. The user is directed back to the manage pets screen
+                - 2a. Pets could not be retrieved
+                    - 2a1. If there are no pets yet, display text saying "Add Your Pets!" in the text display. Otherwise, display "error getting pets, try again later"
+                    - 2a2. The user backs out to the manage household screen and clicks manage pets to try again
+                - 4a. The changes could not be made to the server
+                    - 4a1. An error message is displayed and the user is prompted to try again
+                    - 4a2. The user is directed back to the manage pets screen
 <a name="fr4"></a>  
 
 4. **History Management** 
@@ -132,9 +134,9 @@
             - **Failure scenario(s)**:
                 - 1a. User is not a Household Manager
                     - 1a1. User is not prompted with the "View History" button
-                - 1b. Server is unable to retrieve the history
-                    - 1b1. App displays an error message saying the history could not be retrieved and the user should try again later
-                    - 1b2. The user backs out to the main screen and clicks the view history button again
+                - 2a. Server is unable to retrieve the history
+                    - 2a1. App displays an error message saying the history could not be retrieved and the user should try again later
+                    - 2a2. The user backs out to the main screen and clicks the view history button again
 <a name="fr5"></a>   
 
 5. **Feeding Time Notification** 
@@ -150,9 +152,9 @@
                 2. The system sends a push notification to the user indicating that it is time to feed the pet.
                 3. User receives the push notification on their device
             - **Failure scenario(s)**:
-                - 1b. The push notification fails to send
-                    - 1b1. The system fails to deliver the notification due to connectivity or server issues.
-                    - 1b2. The next time the app is opened, the user is told the request was failed and is prompted to check their settings and permissions.
+                - 2a. The push notification fails to send
+                    - 2a1. The system fails to deliver the notification due to connectivity or server issues.
+                    - 2a2. The next time the app is opened, the user is told the request was failed and is prompted to check their settings and permissions.
 <a name="fr6"></a>
 
 6. **Login Authentication** 
@@ -168,13 +170,13 @@
                 2. User is directed to the google authentication page
                 3. If the user has an account, their household information is retrieved and they are sent to the main screen. Otherwise, if the user does not have an account, they are displayed a welcome message asking them to join or initiate a household.
             - **Failure scenario(s)**:
-                - 1b. User is unable to authenticate through Google.
-                    - 1b1. The app encounters an issue during the authentication process (e.g., incorrect credentials, server error)
-                    - 1b2. The system displays an error message prompting the user to try again. 
-                    - 1b3. The user dismisses the message and is redirected to the login screen
-                - 1c. Household could not be initiated for a new user
-                    - 1c1. The system displays an error message prompting the user to try again. 
-                    - 1c2. The user dismisses the message and is redirected back to the welcome page
+                - 2a. User is unable to authenticate through Google.
+                    - 2a1. The app encounters an issue during the authentication process (e.g., incorrect credentials, server error)
+                    - 2a2. The system displays an error message prompting the user to try again. 
+                    - 2a3. The user dismisses the message and is redirected to the login screen
+                - 3a. Household could not be initiated for a new user
+                    - 3a1. The system displays an error message prompting the user to try again. 
+                    - 3a2. The user dismisses the message and is redirected back to the welcome page
                 
 
 <!--### **3.4. Screen Mockups**-->
@@ -186,9 +188,9 @@
     - **Description**: The app should be usable by all members of the household, including those with impaired vision, language barriers, and of all mental faculties. Further, users should be able to complete the core actions (logging a feeding, viewing history) in 3 clicks or less.
     - **Justification**: This app is designed for people who aren't tech-savvy. By making it simple and intuitive, we ensure it's easy for all users, regardless of ability, to track pet feedings with minimal effort. Core actions are streamlined to 3 clicks or less, eliminating complexity and making pet care accessible for everyone in the household.
 <a name="nfr2"></a>    
-2. **Maintainability**
-    - **Description**: Logs should persist for at least a year
-    - **Justification**: A key secondary function of the app is to store feeding history. This data can be valuable for pet owners who wish to track their pets' diets, portion sizes, and feeding patterns over time. Retaining this information is useful for various purposes, such as monitoring health trends, managing pet budgets, and identifying changes in feeding behavior. By ensuring that logs are kept for a full year, the app provides lasting value and insight for users
+2. **Ease of use**
+    - **Description**: Requests made to the backend should be retrieved within 2 seconds with up to 100 concurrent users.
+    - **Justification**: A key secondary function of any app is processing speed. Further since this is an app meant to speed up household work for the pets, it would be very problematic if the app caused more frustrations with slow API requests.
 
 
 ## 4. Designs Specification
@@ -326,8 +328,8 @@
 1. [**Accessibility**](#nfr1)
     - **Validation**: 
 The app will support multiple languages, clear navigation, large readable fonts, high-contrast visuals, and intuitive icons to ensure accessibility for users with varying abilities. Key features will be easily accessible from the main screen or through shortcuts for a seamless experience.
-2. [**Maintainability**](#nfr2)
-    - **Validation**: The app will store feeding logs in a scalable database with a retention policy that ensures data is kept for at least one year. Automated backups and secure storage will prevent data loss, while efficient indexing will allow users to quickly access and analyze historical feeding records.
+2. [**Ease of Use**](#nfr2)
+    - **Validation**: The app will have easy to access endpoints and optimized algorithms that allow concurrent requests.
 
 
 ### **4.8. Main Project Complexity Design**
