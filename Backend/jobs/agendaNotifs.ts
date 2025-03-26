@@ -34,26 +34,35 @@ agendaNotifs.define("send feeding notifications", async (job: Job) => {
           console.warn(`Household or owner email not found for pet ${pet.name}`);
           continue;
         }
-        // Get the user's device token using the owner's email
-        const user = await User.findById({ email: household.managerId });
-        const token = user?.FCMToken;
-        if (!token) {
-          console.warn(`FCM token not found for user ${household.managerId}`);
+
+        // Fetch every user in that household
+        const users = await User.find({ householdId: pet.householdId });
+        if (users.length === 0) {
+          console.warn(`No users found for household ${pet.householdId}`);
           continue;
         }
-        // Build and send the notification message
-        const message = {
-          notification: {
-            title: "Feeding Reminder",
-            body: `It's time to feed your pet: ${pet.name}`,
-          },
-          token: token
-        };
-        try {
-          const response = await admin.messaging().send(message);
-          console.log(`Notification sent for pet ${pet.name}: ${response}`);
-        } catch (err) {
-          console.error(`Error sending notification for pet ${pet.name}:`, err);
+
+        for (const user of users) {
+          const token = user.FCMToken;
+          if (!token) {
+            console.warn(`No FCM token for user ${user.email}`);
+            continue;
+          }
+        
+          const message = {
+            notification: {
+              title: "Feeding Reminder",
+              body: `It's time to feed your pet: ${pet.name}`,
+            },
+            token,
+          };
+        
+          try {
+            const response = await admin.messaging().send(message);
+            console.log(`Notification sent to ${user.email} for pet ${pet.name}: ${response}`);
+          } catch (err) {
+            console.error(`Error sending notification to ${user.email} for pet ${pet.name}:`, err);
+          }
         }
       }
     }
