@@ -3,6 +3,7 @@ import Pet from "../models/Pet";
 import Household from "../models/Household";
 import User from "../models/User";
 import admin from "../config/firebase";
+import moment from 'moment-timezone';
 const Agenda = require("agenda");
 
 const agendaNotifs = new Agenda({
@@ -11,10 +12,9 @@ const agendaNotifs = new Agenda({
 
 // Define the feeding notification job
 agendaNotifs.define("send feeding notifications", async (job: Job) => {
-  console.log(`Job ${job.attrs.name} executing at ${new Date()}`);
-  const now = new Date();
-  const currentHour = now.getHours();
-  const currentMinute = now.getMinutes();
+  console.log(`Job ${job.attrs.name} executing at ${moment().tz("America/Vancouver").format()}`);
+  const now = moment().tz("America/Vancouver");
+  const currentHour = now.hour();
 
   try {
     // Fetch all pets (consider optimizing this query in production)
@@ -23,9 +23,7 @@ agendaNotifs.define("send feeding notifications", async (job: Job) => {
       // Convert the stored feedingTime (e.g., "1970-01-01T14:30:00.000Z") to a Date
       const petFeedingTime = new Date(pet.feedingTime);
       if (
-        petFeedingTime.getHours() === currentHour &&
-        petFeedingTime.getMinutes() === currentMinute && 
-        !pet.fed
+        petFeedingTime.getHours() <= currentHour && !pet.fed
       ) {
         // Look up the household to get the owner's email
         if (!pet.householdId) continue;
@@ -80,10 +78,10 @@ agendaNotifs.define("send feeding notifications", async (job: Job) => {
     // Cancel any existing instances of the job to prevent duplicates
     await agendaNotifs.cancel({ name: "send feeding notifications" });
     
-    // Schedule the job to run every minute
-    agendaNotifs.every("1 minute", "send feeding notifications");
+    // Schedule the job to run every hour
+    agendaNotifs.every("1 hour", "send feeding notifications");
 
-    console.log("Feeding notifications job scheduled to run every minute");
+    console.log("Feeding notifications job scheduled to run every hour");
   } catch (err) {
     console.error("Failed to start or schedule Agenda for feeding notifications", err);
   }

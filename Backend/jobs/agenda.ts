@@ -17,21 +17,22 @@ agenda.define("reset pet fed status", async (job: Job) => {
     }
   });
 
-(async function initializeAgenda() {
-  try {
-    await agenda.start();
-    console.log("Agenda started");
-
-    // cancel any existing instances of the job
-    await agenda.cancel({ name: "reset pet fed status" });
-    
-    // Scheduled for every midnight
-    agenda.schedule('everyday at 00:00','reset pet fed status');
-
-    console.log("Agenda started and job scheduled");
-  } catch (err) {
-    console.error("Failed to start Agenda", err);
-  }
-})();
+  (async function initializeAgenda() {
+    try {
+      await agenda.start();
+      console.log("Agenda started");
+  
+      // Cancel any existing instances of the job
+      await agenda.cancel({ name: "reset pet fed status" });
+      
+      const job = agenda.create("reset pet fed status");
+      job.repeatEvery("0 0 * * *", { timezone: "America/Vancouver", skipImmediate: true });
+      await job.save();
+  
+      console.log("Agenda job 'reset pet fed status' scheduled to run at midnight (America/Vancouver)");
+    } catch (err) {
+      console.error("Failed to start Agenda", err);
+    }
+  })();  
 
 export default agenda;
