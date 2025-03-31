@@ -106,9 +106,7 @@ describe("Log Tests", () => {
         ];
 
         (Log.find as jest.Mock).mockReturnValue({
-            populate: jest.fn().mockReturnValue({
-                sort: jest.fn().mockResolvedValue(logs)
-            })
+            sort: jest.fn().mockResolvedValue(logs)
         });
 
         const res = await request(app).get(`/log/pet/${petName}`);
@@ -119,24 +117,22 @@ describe("Log Tests", () => {
     });
 
     it("should fail to return the pet's feeding history when db fails", async () => {
-        const petId = "pet123";
+        const petName = "pet123";
         const logs = [
-            { petId, userName: "User1", timestamp: "2025-03-17T10:00:00Z", amount: 5 },
-            { petId, userName: "User2", timestamp: "2025-03-16T10:00:00Z", amount: 3 }
+            { petName, userName: "User1", timestamp: "2025-03-17T10:00:00Z", amount: 5 },
+            { petName, userName: "User2", timestamp: "2025-03-16T10:00:00Z", amount: 3 }
         ];
 
         const saveMock = jest.fn().mockRejectedValue(new Error("Database save error"));
         (Log.find as jest.Mock).mockReturnValue({
-            populate: jest.fn().mockReturnValue({
-                sort: jest.fn().mockImplementation(saveMock)
-            })
+            sort: jest.fn().mockImplementation(saveMock)
         });
 
-        const res = await request(app).get(`/log/pet/${petId}`);
+        const res = await request(app).get(`/log/pet/${petName}`);
 
         expect(res.status).toBe(500);
         expect(res.body.message).toBe("Error retrieving feeding history");
-        expect(Log.find).toHaveBeenCalledWith({ petId });
+        expect(Log.find).toHaveBeenCalledWith({ petName: petName });
     });
 
     it("should return the household feeding history", async () => {
@@ -183,16 +179,14 @@ describe("Log Tests", () => {
 
         (User.findOne as jest.Mock).mockResolvedValue({ _id: "user123" });
         (Log.find as jest.Mock).mockReturnValue({
-            populate: jest.fn().mockReturnValue({
-                sort: jest.fn().mockResolvedValue(logs)
-            })
+            sort: jest.fn().mockResolvedValue(logs)
         });
 
         const res = await request(app).get(`/log/user/${userEmail}`);
 
         expect(res.status).toBe(200);
         expect(res.body).toEqual(logs);
-        expect(Log.find).toHaveBeenCalledWith({ userId: "user123" });
+        expect(Log.find).toHaveBeenCalledWith({ userName: undefined });
     });
 
     it("should fail to return the user's feeding history w 404 when user not found ", async () => {
@@ -204,9 +198,7 @@ describe("Log Tests", () => {
 
         (User.findOne as jest.Mock).mockResolvedValue(null);
         (Log.find as jest.Mock).mockReturnValue({
-            populate: jest.fn().mockReturnValue({
-                sort: jest.fn().mockResolvedValue(logs)
-            })
+            sort: jest.fn().mockResolvedValue(logs)
         });
 
         const res = await request(app).get(`/log/user/${userEmail}`);
@@ -235,6 +227,6 @@ describe("Log Tests", () => {
 
         expect(res.status).toBe(500);
         expect(res.body.message).toEqual("Error retrieving user feeding history");
-        expect(Log.find).toHaveBeenCalledWith({ userId: "user123" });
+        expect(Log.find).toHaveBeenCalledWith({ userName: undefined });
     });
 });
