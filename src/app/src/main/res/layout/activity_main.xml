@@ -24,14 +24,6 @@
             android:textAlignment="center"
             android:textAppearance="@style/TitleTextStyle" />
 
-        <TextView
-            android:id="@+id/subtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="@string/home_page_lowercase"
-            android:textAppearance="@style/SubtitleTextStyle" />
-
         <Button
             android:id="@+id/feed_button"
             android:layout_width="256dp"
@@ -72,6 +64,17 @@
             android:backgroundTint="@color/dark_blue"
             android:fontFamily="sans-serif-medium"
             android:text="@string/feeding_history"
+            android:textSize="19sp"
+            android:visibility="visible" />
+
+        <Button
+            android:id="@+id/analytics_button"
+            android:layout_width="256dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/extra_dark_green"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/analytics"
             android:textSize="19sp"
             android:visibility="visible" />
 
