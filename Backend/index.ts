@@ -1,6 +1,6 @@
 import express from "express";
-import agenda from "./jobs/agenda"
-import agendaNotifs from "./jobs/agendaNotifs";
+import "./jobs/resetFedStatusCron";
+import "./jobs/passiveNotifsCron";
 import connectDB from "./config/db";
 import userHouseholdRoutes from "./routes/userHouseholdRoutes";
 import logRoutes from "./routes/logRoutes";
@@ -22,18 +22,12 @@ app.use("/user", userRoutes);
 app.use("/pet", petRoutes);
 app.use("/notify", notificationRoutes);
 
-// Connect to database 
-connectDB()
-    .then(() => {
-        // Start Agenda after the DB is connected
-        agenda.start();
-        console.log("Pet Refresh Agenda started");
-        agendaNotifs.start();
-        console.log("Notification Agenda started");
-    })
-    .catch(err => {
-        console.error("Failed to connect to the database", err);
-    });
-
 const PORT = process.env.PORT || 5001;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+connectDB()
+  .then(() => {
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  })
+  .catch((err) => {
+    console.error("Failed to connect to the database", err);
+  });
