@@ -9,7 +9,7 @@ import Household from "../models/Household";
 export const logFeeding = async (req: Request, res: Response): Promise<void> => {
     try {
         const { petName } = req.params;
-        const {userEmail, householdId } = req.body;
+        const {userEmail, householdId, feedingAmount } = req.body;
 
         // Validate user
         console.log("Searching for user with email, %s", userEmail);
@@ -45,7 +45,7 @@ export const logFeeding = async (req: Request, res: Response): Promise<void> => 
             petName: petName,
             userName: user.name,
             timestamp: new Date(),
-            amount: 5
+            amount: parseInt(feedingAmount)
         });
 
         await log.save();
