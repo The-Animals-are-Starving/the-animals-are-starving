@@ -16,6 +16,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TheAnimalsAreStarving"
         tools:targetApi="31">
+        <activity
+            android:name=".activities.AnalyticsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_analytics"
+            android:theme="@style/Theme.TheAnimalsAreStarving" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
@@ -23,6 +28,7 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/base_pink" />
+
         <activity
             android:name=".activities.LoginActivity"
             android:exported="false" />
@@ -55,6 +61,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service
             android:name=".MyFirebaseMessagingService"
             android:exported="false"

@@ -5,8 +5,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
     // Base URL for your backend API
-    private const val BASE_URL = "http://ec2-44-246-18-108.us-west-2.compute.amazonaws.com/"
-//    private const val BASE_URL = "http://10.0.2.2:5001"
+    //private const val BASE_URL = "http://ec2-44-246-18-108.us-west-2.compute.amazonaws.com/"
+    private const val BASE_URL = "http://10.0.2.2:5001"
 
     // Retrofit instance - created only once
     private val retrofit: Retrofit by lazy {

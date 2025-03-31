@@ -50,4 +50,6 @@
     <string name="create">Create</string>
     <string name="or_wait_to_be_added_to_an_existing_household">Or wait to be added to an existing household</string>
     <string name="previous_feedings">Previous Feedings</string>
+    <string name="analytics">Analytics</string>
+    <string name="title_activity_analytics">AnalyticsActivity</string>
 </resources>

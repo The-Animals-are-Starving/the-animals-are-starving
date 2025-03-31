@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var manageButton: Button
     private lateinit var feedingHistoryButton: Button
     private lateinit var logoutButton: Button
+    private lateinit var analyticsButton: Button
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -128,6 +129,8 @@ class MainActivity : AppCompatActivity() {
                             buttonManage.visibility = View.GONE
                             val buttonLog: Button = findViewById(R.id.feeding_history_button)
                             buttonLog.visibility = View.GONE
+                            val buttonAnalytic: Button = findViewById(R.id.analytics_button)
+                            buttonAnalytic.visibility = View.GONE
                         }
                         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
                             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -178,6 +181,7 @@ class MainActivity : AppCompatActivity() {
         manageButton = findViewById(R.id.manage_button)
         feedingHistoryButton = findViewById(R.id.feeding_history_button)
         logoutButton = findViewById(R.id.logoutButton)
+        analyticsButton = findViewById(R.id.analytics_button)
 
         feedingButton.setOnClickListener {
             val intent = Intent(this, FeedingActivity::class.java)
@@ -192,6 +196,10 @@ class MainActivity : AppCompatActivity() {
         }
         feedingHistoryButton.setOnClickListener {
             val intent = Intent(this, HistoryActivity::class.java)
+            startActivity(intent)
+        }
+        analyticsButton.setOnClickListener {
+            val intent = Intent(this, AnalyticsActivity::class.java)
             startActivity(intent)
         }
 
