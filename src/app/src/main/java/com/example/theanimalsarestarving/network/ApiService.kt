@@ -73,6 +73,9 @@ interface ApiService {
     @POST("pet")
     fun addPet(@Body body: Map<String, String?>): Call<Pet> //Adds pet to db
 
+    @DELETE("pet/{petName}")
+    fun deletePet(@Path("petName") petName: String): Call<Boolean>
+
     @GET("pet/{householdId}")
     fun getAllPets(@Path("householdId") householdId: String): Call<List<Pet>>  // Return a list of pets
 

@@ -222,45 +222,12 @@ class ManageHouseholdActivity : AppCompatActivity() {
         }
     }
 
-    private fun showEditPopup(petTextView: TextView) {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Edit Pet")
-
-        val layout = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(50, 20, 50, 20)
-        }
-
-        val editName = EditText(this).apply { //TODO: Change this to edit pet params
-            hint = "Pet Name"
-            setText(petTextView.text)
-            setSingleLine(true)
-        }
-        layout.addView(editName)
-
-        val editTime = EditText(this).apply {
-            hint = "Change Feeding Time"
-            isFocusable = false
-            setOnClickListener { showTimePicker(this) }
-        }
-        layout.addView(editTime)
-        builder.setView(layout)
-
-        builder.setPositiveButton("Save") { _, _ ->
-            petTextView.text = editName.text.toString()
-            //TODO: Change this to send to backend
-        }
-
-        builder.show()
-    }
-
     private fun isValidEmail(email: String): Boolean {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
 
     private fun createNameView(user: User): TextView {
-
         val nameView = TextView(this).apply {
             text = user.name
             layoutParams = LinearLayout.LayoutParams(
@@ -270,12 +237,10 @@ class ManageHouseholdActivity : AppCompatActivity() {
             )
         }
         return nameView
-
     }
 
 
     private fun createDeleteButton(user: User): Button {
-
         val deleteButton = Button(this).apply {
             text = getString(R.string.delete_text)
             setOnClickListener {
@@ -295,6 +260,40 @@ class ManageHouseholdActivity : AppCompatActivity() {
                                 AppUtils.alertMessage(
                                     this@ManageHouseholdActivity,
                                     "Failed to delete user. Please try again."
+                                )
+                            }
+                        }
+                    }
+                    .setNegativeButton("NO") { dialog, _ -> dialog.cancel() }
+                    .show()
+            }
+        }
+        return deleteButton
+    }
+
+    /*
+    Overload method for deleting pet rather than user
+     */
+    private fun createDeleteButton(pet: Pet): Button {
+        val deleteButton = Button(this).apply {
+            text = getString(R.string.delete_text)
+            setOnClickListener {
+                AlertDialog.Builder(this@ManageHouseholdActivity)
+                    .setTitle("Confirm Deletion")
+                    .setMessage("Are you sure you want to delete this pet?")
+                    .setPositiveButton("YES") { _, _ ->
+                        deletePet(pet.name) { success ->
+                            if (success) {
+                                Toast.makeText(
+                                    this@ManageHouseholdActivity,
+                                    "Pet Deleted",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                refreshPets()
+                            } else {
+                                AppUtils.alertMessage(
+                                    this@ManageHouseholdActivity,
+                                    "Failed to delete Pet. Please try again."
                                 )
                             }
                         }
@@ -426,17 +425,10 @@ class ManageHouseholdActivity : AppCompatActivity() {
                             )
                         }
 
-                        val editButton = Button(this).apply {
-                            text = getString(R.string.edit_text)
-                            layoutParams = LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.WRAP_CONTENT,
-                                LinearLayout.LayoutParams.WRAP_CONTENT
-                            )
-                            setOnClickListener { showEditPopup(petNameView) }
-                        }
+                        val deleteButton = createDeleteButton(pet)
 
                         petRow.addView(petNameView)
-                        petRow.addView(editButton)
+                        petRow.addView(deleteButton)
                         petListContainer.addView(petRow)
                     }
                 } else {
@@ -499,8 +491,29 @@ class ManageHouseholdActivity : AppCompatActivity() {
             }
         })
         callback(true)
-        //TODO: Make backend call
     }
 
+    private fun deletePet(petName: String, callback: (Boolean) -> Unit) {
+        Log.d("ManageHousehold", "Attempting to delete pet $petName")
+        apiService.deletePet(petName).enqueue(object : retrofit2.Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                if (response.isSuccessful) {
+                    val success = response.body() ?: false
+                    if (success) {
+                        Log.d("DeletePet", "Pet deleted successfully")
+                    } else {
+                        Log.d("DeletePet", "Pet not found or already deleted")
+                    }
+                } else {
+                    Log.e("DeletePet", "Failed with code: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                Log.e("DeletePet", "Error: ${t.message}")
+            }
+        })
+        callback(true)
+    }
 
 }
