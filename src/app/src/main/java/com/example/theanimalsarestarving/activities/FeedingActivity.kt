@@ -1,14 +1,17 @@
 package com.example.theanimalsarestarving.activities
 
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.theanimalsarestarving.R
@@ -114,35 +117,57 @@ class FeedingActivity : AppCompatActivity() {
         }
 
         feedingButton.setOnClickListener{
-            val repository = PetRepository
-            repository.feedPet(petName) { success ->
-                if (success) {
-                    // Update UI after feeding the pet
-                    fedStatusText.text = getString(R.string.fed_text)
-                    petCircle.setColorFilter(
-                        ContextCompat.getColor(
-                            this@FeedingActivity,
-                            R.color.base_green
-                        )
-                    )
-                    feedingButton.visibility = View.GONE
-                    feedingInfo.visibility = View.VISIBLE
-                } else {
-                    AppUtils.alertMessage(this, "Failed to feed pet. Please try again.")
-                }
-            }
-            val currUser = CurrUserRepository.getCurrUser()
-            Log.d("FeedingActivity", "Attempting to log feeding for pet $petName, from user $currUser")
-            repository.logFeed(petName, currUser?.email.toString())
-            { success ->
-                if (success) {
-                    Toast.makeText(this, "Feeding logged successfully", Toast.LENGTH_SHORT).show()
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Enter Feeding Amount")
+
+            val input = EditText(this)
+            input.inputType = InputType.TYPE_CLASS_NUMBER
+            input.setPadding(40, 20, 40, 20) // Add padding to make it look better
+            builder.setView(input)
+
+
+            builder.setPositiveButton("Feed") { _, _ ->
+                val feedingAmount = input.text.toString()
+                if (feedingAmount.isNotEmpty() && feedingAmount.toIntOrNull() != null) {
+                    val repository = PetRepository
+                    repository.feedPet(petName) { success ->
+                        if (success) {
+                            // Update UI after feeding the pet
+                            fedStatusText.text = getString(R.string.fed_text)
+                            petCircle.setColorFilter(
+                                ContextCompat.getColor(
+                                    this@FeedingActivity,
+                                    R.color.base_green
+                                )
+                            )
+                            feedingButton.visibility = View.GONE
+                            feedingInfo.visibility = View.VISIBLE
+                        } else {
+                            AppUtils.alertMessage(this, "Failed to feed pet. Please try again.")
+                        }
+                    }
+                    val currUser = CurrUserRepository.getCurrUser()
+                    Log.d("FeedingActivity", "Attempting to log feeding for pet $petName, from user $currUser")
+                    repository.logFeed(petName, currUser?.email.toString(), feedingAmount)
+                    { success ->
+                        if (success) {
+                            Toast.makeText(this, "Feeding logged successfully", Toast.LENGTH_SHORT).show()
+
+                        } else {
+                            Toast.makeText(this, "Failed to log feeding", Toast.LENGTH_SHORT).show()
+                        }
+
+                    }
 
                 } else {
-                    Toast.makeText(this, "Failed to log feeding", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Please enter a valid feeding amount", Toast.LENGTH_SHORT).show()
                 }
-
             }
+            builder.setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+
+            builder.show()
         }
 
         // Add the new pet layout to the container
