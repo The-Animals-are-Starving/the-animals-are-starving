@@ -79,14 +79,16 @@
             android:visibility="visible" />
 
         <LinearLayout
-            android:layout_width="233dp"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="50dp"
+            >
 
             <Button
                 android:id="@+id/translate_fr_button"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="5dp"
                 android:layout_marginBottom="16dp"
                 android:layout_weight="1"
                 android:backgroundTint="@color/grey"
@@ -98,7 +100,7 @@
                 android:id="@+id/translate_en_button"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="5dp"
                 android:layout_marginBottom="16dp"
                 android:layout_weight="1"
                 android:backgroundTint="@color/grey"

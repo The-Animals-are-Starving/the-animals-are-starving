@@ -1,22 +1,42 @@
 package com.example.theanimalsarestarving.activities
+
 import android.content.Context
+import android.content.SharedPreferences
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
+import androidx.lifecycle.LifecycleCoroutineScope
 import com.example.theanimalsarestarving.R
-import com.example.theanimalsarestarving.activities.MainActivity
 import com.google.cloud.translate.Translate
 import com.google.cloud.translate.TranslateOptions
 import com.google.cloud.translate.Translation
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+
+private val TRANSLATE_API_KEY = "AIzaSyD4ykkYCFgjq6OdthtgF_FhVWUDdbwAQtM"
 
 class TranslationHelper(private val context: Context) {
 
-    // Suspend function for translating a single string
-    private val TRANSLATE_API_KEY = "AIzaSyD4ykkYCFgjq6OdthtgF_FhVWUDdbwAQtM"
+    private val sharedPreferences = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
 
+    // Save the selected language to SharedPreferences
+    fun setLanguagePreference(languageCode: String) {
+        with(sharedPreferences.edit()) {
+            putString("selected_language", languageCode)
+            apply()
+        }
+    }
+
+    // Retrieve the selected language from SharedPreferences
+    fun getLanguagePreference(): String? {
+        return sharedPreferences.getString("selected_language", "en") // Default to English
+    }
+
+    // Suspend function for translating a single string
     suspend fun translateString(value: String, targetLanguage: String): String {
         return withContext(Dispatchers.IO) {
             val translate = TranslateOptions.newBuilder()
@@ -31,76 +51,80 @@ class TranslationHelper(private val context: Context) {
             translation.translatedText
         }
     }
-    // Suspend function to translate all strings
-    suspend fun translateAndUpdateUI(targetLanguage: String) {
-        // Translate individual strings asynchronously
-        val titleText = getStringFromResources(R.string.the_animals_are_starving)
-        val feedText = getStringFromResources(R.string.feed_da_dawg)
-        val notifyText = getStringFromResources(R.string.notify_other_users)
-        val manageText = getStringFromResources(R.string.manage_household)
-        val historyText = getStringFromResources(R.string.feeding_history)
-        val analyticsText = getStringFromResources(R.string.analytics)
-        val logoutText = getStringFromResources(R.string.logout)
 
-        val translatedTitle = translateString(titleText, targetLanguage)
-        val translatedFeed = translateString(feedText, targetLanguage)
-        val translatedNotify = translateString(notifyText, targetLanguage)
-        val translatedManage = translateString(manageText, targetLanguage)
-        val translatedHistory = translateString(historyText, targetLanguage)
-        val translatedAnalytics = translateString(analyticsText, targetLanguage)
-        val translatedLogout = translateString(logoutText, targetLanguage)
+    // Dynamically translate and update all text-related UI elements in the current layout
+    suspend fun translateAndUpdateUI(targetLanguage: String, rootView: View) {
+        // Get all views to translate
+        val allViews = getAllViews(rootView)
 
-        // Wait for all translations to complete and then update the UI
-        updateUIWithTranslatedStrings(
-            translatedTitle, translatedFeed, translatedNotify, translatedManage,
-            translatedHistory, translatedAnalytics, translatedLogout
-        )
-    }
+        // Translate all strings asynchronously and update the views
+        for (view in allViews) {
+            when (view) {
+                is TextView -> {
+                    val originalText = view.text.toString()
+                    val translatedText = translateString(originalText, targetLanguage)
+                    view.text = translatedText
+                }
 
-    private fun getStringFromResources(stringId: Int): String {
-        return context.getString(stringId)
-    }
+                is Button -> {
+                    val originalText = view.text.toString()
+                    val translatedText = translateString(originalText, targetLanguage)
+                    view.text = translatedText
+                }
 
-    // Update the UI elements with the translated strings
-    private suspend fun updateUIWithTranslatedStrings(
-        translatedTitle: String,
-        translatedFeed: String,
-        translatedNotify: String,
-        translatedManage: String,
-        translatedHistory: String,
-        translatedAnalytics: String,
-        translatedLogout: String
-    ) {
-        // Switch back to the main thread to update the UI
-        withContext(Dispatchers.Main) {
-            val mainActivity = context as MainActivity
-
-            // Find your UI elements and update their text
-            val textViewTitle = mainActivity.findViewById<TextView>(R.id.title)
-            val buttonFeed = mainActivity.findViewById<Button>(R.id.feed_button)
-            val buttonNotify = mainActivity.findViewById<Button>(R.id.notify_button)
-            val buttonManage = mainActivity.findViewById<Button>(R.id.manage_button)
-            val buttonHistory = mainActivity.findViewById<Button>(R.id.feeding_history_button)
-            val buttonAnalytics = mainActivity.findViewById<Button>(R.id.analytics_button)
-
-            val buttonLogout = mainActivity.findViewById<Button>(R.id.logoutButton)
-
-            // Update the UI text with translated values
-            textViewTitle.text = translatedTitle
-            buttonFeed.text = translatedFeed
-            buttonNotify.text = translatedNotify
-            buttonManage.text = translatedManage
-            buttonHistory.text = translatedHistory
-            buttonAnalytics.text = translatedAnalytics
-            buttonLogout.text = translatedLogout
+                is EditText -> {
+                    val originalHint = view.hint.toString()
+                    val translatedHint = translateString(originalHint, targetLanguage)
+                    view.setHint(translatedHint)
+                }
+            }
         }
     }
 
-    // Function to handle language change
-    fun changeLanguage(languageCode: String, lifecycleScope: CoroutineScope) {
-        // Launch a coroutine to handle translation and UI update
+    // Get all views in the layout for translation
+    private fun getAllViews(root: View): List<View> {
+        val views = mutableListOf<View>()
+        if (root is TextView || root is Button || root is EditText) {
+            views.add(root)
+        }
+
+        if (root is ViewGroup) {
+            for (i in 0 until root.childCount) {
+                val child = root.getChildAt(i)
+                views.addAll(getAllViews(child))
+            }
+        }
+
+        return views
+    }
+
+    // Change language dynamically for the given views list
+    fun changeLanguage(
+        language: String,
+        lifecycleScope: LifecycleCoroutineScope,
+        views: List<View>
+    ) {
         lifecycleScope.launch {
-            translateAndUpdateUI(languageCode)
+            // Perform translation in the background
+            for (view in views) {
+                when (view) {
+                    is TextView -> {
+                        val translatedText = translateString(view.text.toString(), language)
+                        view.text = translatedText
+                    }
+
+                    is Button -> {
+                        val translatedText = translateString(view.text.toString(), language)
+                        view.text = translatedText
+                    }
+
+                    is EditText -> {
+                        val translatedHint = translateString(view.hint.toString(), language)
+                        view.setHint(translatedHint)
+                    }
+                }
+            }
         }
     }
 }
+

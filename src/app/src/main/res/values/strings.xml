@@ -1,7 +1,7 @@
 <resources>
+    <!-- Define the individual strings -->
     <string name="app_name">The Animals Are Starving</string>
     <string name="title_activity_manage_household">ManageHouseholdActivity</string>
-
     <string name="fed_text">FED</string>
     <string name="not_fed_text">NOT FED</string>
     <string name="no_logs_text">No Logs Available</string>
@@ -21,8 +21,7 @@
     <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
     <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="limbo_instructions_text">Or have your manager add you to a household and reopen the app to continue.</string>
 
@@ -41,7 +40,7 @@
     <string name="home_page_lowercase">Home Page</string>
     <string name="feed_da_dawg">Feed Da Dawg</string>
     <string name="notify_other_users">Notify Other Users</string>
-    <string name="feeding_history">Feeding History</string>
+    <string name="feeding_history">Past Feedings</string>
     <string name="create_household">Create Household</string>
     <string name="you_are_currently_logged_in_as_email">You are currently logged in as: [email]</string>
     <string name="hello_name">Hello, [name]!</string>
@@ -52,6 +51,56 @@
     <string name="previous_feedings">Previous Feedings</string>
     <string name="analytics">Analytics</string>
     <string name="title_activity_analytics">AnalyticsActivity</string>
-    <string name="french">Francais</string>
+    <string name="french">French</string>
     <string name="english">English</string>
+
+    <!-- Array to hold the keys of all strings you want to translate -->
+    <string-array name="all_string_ids">
+        <item>@string/app_name</item>
+        <item>@string/title_activity_manage_household</item>
+        <item>@string/fed_text</item>
+        <item>@string/not_fed_text</item>
+        <item>@string/no_logs_text</item>
+        <item>@string/delete_text</item>
+        <item>@string/logged_in_text</item>
+        <item>@string/edit_text</item>
+        <item>@string/notify_text</item>
+        <item>@string/messages_header</item>
+        <item>@string/sync_header</item>
+        <item>@string/signature_title</item>
+        <item>@string/reply_title</item>
+        <item>@string/sync_title</item>
+        <item>@string/attachment_title</item>
+        <item>@string/attachment_summary_on</item>
+        <item>@string/attachment_summary_off</item>
+        <item>@string/limbo_instructions_text</item>
+        <item>@string/msg_token_fmt</item>
+        <item>@string/manage_household</item>
+        <item>@string/household_members</item>
+        <item>@string/new_user</item>
+        <item>@string/new_pet</item>
+        <item>@string/pets</item>
+        <item>@string/home_page</item>
+        <item>@string/feed_pets</item>
+        <item>@string/logout</item>
+        <item>@string/feeding_page</item>
+        <item>@string/feed_da_dawgs</item>
+        <item>@string/the_animals_are_starving</item>
+        <item>@string/home_page_lowercase</item>
+        <item>@string/feed_da_dawg</item>
+        <item>@string/notify_other_users</item>
+        <item>@string/feeding_history</item>
+        <item>@string/create_household</item>
+        <item>@string/you_are_currently_logged_in_as_email</item>
+        <item>@string/hello_name</item>
+        <item>@string/please_name_your_household</item>
+        <item>@string/household_name</item>
+        <item>@string/create</item>
+        <item>@string/or_wait_to_be_added_to_an_existing_household</item>
+        <item>@string/previous_feedings</item>
+        <item>@string/analytics</item>
+        <item>@string/title_activity_analytics</item>
+        <item>@string/french</item>
+        <item>@string/english</item>
+    </string-array>
 </resources>

@@ -8,7 +8,9 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -214,13 +216,17 @@ class MainActivity : AppCompatActivity() {
 //        }
 
         translateFrenchButton.setOnClickListener {
-            // Launch coroutine to change language and pass lifecycleScope
-            translationHelper.changeLanguage("fr", lifecycleScope)  // Example: changing to French
+            // Collect all views dynamically and change the language to French
+            val allViews = getAllViews(findViewById(R.id.main)) // Replace with actual layout ID
+            translationHelper.changeLanguage("fr", lifecycleScope, allViews)
         }
+
         translateEnglishButton.setOnClickListener {
-            // Launch coroutine to change language and pass lifecycleScope
-            translationHelper.changeLanguage("en", lifecycleScope)  // Example: changing to French
+            // Collect all views dynamically and change the language to English
+            val allViews = getAllViews(findViewById(R.id.main)) // This will now return a List<View>
+            translationHelper.changeLanguage("en", lifecycleScope, allViews)
         }
+
 
 
         logoutButton.setOnClickListener {
@@ -392,4 +398,24 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
         finish() // Finish MainActivity so user can't come back by pressing back
     }
+
+    fun getAllViews(root: View): List<View> {
+        val views = mutableListOf<View>()
+
+        // Check if the root view is one of the target types (TextView, Button, EditText)
+        if (root is TextView || root is Button || root is EditText) {
+            views.add(root)  // Add this view to the list
+        }
+
+        // If the root view is a ViewGroup, iterate over its children and add them recursively
+        if (root is ViewGroup) {
+            for (i in 0 until root.childCount) {
+                val child = root.getChildAt(i)
+                views.addAll(getAllViews(child))  // Recursively collect views
+            }
+        }
+
+        return views  // Return the list of views
+    }
+
 }
