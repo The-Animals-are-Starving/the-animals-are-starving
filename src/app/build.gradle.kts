@@ -118,5 +118,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     //Translation
-    implementation("com.google.cloud:google-cloud-translate:1.27.0")
+
+    implementation("com.google.cloud:google-cloud-translate:1.27.0") {
+        exclude(group= "com.google.protobuf", module= "protobuf-lite")
+    }
 }
