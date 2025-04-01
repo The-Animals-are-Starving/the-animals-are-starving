@@ -212,8 +212,8 @@ class MainActivity : AppCompatActivity() {
 //        }
 
         translateButton.setOnClickListener {
-            // Change language to French (or any language code you want)
-            translationHelper.changeLanguage("fr")
+            // Launch coroutine to change language and pass lifecycleScope
+            translationHelper.changeLanguage("fr", lifecycleScope)  // Example: changing to French
         }
 
         logoutButton.setOnClickListener {

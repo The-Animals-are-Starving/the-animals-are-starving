@@ -53,7 +53,12 @@ android {
     }
     packaging {
         resources {
-            excludes += ("META-INF/INDEX.LIST")
+            excludes += "META-INF/INDEX.LIST"
+            excludes += "META-INF/DEPENDENCIES"
+            excludes += "META-INF/LICENSE"
+            excludes += "META-INF/LICENSE.txt"
+            excludes += "META-INF/NOTICE"
+            excludes += "META-INF/NOTICE.txt"
         }
     }
 }
@@ -129,5 +134,5 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     //Translation
-    implementation("com.google.cloud:google-cloud-translate:1.27.0")
+    implementation("com.google.cloud:google-cloud-translate:2.0.0")
 }
