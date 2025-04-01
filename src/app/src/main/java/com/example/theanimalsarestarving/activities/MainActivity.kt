@@ -294,19 +294,23 @@ class MainActivity : AppCompatActivity() {
             orientation = LinearLayout.VERTICAL
             setPadding(50, 20, 50, 20)
         }
+        val sharedPreferences: SharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
+        val currentUserName = sharedPreferences.getString("name", "").toString()
 
         val repository = MainRepository(apiService)
         repository.getAllUsers(HouseholdRepository.getCurrentHousehold()?._id.toString()) { users ->
             if (users != null) {
-                if (users.isEmpty()) { //not working atm dunno why
-                    val noticeText = "No Users in Household"
+                val otherUsers = users.filter { it.name != currentUserName }
+
+                if (otherUsers.isEmpty()) {
+                    val noticeText = "No one else is in this household. You are the only one."
                     val noticeView = TextView(this).apply {
                         text = noticeText
                         textSize = 20f
                     }
                     layout.addView(noticeView)
                 } else {
-                    for (user in users) {
+                    for (user in otherUsers) {
                         val userRow = LinearLayout(this).apply {
                             orientation = LinearLayout.HORIZONTAL
                         }
@@ -317,7 +321,6 @@ class MainActivity : AppCompatActivity() {
                                 LinearLayout.LayoutParams.WRAP_CONTENT,
                                 1f
                             )
-
                         }
                         val notifyUserButton = Button(this).apply {
                             text = getString(R.string.notify_text)
@@ -333,7 +336,6 @@ class MainActivity : AppCompatActivity() {
                         layout.addView(userRow)
                     }
                 }
-
             } else {
                 AppUtils.alertMessage(this, "Failed to fetch users. Please try again.")
             }
