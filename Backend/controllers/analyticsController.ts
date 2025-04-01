@@ -1,6 +1,99 @@
 import { Request, Response } from "express";
 import Log, { ILog } from "../models/Log";
+import Pet, { IPet } from "../models/Pet";
 import { Types } from "mongoose";
+
+export const getFeedingAnomalies = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { householdId } = req.params;
+    if (!householdId) {
+      res.status(400).json({ message: "householdId is required" });
+      return;
+    }
+
+    // Get pets in the household
+    const pets: IPet[] = await Pet.find({ householdId: new Types.ObjectId(householdId) });
+    if (!pets.length) {
+      res.json({ anomalies: [] });
+      return;
+    }
+
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+    // Retrieve all logs for this household from the past week
+    const logs: ILog[] = await Log.find({
+      householdId: new Types.ObjectId(householdId),
+      timestamp: { $gte: oneWeekAgo },
+    });
+
+    const anomalies: Array<{
+      pet: string;
+      largeDeviation: boolean;
+      significantlyLate: boolean;
+      averageAmount: number;
+      feedingCount: number;
+    }> = [];
+
+    for (const pet of pets) {
+      const petName = pet.name;
+
+      const petLogs = logs.filter(log => log.petName.toString() === petName);
+      let largeDeviation = false;
+      let significantlyLate = false;
+      let totalAmount = 0;
+
+      if (petLogs.length > 0) {
+        for (const log of petLogs) {
+          totalAmount += log.amount;
+        }
+        const avgAmount = totalAmount / petLogs.length;
+        // deviation threshold of 30% of the average
+        const deviationThreshold = avgAmount * 0.3;
+
+        for (const log of petLogs) {
+          if (Math.abs(log.amount - avgAmount) > deviationThreshold) {
+            largeDeviation = true;
+          }
+
+          // Compare log timestamp with scheduled feeding time
+          const scheduledTimeStr = pet.feedingTime;
+          const [scheduledHour, scheduledMinute] = scheduledTimeStr.split(":").map(Number);
+          const scheduledDate = new Date(log.timestamp);
+          scheduledDate.setHours(scheduledHour, scheduledMinute, 0, 0);
+          // Allow a 30 minute delay threshold
+          const lateThreshold = 30 * 60 * 1000;
+
+          if (log.timestamp.getTime() - scheduledDate.getTime() > lateThreshold) {
+            significantlyLate = true;
+          }
+        }
+
+        anomalies.push({
+          pet: petName,
+          largeDeviation,
+          significantlyLate,
+          averageAmount: avgAmount,
+          feedingCount: petLogs.length,
+        });
+      } else {
+        // If no logs exist for the pet in the past week, assume no anomalies
+        anomalies.push({
+          pet: petName,
+          largeDeviation: false,
+          significantlyLate: false,
+          averageAmount: 0,
+          feedingCount: 0,
+        });
+      }
+    }
+
+    res.json({ anomalies });
+  } catch (error) {
+    console.error("Error computing feeding anomalies:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 // Helper function to get the ISO week number of a given date
 function getWeekNumber(date: Date): number {
@@ -75,54 +168,3 @@ export const getUserRankings = async (req: Request, res: Response): Promise<void
     res.status(500).json({ message: "Internal server error" });
   }
 };
-
-// // Predict feeding cost for the next month
-// export const predictFeedingCost = async (req: Request, res: Response): Promise<void> => {
-//     try {
-//         const { householdId } = req.params;
-//         const { pricePerKg } = req.body; // Requires food price per kg in the request
-
-//         const pastLogs = await Log.aggregate([
-//             { $match: { householdId: new Types.ObjectId(householdId), timestamp: { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) } } },
-//             { $group: { _id: null, totalAmount: { $sum: "$amount" } } }
-//         ]);
-
-//         if (pastLogs.length === 0) {
-//             res.json({ estimatedCost: 0, totalAmountFed: 0 });
-//             return;
-//         }
-
-//         const totalAmountFed = pastLogs[0].totalAmount;
-//         const estimatedMonthlyConsumption = (totalAmountFed / 30) * 30;
-//         const estimatedCost = (estimatedMonthlyConsumption / 1000) * pricePerKg;
-
-//         res.json({ estimatedCost, totalAmountFed });
-//     } catch (error: unknown) {
-//         console.error("Error:", error);
-//         res.status(500).json({ message: "Error predicting feeding costs" });
-//     }
-// };
-
-// // Detect anomalies in feeding behavior
-// export const detectAnomalies = async (req: Request, res: Response): Promise<void> => {
-//     try {
-//         const { householdId } = req.params;
-//         const logs = await Log.find({ householdId: new Types.ObjectId(householdId) });
-
-//         if (logs.length < 5) {
-//             res.json({ message: "Not enough data to detect anomalies" });
-//             return;
-//         }
-
-//         const amounts = logs.map(log => log.amount);
-//         const avg = amounts.reduce((a, b) => a + b, 0) / amounts.length;
-//         const stdDev = Math.sqrt(amounts.map(x => Math.pow(x - avg, 2)).reduce((a, b) => a + b, 0) / amounts.length);
-
-//         const anomalies = logs.filter(log => Math.abs(log.amount - avg) > 2 * stdDev);
-
-//         res.json({ avgAmount: avg, stdDev, anomalies });
-//     } catch (error: unknown) {
-//         console.error("Error:", error);
-//         res.status(500).json({ message: "Error detecting anomalies" });
-//     }
-// };
