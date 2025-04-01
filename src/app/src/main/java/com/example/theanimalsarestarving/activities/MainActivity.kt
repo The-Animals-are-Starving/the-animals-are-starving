@@ -28,6 +28,8 @@ import com.example.theanimalsarestarving.network.RetrofitClient
 import com.example.theanimalsarestarving.repositories.CurrUserRepository
 import com.example.theanimalsarestarving.repositories.HouseholdRepository
 import com.example.theanimalsarestarving.repositories.MainRepository
+import com.example.theanimalsarestarving.activities.TranslationHelper
+
 import com.example.theanimalsarestarving.utils.AppUtils
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
@@ -46,6 +48,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mainRepository: MainRepository
     private lateinit var apiService: ApiService
+    private lateinit var translationHelper: TranslationHelper  // Declare the TranslationHelper instance
 
     //buttons
     private lateinit var feedingButton: Button
@@ -54,6 +57,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var feedingHistoryButton: Button
     private lateinit var logoutButton: Button
     private lateinit var analyticsButton: Button
+    private lateinit var translateButton: Button
+
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -85,6 +90,7 @@ class MainActivity : AppCompatActivity() {
         val sharedPreferences: SharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
 
         val email = sharedPreferences.getString("userEmail", "").toString()
+        translationHelper = TranslationHelper(this)
 
         lifecycleScope.launch {
             try {
@@ -123,6 +129,7 @@ class MainActivity : AppCompatActivity() {
                         startActivity(intent)
                     } else {
                         setContentView(R.layout.activity_main)
+
                         setUpButtons()
                         if(CurrUserRepository.getCurrUser()?.role == "normal") {
                             val buttonManage: Button = findViewById(R.id.manage_button)
@@ -182,6 +189,7 @@ class MainActivity : AppCompatActivity() {
         feedingHistoryButton = findViewById(R.id.feeding_history_button)
         logoutButton = findViewById(R.id.logoutButton)
         analyticsButton = findViewById(R.id.analytics_button)
+        translateButton = findViewById(R.id.translate_button)
 
         feedingButton.setOnClickListener {
             val intent = Intent(this, FeedingActivity::class.java)
@@ -198,9 +206,14 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, HistoryActivity::class.java)
             startActivity(intent)
         }
-        analyticsButton.setOnClickListener {
-            val intent = Intent(this, AnalyticsActivity::class.java)
-            startActivity(intent)
+//        analyticsButton.setOnClickListener {
+//            val intent = Intent(this, AnalyticsActivity::class.java)
+//            startActivity(intent)
+//        }
+
+        translateButton.setOnClickListener {
+            // Change language to French (or any language code you want)
+            translationHelper.changeLanguage("fr")
         }
 
         logoutButton.setOnClickListener {

@@ -116,4 +116,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    //Translation
+    implementation("com.google.cloud:google-cloud-translate:1.27.0")
 }

@@ -52,4 +52,5 @@
     <string name="previous_feedings">Previous Feedings</string>
     <string name="analytics">Analytics</string>
     <string name="title_activity_analytics">AnalyticsActivity</string>
+    <string name="french">French</string>
 </resources>
