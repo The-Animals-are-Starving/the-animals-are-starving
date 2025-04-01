@@ -40,7 +40,6 @@ class TranslationHelper(private val context: Context) {
         val manageText = getStringFromResources(R.string.manage_household)
         val historyText = getStringFromResources(R.string.feeding_history)
         val analyticsText = getStringFromResources(R.string.analytics)
-        val frenchText = getStringFromResources(R.string.french)
         val logoutText = getStringFromResources(R.string.logout)
 
         val translatedTitle = translateString(titleText, targetLanguage)
@@ -49,13 +48,12 @@ class TranslationHelper(private val context: Context) {
         val translatedManage = translateString(manageText, targetLanguage)
         val translatedHistory = translateString(historyText, targetLanguage)
         val translatedAnalytics = translateString(analyticsText, targetLanguage)
-        val translatedFrench = translateString(frenchText, targetLanguage)
         val translatedLogout = translateString(logoutText, targetLanguage)
 
         // Wait for all translations to complete and then update the UI
         updateUIWithTranslatedStrings(
             translatedTitle, translatedFeed, translatedNotify, translatedManage,
-            translatedHistory, translatedAnalytics, translatedFrench, translatedLogout
+            translatedHistory, translatedAnalytics, translatedLogout
         )
     }
 
@@ -71,7 +69,6 @@ class TranslationHelper(private val context: Context) {
         translatedManage: String,
         translatedHistory: String,
         translatedAnalytics: String,
-        translatedFrench: String,
         translatedLogout: String
     ) {
         // Switch back to the main thread to update the UI
@@ -85,7 +82,7 @@ class TranslationHelper(private val context: Context) {
             val buttonManage = mainActivity.findViewById<Button>(R.id.manage_button)
             val buttonHistory = mainActivity.findViewById<Button>(R.id.feeding_history_button)
             val buttonAnalytics = mainActivity.findViewById<Button>(R.id.analytics_button)
-            val buttonTranslate = mainActivity.findViewById<Button>(R.id.translate_button)
+
             val buttonLogout = mainActivity.findViewById<Button>(R.id.logoutButton)
 
             // Update the UI text with translated values
@@ -95,7 +92,6 @@ class TranslationHelper(private val context: Context) {
             buttonManage.text = translatedManage
             buttonHistory.text = translatedHistory
             buttonAnalytics.text = translatedAnalytics
-            buttonTranslate.text = translatedFrench
             buttonLogout.text = translatedLogout
         }
     }

@@ -57,7 +57,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var feedingHistoryButton: Button
     private lateinit var logoutButton: Button
     private lateinit var analyticsButton: Button
-    private lateinit var translateButton: Button
+    private lateinit var translateEnglishButton: Button
+    private lateinit var translateFrenchButton: Button
 
 
     private val requestPermissionLauncher = registerForActivityResult(
@@ -189,7 +190,8 @@ class MainActivity : AppCompatActivity() {
         feedingHistoryButton = findViewById(R.id.feeding_history_button)
         logoutButton = findViewById(R.id.logoutButton)
         analyticsButton = findViewById(R.id.analytics_button)
-        translateButton = findViewById(R.id.translate_button)
+        translateFrenchButton = findViewById(R.id.translate_fr_button)
+        translateEnglishButton = findViewById(R.id.translate_en_button)
 
         feedingButton.setOnClickListener {
             val intent = Intent(this, FeedingActivity::class.java)
@@ -211,10 +213,15 @@ class MainActivity : AppCompatActivity() {
 //            startActivity(intent)
 //        }
 
-        translateButton.setOnClickListener {
+        translateFrenchButton.setOnClickListener {
             // Launch coroutine to change language and pass lifecycleScope
             translationHelper.changeLanguage("fr", lifecycleScope)  // Example: changing to French
         }
+        translateEnglishButton.setOnClickListener {
+            // Launch coroutine to change language and pass lifecycleScope
+            translationHelper.changeLanguage("en", lifecycleScope)  // Example: changing to French
+        }
+
 
         logoutButton.setOnClickListener {
             val sharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
