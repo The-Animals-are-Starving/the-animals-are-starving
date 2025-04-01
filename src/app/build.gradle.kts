@@ -1,3 +1,4 @@
+import com.android.build.api.dsl.Packaging
 import java.util.Properties
 
 plugins {
@@ -50,8 +51,20 @@ android {
         buildConfig = true
         compose = true
     }
+    packaging {
+        resources {
+            excludes += ("META-INF/INDEX.LIST")
+        }
+    }
 }
 
+configurations.all {
+    exclude(group = "com.google.protobuf", module= "protobuf-lite")
+
+    resolutionStrategy {
+        force("com.google.protobuf:protobuf-java:4.30.2") // Ensure protobuf-java is being used
+    }
+}
 dependencies {
 
     // Android Libraries
@@ -97,10 +110,8 @@ dependencies {
     implementation(libs.firebase.crashlytics)
     implementation(platform("com.google.firebase:firebase-bom:33.10.0"))
     implementation("com.google.firebase:firebase-analytics-ktx")
-    /** we shouldn't need to specify the version since we have the BOM, but it didn't work
-     * so I just added it manually; just something to keep note of...
-     */
     implementation("com.google.firebase:firebase-messaging:24.1.0")
+
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
 
@@ -118,8 +129,5 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     //Translation
-
-    implementation("com.google.cloud:google-cloud-translate:1.27.0") {
-        exclude(group= "com.google.protobuf", module= "protobuf-lite")
-    }
+    implementation("com.google.cloud:google-cloud-translate:1.27.0")
 }
