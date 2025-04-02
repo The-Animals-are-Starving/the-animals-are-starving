@@ -186,11 +186,12 @@
 <a name="nfr1"></a>
 1. **Accessibility**
     - **Description**: The app should be usable by all members of the household, including those with impaired vision, language barriers, and of all mental faculties. Further, users should be able to complete the core actions (logging a feeding, viewing history) in 3 clicks or less.
-    - **Justification**: This app is designed for people who aren't tech-savvy. By making it simple and intuitive, we ensure it's easy for all users, regardless of ability, to track pet feedings with minimal effort. Core actions are streamlined to 3 clicks or less, eliminating complexity and making pet care accessible for everyone in the household.
+    - **Justification**: This app is designed for people who aren't tech-savvy. By making it simple and intuitive, we ensure it's easy for all users, regardless of ability, to track pet feedings with minimal effort. Core actions are streamlined to 3 clicks or less, eliminating complexity and making pet care accessible for everyone in the household. This limit of 3 clicks is a general rule first referenced by Jeffrey Zeldman in his book [Taking Your Talent to the Web 2001](https://zeldman.com/talent/Taking_Your_Talent_to_the_Web.pdf), saying "users should ideally be able to reach their intended destination within
+three mouse clicks." While it may not be the end all be all, it is a sound guideline that we have chosen to follow.
 <a name="nfr2"></a>    
 2. **Ease of use**
     - **Description**: Requests made to the backend should be retrieved within 2 seconds with up to 100 concurrent users.
-    - **Justification**: A key secondary function of any app is processing speed. Further since this is an app meant to speed up household work for the pets, it would be very problematic if the app caused more frustrations with slow API requests.
+    - **Justification**: A key secondary function of any app is processing speed. Further since this is an app meant to speed up household work for the pets, it would be very problematic if the app caused more frustrations with slow API requests. The timing of 2 seconds is, again, a general rule for API calls, as referenced in [an article by OctoPerf](https://blog.octoperf.com/performance-response-times/#less-than-2-seconds), stating that "for complex activities, such as browsing products that vary along multiple dimensions, 2 seconds represents an important response-time limit," which is true of our database queries.
 
 
 ## 4. Designs Specification
