@@ -7,6 +7,7 @@ import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.network.NetworkManager.apiService
 import com.example.theanimalsarestarving.repositories.HouseholdRepository
@@ -21,16 +22,22 @@ import java.util.TimeZone
 class HistoryActivity : AppCompatActivity() {
 
 
+    lateinit var translationHelper: TranslationHelper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.history_activity)
-
+        val bundle: Bundle? = intent.extras
+        if (bundle != null) {
+            translationHelper = intent.getSerializableExtra("translationHelperVar") as TranslationHelper
+        }
 
         val householdId = HouseholdRepository.getCurrentHousehold()?._id.toString()
         Log.d("HistoryActivity", "householdId: $householdId")
 
         refreshHistory(householdId)
 
+        translationHelper.updateLanguageUI(translationHelper, findViewById(R.id.history_activity), lifecycleScope)
 
     }
     private fun refreshHistory(householdId: String) {

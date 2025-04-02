@@ -70,13 +70,9 @@ class FeedingActivity : AppCompatActivity() {
         loadPets(HouseholdRepository.getCurrentHousehold()?._id.toString())
 
         Log.d(TAG, "Current Language: ${LanguageRepository.language}")
-        setLanguage()
+        translationHelper.updateLanguageUI(translationHelper, findViewById(R.id.feeding_activity), lifecycleScope)
     }
 
-    private fun setLanguage(){
-        val allViews = translationHelper.getAllViews(findViewById(R.id.feeding_activity)) // Replace with actual layout ID
-        translationHelper.changeLanguage(LanguageRepository.language, lifecycleScope, allViews)
-    }
 
     private fun loadPets(testHouseholdId: String) {
         CoroutineScope(Dispatchers.Main).launch {

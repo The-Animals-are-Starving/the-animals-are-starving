@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.lifecycleScope
 import com.example.theanimalsarestarving.BuildConfig
 import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.repositories.LanguageRepository
@@ -120,6 +121,11 @@ class TranslationHelper() : Serializable {
             LanguageRepository.language = language
             Log.d(TAG, "Language Set: ${LanguageRepository.language}")
         }
+    }
+
+    fun updateLanguageUI(helper: TranslationHelper, view: View, lifecycleScope: LifecycleCoroutineScope){
+        val allViews = helper.getAllViews(view) // Replace with actual layout ID
+        helper.changeLanguage(LanguageRepository.language, lifecycleScope, allViews)
     }
 }
 

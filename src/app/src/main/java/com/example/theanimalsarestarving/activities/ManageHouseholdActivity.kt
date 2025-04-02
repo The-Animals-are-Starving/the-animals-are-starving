@@ -19,6 +19,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.models.Pet
 import com.example.theanimalsarestarving.models.User
@@ -34,6 +35,9 @@ import retrofit2.Call
 import retrofit2.Response
 
 class ManageHouseholdActivity : AppCompatActivity() {
+
+    lateinit var translationHelper: TranslationHelper
+
     private val currHouseholdId =
         if (HouseholdRepository.getCurrentHousehold() != null) HouseholdRepository.getCurrentHousehold()?._id else 1
 
@@ -41,6 +45,10 @@ class ManageHouseholdActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.manage_activity)
+        val bundle: Bundle? = intent.extras
+        if (bundle != null) {
+            translationHelper = intent.getSerializableExtra("translationHelperVar") as TranslationHelper
+        }
 
         val newUserButton = findViewById<Button>(R.id.newUserButton)
 
@@ -60,6 +68,9 @@ class ManageHouseholdActivity : AppCompatActivity() {
 
         refreshUsers()
         refreshPets()
+
+        translationHelper.updateLanguageUI(translationHelper, findViewById(R.id.manage_household_activity), lifecycleScope)
+
     }
 
     private fun showAddUserDialog() { //Popup for new user

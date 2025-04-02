@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.FeedingActivity">
+    tools:context=".activities.FeedingActivity"
+    android:id="@+id/history_activity">
 
     <ScrollView
         android:id="@+id/petLayoutContainer"

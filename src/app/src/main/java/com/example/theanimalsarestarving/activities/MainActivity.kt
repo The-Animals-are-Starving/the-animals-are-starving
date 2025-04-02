@@ -207,14 +207,17 @@ class MainActivity : AppCompatActivity() {
         }
         manageButton.setOnClickListener {
             val intent = Intent(this, ManageHouseholdActivity::class.java)
+            intent.putExtra("translationHelperVar", translationHelper)
             startActivity(intent)
         }
         feedingHistoryButton.setOnClickListener {
             val intent = Intent(this, HistoryActivity::class.java)
+            intent.putExtra("translationHelperVar", translationHelper)
             startActivity(intent)
         }
         analyticsButton.setOnClickListener {
             val intent = Intent(this, AnalyticsActivity::class.java)
+            intent.putExtra("translationHelperVar", translationHelper)
             startActivity(intent)
         }
 

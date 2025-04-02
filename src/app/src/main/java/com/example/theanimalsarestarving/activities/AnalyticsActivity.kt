@@ -7,6 +7,7 @@ import android.view.Gravity
 import android.widget.TableRow
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.models.Household
 import com.example.theanimalsarestarving.network.NetworkManager.apiService
@@ -15,13 +16,21 @@ import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.utils.AppUtils
 
 class AnalyticsActivity : AppCompatActivity() {
+
+    lateinit var translationHelper: TranslationHelper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.analytics_activity)
-
+        val bundle: Bundle? = intent.extras
+        if (bundle != null) {
+            translationHelper = intent.getSerializableExtra("translationHelperVar") as TranslationHelper
+        }
         val householdId = HouseholdRepository.getCurrentHousehold()?._id.toString()
 
         refreshAnalytics(householdId)
+        translationHelper.updateLanguageUI(translationHelper, findViewById(R.id.analytics_activity), lifecycleScope)
+
     }
 
     private fun refreshAnalytics(householdId: String) {
