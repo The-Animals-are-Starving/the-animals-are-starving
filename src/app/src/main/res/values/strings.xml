@@ -53,6 +53,7 @@
     <string name="title_activity_analytics">AnalyticsActivity</string>
     <string name="french">French</string>
     <string name="english">English</string>
+    <string name="analytic">Analytics</string>
 
     <!-- Array to hold the keys of all strings you want to translate -->
     <string-array name="all_string_ids">

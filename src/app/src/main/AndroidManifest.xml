@@ -21,6 +21,11 @@
             android:exported="false"
             android:label="@string/title_activity_analytics"
             android:theme="@style/Theme.TheAnimalsAreStarving" />
+        <activity
+            android:name=".activities.ui.theme.AnalyticsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_analytics"
+            android:theme="@style/Theme.TheAnimalsAreStarving" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"

@@ -1,5 +1,7 @@
 package com.example.theanimalsarestarving.network
 
+import com.example.theanimalsarestarving.models.FeedingAnomalyResponse
+import com.example.theanimalsarestarving.models.Anomaly
 import com.example.theanimalsarestarving.models.FeedingLog
 import com.example.theanimalsarestarving.models.Household
 import com.example.theanimalsarestarving.models.Pet
@@ -102,6 +104,9 @@ interface ApiService {
 
     @POST("notify/{email}")
     fun sendNotification(@Path("email") email: String): Call<Void>
+
+    @POST("analytics/anomalies/{householdId}")
+    fun getAnomalies(@Path("householdId") householdId: String): Call<FeedingAnomalyResponse>
 
 
 }

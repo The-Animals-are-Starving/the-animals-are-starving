@@ -210,10 +210,10 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, HistoryActivity::class.java)
             startActivity(intent)
         }
-//        analyticsButton.setOnClickListener {
-//            val intent = Intent(this, AnalyticsActivity::class.java)
-//            startActivity(intent)
-//        }
+        analyticsButton.setOnClickListener {
+            val intent = Intent(this, AnalyticsActivity::class.java)
+            startActivity(intent)
+        }
 
         translateFrenchButton.setOnClickListener {
             // Collect all views dynamically and change the language to French

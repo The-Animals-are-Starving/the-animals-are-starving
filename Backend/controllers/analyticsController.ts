@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import Log, { ILog } from "../models/Log";
 import Pet, { IPet } from "../models/Pet";
 import { Types } from "mongoose";
+import Household from "../models/Household";
 
 export const getFeedingAnomalies = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -10,6 +11,17 @@ export const getFeedingAnomalies = async (req: Request, res: Response): Promise<
       res.status(400).json({ message: "householdId is required" });
       return;
     }
+
+    let household = null;
+      if (householdId) {
+          household = await Household.findById(householdId);
+          if (!household) {
+              console.log("Household not found")
+              res.status(404).json({ message: "Household not found" });
+              return;
+          }
+      }
+    
 
     // Get pets in the household
     const pets: IPet[] = await Pet.find({ householdId: new Types.ObjectId(householdId) });

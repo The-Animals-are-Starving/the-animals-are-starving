@@ -1,0 +1,47 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.FeedingActivity">
+
+    <ScrollView
+        android:id="@+id/analyticsScroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">  <!-- Ensures content takes full height -->
+
+        <LinearLayout
+            android:id="@+id/analyticsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="16dp">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/paw_font"
+                android:letterSpacing="0.15"
+                android:text="@string/analytic"
+                android:textAlignment="center"
+                android:textColor="@color/subtitle_color"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <!-- Box for Feedings Logs -->
+            <TableLayout
+                android:id="@+id/analyticsBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stretchColumns="*"
+                android:padding="16dp"
+                android:layout_marginBottom="16dp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
