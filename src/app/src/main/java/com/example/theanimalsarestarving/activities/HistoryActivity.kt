@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.network.NetworkManager.apiService
 import com.example.theanimalsarestarving.repositories.HouseholdRepository
+import com.example.theanimalsarestarving.repositories.LanguageRepository
 import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.utils.AppUtils
 import retrofit2.HttpException

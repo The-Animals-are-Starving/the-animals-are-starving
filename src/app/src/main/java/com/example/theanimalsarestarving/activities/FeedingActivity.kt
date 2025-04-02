@@ -14,12 +14,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.models.UserRole
 import com.example.theanimalsarestarving.network.ApiService
 import com.example.theanimalsarestarving.network.NetworkManager
 import com.example.theanimalsarestarving.repositories.CurrUserRepository
 import com.example.theanimalsarestarving.repositories.HouseholdRepository
+import com.example.theanimalsarestarving.repositories.LanguageRepository
 import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.repositories.PetRepository
 import com.example.theanimalsarestarving.utils.AppUtils
@@ -38,10 +40,12 @@ class FeedingActivity : AppCompatActivity() {
     private lateinit var petContainer: LinearLayout
     private lateinit var mainRepository: MainRepository
     private lateinit var apiService: ApiService
+    private lateinit var translationHelper: TranslationHelper  // Declare the TranslationHelper instance
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.feeding_activity)
+        translationHelper = TranslationHelper(this)
 
         petContainer = findViewById(R.id.petContainer)
 
@@ -60,8 +64,15 @@ class FeedingActivity : AppCompatActivity() {
         Log.d(TAG, "Current Household: ${HouseholdRepository.getCurrentHousehold()}\n Current User: ${CurrUserRepository.getCurrUser()}\n Current pets: ${PetRepository.getPets()}")
 
         loadPets(HouseholdRepository.getCurrentHousehold()?._id.toString())
+
+        Log.d(TAG, "Current Language: ${LanguageRepository.language}")
+        setLanguage()
     }
 
+    private fun setLanguage(){
+        val allViews = translationHelper.getAllViews(findViewById(R.id.feeding_activity)) // Replace with actual layout ID
+        translationHelper.changeLanguage(LanguageRepository.language, lifecycleScope, allViews)
+    }
 
     private fun loadPets(testHouseholdId: String) {
         CoroutineScope(Dispatchers.Main).launch {

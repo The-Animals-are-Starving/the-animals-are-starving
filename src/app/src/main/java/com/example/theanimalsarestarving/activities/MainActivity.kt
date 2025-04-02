@@ -31,6 +31,7 @@ import com.example.theanimalsarestarving.repositories.CurrUserRepository
 import com.example.theanimalsarestarving.repositories.HouseholdRepository
 import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.activities.TranslationHelper
+import com.example.theanimalsarestarving.repositories.LanguageRepository
 
 import com.example.theanimalsarestarving.utils.AppUtils
 import com.google.android.gms.tasks.OnCompleteListener
@@ -50,7 +51,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mainRepository: MainRepository
     private lateinit var apiService: ApiService
-    private lateinit var translationHelper: TranslationHelper  // Declare the TranslationHelper instance
+    public lateinit var translationHelper: TranslationHelper  // Declare the TranslationHelper instance
 
     //buttons
     private lateinit var feedingButton: Button
@@ -216,14 +217,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         translateFrenchButton.setOnClickListener {
+            Log.d(TAG, "currLanguage: ${LanguageRepository.language}")
             // Collect all views dynamically and change the language to French
-            val allViews = getAllViews(findViewById(R.id.main)) // Replace with actual layout ID
+            val allViews = translationHelper.getAllViews(findViewById(R.id.main)) // Replace with actual layout ID
             translationHelper.changeLanguage("fr", lifecycleScope, allViews)
         }
 
         translateEnglishButton.setOnClickListener {
             // Collect all views dynamically and change the language to English
-            val allViews = getAllViews(findViewById(R.id.main)) // This will now return a List<View>
+            val allViews = translationHelper.getAllViews(findViewById(R.id.main)) // This will now return a List<View>
             translationHelper.changeLanguage("en", lifecycleScope, allViews)
         }
 
@@ -399,25 +401,6 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, CreateHouseholdActivity::class.java)
         startActivity(intent)
         finish() // Finish MainActivity so user can't come back by pressing back
-    }
-
-    fun getAllViews(root: View): List<View> {
-        val views = mutableListOf<View>()
-
-        // Check if the root view is one of the target types (TextView, Button, EditText)
-        if (root is TextView || root is Button || root is EditText) {
-            views.add(root)  // Add this view to the list
-        }
-
-        // If the root view is a ViewGroup, iterate over its children and add them recursively
-        if (root is ViewGroup) {
-            for (i in 0 until root.childCount) {
-                val child = root.getChildAt(i)
-                views.addAll(getAllViews(child))  // Recursively collect views
-            }
-        }
-
-        return views  // Return the list of views
     }
 
 }

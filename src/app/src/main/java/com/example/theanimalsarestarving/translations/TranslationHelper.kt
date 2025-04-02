@@ -2,6 +2,7 @@ package com.example.theanimalsarestarving.activities
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -10,6 +11,7 @@ import android.widget.TextView
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.example.theanimalsarestarving.BuildConfig
 import com.example.theanimalsarestarving.R
+import com.example.theanimalsarestarving.repositories.LanguageRepository
 import com.google.cloud.translate.Translate
 import com.google.cloud.translate.TranslateOptions
 import com.google.cloud.translate.Translation
@@ -18,6 +20,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+private const val TAG = "TranslationHelper"
 
 class TranslationHelper(private val context: Context) {
 
@@ -81,8 +84,9 @@ class TranslationHelper(private val context: Context) {
         }
     }
 
+
     // Get all views in the layout for translation
-    private fun getAllViews(root: View): List<View> {
+     fun getAllViews(root: View): List<View> {
         val views = mutableListOf<View>()
         if (root is TextView || root is Button || root is EditText) {
             views.add(root)
@@ -104,6 +108,9 @@ class TranslationHelper(private val context: Context) {
         lifecycleScope: LifecycleCoroutineScope,
         views: List<View>
     ) {
+
+        Log.d(TAG, "setting language: $language")
+
         lifecycleScope.launch {
             // Perform translation in the background
             for (view in views) {
@@ -124,6 +131,8 @@ class TranslationHelper(private val context: Context) {
                     }
                 }
             }
+            LanguageRepository.language = language
+            Log.d(TAG, "Language Set: ${LanguageRepository.language}")
         }
     }
 }
