@@ -11,9 +11,10 @@ object NetworkInitializer {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val apiService = retrofit.create(ApiService::class.java)
-        val mainRepository = MainRepository(apiService)
+        val userApiService = retrofit.create(UserApiService::class.java)
+        val mainRepository = MainRepository(apiService, userApiService)
         // Initialize your network manager or any other singletons here
-        NetworkManager.initialize(apiService, mainRepository)
+        NetworkManager.initialize(apiService, mainRepository, userApiService)
         return Pair(apiService, mainRepository)
     }
 }

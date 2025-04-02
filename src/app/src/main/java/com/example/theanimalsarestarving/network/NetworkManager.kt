@@ -7,11 +7,13 @@ object NetworkManager {
     // Singleton instances for ApiService and MainRepository
     lateinit var apiService: ApiService
     lateinit var mainRepository: MainRepository
+    lateinit var userApiService: UserApiService
 
     // Initialize the singleton with instances of ApiService and MainRepository
-    fun initialize(apiService: ApiService, mainRepository: MainRepository) {
+    fun initialize(apiService: ApiService, mainRepository: MainRepository, userApiService: UserApiService) {
         this.apiService = apiService
         this.mainRepository = mainRepository
+        this.userApiService = userApiService
     }
 
     // Optional: If you want to check if it has been initialized

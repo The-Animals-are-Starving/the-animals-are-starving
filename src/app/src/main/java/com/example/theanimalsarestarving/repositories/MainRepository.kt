@@ -7,16 +7,14 @@ import com.example.theanimalsarestarving.models.FeedingLog
 import com.example.theanimalsarestarving.models.Pet
 import com.example.theanimalsarestarving.models.User
 import com.example.theanimalsarestarving.network.ApiService
+import com.example.theanimalsarestarving.network.UserApiService
 import retrofit2.Call
 import retrofit2.Response
 
-//TODO: MOVE THESE FUNCTIONS OUT OF MAINREPOSITORY
-class MainRepository(private val apiService: ApiService) {
-
-
+class MainRepository(private val apiService: ApiService, private val userApiService: UserApiService) {
     fun getAllUsers(householdId: String, callback: (List<User>?) -> Unit) {
         Log.d("MainRepository", "Fetching users from household: $householdId")
-        apiService.getAllUsers(householdId).enqueue(object : retrofit2.Callback<List<User>> {
+        userApiService.getAllUsers(householdId).enqueue(object : retrofit2.Callback<List<User>> {
             override fun onResponse(call: Call<List<User>>, response: Response<List<User>>) {
                 if (response.isSuccessful) {
                     val users = response.body()
@@ -39,7 +37,7 @@ class MainRepository(private val apiService: ApiService) {
 
     fun addUser(user: User, callback: (User?) -> Unit) {
         user.householdId = HouseholdRepository.getCurrentHousehold()?._id.toString()
-        apiService.addUser(user).enqueue(object : retrofit2.Callback<User> { // this creates the user
+        userApiService.addUser(user).enqueue(object : retrofit2.Callback<User> { // this creates the user
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 if (response.isSuccessful) {
                     val newUser = response.body()
@@ -65,7 +63,7 @@ class MainRepository(private val apiService: ApiService) {
             "email" to email,
             "role" to newRole
             )
-        apiService.updateUserRole(email, reqBody).enqueue(object : retrofit2.Callback<User> {
+        userApiService.updateUserRole(email, reqBody).enqueue(object : retrofit2.Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 callback(response.isSuccessful)
             }
@@ -79,7 +77,7 @@ class MainRepository(private val apiService: ApiService) {
 
     fun updateUserToken(email: String, token: String, callback: (Boolean) -> Unit) {
         val reqBody = mapOf("FCMToken" to token)
-        apiService.updateUserToken(email, reqBody).enqueue(object : retrofit2.Callback<User> {
+        userApiService.updateUserToken(email, reqBody).enqueue(object : retrofit2.Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 callback(response.isSuccessful)
             }

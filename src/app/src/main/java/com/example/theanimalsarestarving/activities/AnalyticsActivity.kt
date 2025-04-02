@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.models.Household
 import com.example.theanimalsarestarving.network.NetworkManager.apiService
+import com.example.theanimalsarestarving.network.NetworkManager.userApiService
 import com.example.theanimalsarestarving.repositories.HouseholdRepository
 import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.utils.AppUtils
@@ -34,7 +35,7 @@ class AnalyticsActivity : AppCompatActivity() {
 
     private fun refreshAnalytics(householdId: String) {
         val anomalyTable = findViewById<TableLayout>(R.id.analyticsBox)
-        val repository = MainRepository(apiService)
+        val repository = MainRepository(apiService, userApiService)
 
         repository.getFeedingAnomalies(householdId) { anomalies ->
             Log.d("Analytics", anomalies.toString())

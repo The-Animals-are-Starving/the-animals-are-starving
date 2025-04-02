@@ -21,6 +21,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import com.example.theanimalsarestarving.network.ApiService
+import com.example.theanimalsarestarving.network.UserApiService
 
 object NotificationHelper {
 
@@ -73,7 +74,7 @@ object NotificationHelper {
         }
     }
 
-    fun showNotifSend(context: Context, apiService: ApiService) {
+    fun showNotifSend(context: Context, apiService: ApiService, userApiService: UserApiService) {
         val builder = AlertDialog.Builder(context)
         val layout = LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
@@ -83,7 +84,7 @@ object NotificationHelper {
         val currentUserName = sharedPreferences.getString("name", "").toString()
 
         // Fetch users from the repository (this example uses a callback)
-        val repository = com.example.theanimalsarestarving.repositories.MainRepository(apiService)
+        val repository = com.example.theanimalsarestarving.repositories.MainRepository(apiService, userApiService)
         repository.getAllUsers(HouseholdRepository.getCurrentHousehold()?._id.toString()) { users ->
             if (users != null) {
                 val otherUsers = users.filter { it.name != currentUserName }

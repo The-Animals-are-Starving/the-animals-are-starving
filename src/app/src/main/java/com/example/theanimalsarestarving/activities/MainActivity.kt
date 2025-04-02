@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mainRepository: MainRepository
     private lateinit var apiService: com.example.theanimalsarestarving.network.ApiService
+    private lateinit var userApiService: com.example.theanimalsarestarving.network.UserApiService
     lateinit var translationHelper: TranslationHelper
 
     private lateinit var feedingButton: Button
@@ -129,7 +130,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
         notifyButton.setOnClickListener {
-            NotificationHelper.showNotifSend(this, apiService)
+            NotificationHelper.showNotifSend(this, apiService, userApiService)
         }
         manageButton.setOnClickListener {
             val intent = Intent(this, ManageHouseholdActivity::class.java)

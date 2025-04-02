@@ -12,10 +12,12 @@ import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.example.theanimalsarestarving.activities.MainActivity
 import com.example.theanimalsarestarving.network.NetworkManager.apiService
+import com.example.theanimalsarestarving.network.NetworkManager.userApiService
 import com.example.theanimalsarestarving.repositories.CurrUserRepository
 import com.example.theanimalsarestarving.repositories.MainRepository
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+
 
 const val channelId = "notification_channel"
 const val channelName = "com.example.theanimalsarestarving"
@@ -34,7 +36,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         val email = CurrUserRepository.getCurrUser()?.email.toString()
 
-        val repository = MainRepository(apiService)
+        val repository = MainRepository(apiService, userApiService)
         repository.updateUserToken(email, token) { success ->
 
             if (success) {
