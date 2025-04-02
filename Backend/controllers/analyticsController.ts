@@ -7,10 +7,6 @@ import Household from "../models/Household";
 export const getFeedingAnomalies = async (req: Request, res: Response): Promise<void> => {
   try {
     const { householdId } = req.params;
-    if (!householdId) {
-      res.status(400).json({ message: "householdId is required" });
-      return;
-    }
 
     let household = null;
       if (householdId) {
@@ -68,15 +64,15 @@ export const getFeedingAnomalies = async (req: Request, res: Response): Promise<
             largeDeviation = true;
           }
 
-          // Compare log timestamp with scheduled feeding time
-          const scheduledTimeStr = pet.feedingTime;
-          const [scheduledHour, scheduledMinute] = scheduledTimeStr.split(":").map(Number);
-          const scheduledDate = new Date(log.timestamp);
-          scheduledDate.setHours(scheduledHour, scheduledMinute, 0, 0);
-          // Allow a 30 minute delay threshold
-          const lateThreshold = 30 * 60 * 1000;
+          const logDateInVan = new Date(
+            log.timestamp.toLocaleString("en-US", { timeZone: "America/Vancouver" })
+          );
+          const [scheduledHour, scheduledMinute] = pet.feedingTime.split(":").map(Number);
+          const scheduledDateInVan = new Date(logDateInVan);
+          scheduledDateInVan.setHours(scheduledHour, scheduledMinute, 0, 0);
+          const lateThreshold = 30 * 60 * 1000; // 30 minutes in milliseconds
 
-          if (log.timestamp.getTime() - scheduledDate.getTime() > lateThreshold) {
+          if (logDateInVan.getTime() - scheduledDateInVan.getTime() > lateThreshold) {
             significantlyLate = true;
           }
         }
@@ -107,74 +103,50 @@ export const getFeedingAnomalies = async (req: Request, res: Response): Promise<
   }
 };
 
-// Helper function to get the ISO week number of a given date
-function getWeekNumber(date: Date): number {
-  const d = new Date(date.getTime());
-  d.setHours(0, 0, 0, 0);
-  // Adjust to nearest Thursday (ISO week rule)
-  d.setDate(d.getDate() + 4 - (d.getDay() || 7));
-  const yearStart = new Date(d.getFullYear(), 0, 1);
-  const weekNo = Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
-  return weekNo;
-}
-
-// Compute user rankings based on feeding contributions using three nested loops
 export const getUserRankings = async (req: Request, res: Response): Promise<void> => {
   try {
     const { householdId } = req.params;
-    if (!householdId) {
-        res.status(400).json({ message: "householdId is required" });
-        return;
-    }
 
-    // Retrieve all logs for the given household
-    const logs: ILog[] = await Log.find({ householdId: new Types.ObjectId(householdId) });
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+
+    const logs: ILog[] = await Log.find({ 
+      householdId: new Types.ObjectId(householdId),
+      timestamp: { $gte: startOfMonth, $lt: startOfNextMonth }
+    });
+    
     if (!logs.length) {
-        res.json({ userContributions: {} });
-        return;
+      res.json({ rankings: [] });
+      return;
     }
 
-    // Group logs by pet and then by week
-    const petWeeklyLogs: { [petName: string]: { [week: number]: ILog[] } } = {};
+    const userTotals: { [userName: string]: number } = {};
+    let overallTotal = 0;
+
     logs.forEach(log => {
-      const pet = log.petName.toString();
-      const week = getWeekNumber(log.timestamp);
-      if (!petWeeklyLogs[pet]) {
-        petWeeklyLogs[pet] = {};
+      overallTotal += log.amount;
+      const user = log.userName.toString();
+      if (!userTotals[user]) {
+        userTotals[user] = 0;
       }
-      if (!petWeeklyLogs[pet][week]) {
-        petWeeklyLogs[pet][week] = [];
-      }
-      petWeeklyLogs[pet][week].push(log);
+      userTotals[user] += log.amount;
     });
 
-    // Compute user contributions with three nested loops:
-    // Loop 1: Iterate over pets.
-    // Loop 2: Iterate over weeks for each pet.
-    // Loop 3: Iterate over each log for that week.
-    const userContributions: { [userName: string]: { [petName: string]: Array<{ week: number; contribution: number }> } } = {};
-    for (const pet in petWeeklyLogs) {
-      for (const week in petWeeklyLogs[pet]) {
-        const weekNumber = Number(week);
-        const weekLogs = petWeeklyLogs[pet][weekNumber];
-        const totalFood = weekLogs.reduce((sum, log) => sum + log.amount, 0);
-        if (totalFood === 0) continue;
-
-        weekLogs.forEach(log => {
-          const contribution = (log.amount / totalFood) * 100;
-          const user = log.userName.toString();
-          if (!userContributions[user]) {
-            userContributions[user] = {};
-          }
-          if (!userContributions[user][pet]) {
-            userContributions[user][pet] = [];
-          }
-          userContributions[user][pet].push({ week: weekNumber, contribution });
-        });
-      }
+    if (overallTotal === 0) {
+      res.json({ rankings: [] });
+      return;
     }
 
-    res.json({ userContributions });
+    // Create an array of ranking objects sorted by contribution percentage descending
+    const rankings = Object.entries(userTotals)
+      .map(([user, total]) => ({
+        user,
+        contribution: (total / overallTotal) * 100,
+      }))
+      .sort((a, b) => b.contribution - a.contribution);
+
+    res.json({ rankings });
   } catch (error) {
     console.error("Error computing user rankings:", error);
     res.status(500).json({ message: "Internal server error" });
