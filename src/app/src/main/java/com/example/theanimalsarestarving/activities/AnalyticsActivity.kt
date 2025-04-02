@@ -36,7 +36,7 @@ class AnalyticsActivity : AppCompatActivity() {
                 setPadding(8, 8, 8, 8)
             }
 
-            listOf("Pet Name", "Wrong Amount", "Late", "Avg Amount", "Feeding Count").forEach { header ->
+            listOf("Pet Name", "Feeding Amount", "Feeding Time", "Avg Amount", "Feeding Count").forEach { header ->
                 val headerView = TextView(this@AnalyticsActivity).apply {
                     text = header
                     textSize = 18f

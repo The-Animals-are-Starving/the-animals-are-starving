@@ -59,16 +59,15 @@ export const getPetsByHousehold = async (req: Request, res: Response) => {
 export const updatePetFeedingStatus = async (req: Request, res: Response): Promise<void> => {
     try {
         const { petName } = req.params;
-        const { amount, fed } = req.body;
-        const isFed = (fed == 1);
+        const { fed } = req.body;
 
-        if (isFed === undefined) {
-            res.status(400).json({ message: "'isFed' field is required" });
+        if (fed === undefined) {
+            res.status(400).json({ message: "'fed' field is required" });
             return;
         }
 
-        if (typeof isFed !== "boolean") {
-            res.status(400).json({ message: "'isFed' must be a boolean" });
+        if (typeof fed !== "boolean") {
+            res.status(400).json({ message: "'fed' must be a boolean" });
             return;
         }
         console.log("Attempting to feed pet name: %s", petName)
@@ -84,7 +83,7 @@ export const updatePetFeedingStatus = async (req: Request, res: Response): Promi
         const petId = petObj._id;
 
         const updateFields: Partial<IPet> = { fed };
-        if (isFed === true) {
+        if (fed === true) {
             updateFields.lastTimeFed = new Date();
         }
 
@@ -122,7 +121,7 @@ export const removePet = async (req: Request, res: Response): Promise<void> => {
             return;
         }
 
-        res.json({ message: "Pet removed successfully" });
+        res.json(true);
     } catch (error) {
         res.status(500).json({ message: "Error removing pet", error });
     }

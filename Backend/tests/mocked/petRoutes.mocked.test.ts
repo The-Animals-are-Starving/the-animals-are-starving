@@ -276,7 +276,7 @@ describe("Full Flow: Create User ➔ Create Household ➔ Add/Manage Pets", () =
 
     const res = await request(app).delete(`/pet/${petName}`);
     expect(res.status).toBe(200);
-    expect(res.body.message).toBe("Pet removed successfully");
+    expect(res.body).toBe(true);
     expect(Pet.findOne).toHaveBeenCalledWith({ name: petName });
     expect(Pet.findByIdAndDelete).toHaveBeenCalledWith("pet123");
   });

@@ -11,6 +11,11 @@ export const logFeeding = async (req: Request, res: Response): Promise<void> => 
         const { petName } = req.params;
         const {userEmail, householdId, feedingAmount } = req.body;
 
+        var amount = parseInt(feedingAmount)
+        if (isNaN(amount)) {
+            amount = 1;
+        }
+
         // Validate user
         console.log("Searching for user with email, %s", userEmail);
         const user = await User.findOne({ email: userEmail });
@@ -38,14 +43,14 @@ export const logFeeding = async (req: Request, res: Response): Promise<void> => 
             }
             console.log("Found household, %s", household);
         }
-
+        
         // Create log entry
         const log = new Log({
             householdId: householdId,
             petName: petName,
             userName: user.name,
             timestamp: new Date(),
-            amount: parseInt(feedingAmount)
+            amount: amount
         });
 
         await log.save();

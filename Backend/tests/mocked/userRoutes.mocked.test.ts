@@ -291,7 +291,7 @@ describe("DELETE /:email - DeleteUser (Mocked)", () => {
 
     const res = await request(app).delete(`/${email}`);
     expect(res.status).toBe(200);
-    expect(res.body.message).toBe("User deleted successfully");
+    expect(res.body).toBe(true);
   });
 
   // Test: Return 404 when trying to delete a non-existent user.

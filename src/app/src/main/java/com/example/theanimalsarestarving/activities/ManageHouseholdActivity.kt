@@ -341,6 +341,8 @@ class ManageHouseholdActivity : AppCompatActivity() {
             }
         return roleSpinner
     }
+
+
     private fun refreshUsers() {
         val userListContainer = findViewById<LinearLayout>(R.id.userListContainer)
         userListContainer.removeAllViews() // Clear existing user list
@@ -480,14 +482,17 @@ class ManageHouseholdActivity : AppCompatActivity() {
                         Log.d("DeleteUser", "User deleted successfully")
                     } else {
                         Log.d("DeleteUser", "User not found or already deleted")
+                        callback(false)
                     }
                 } else {
                     Log.e("DeleteUser", "Failed with code: ${response.code()}")
+                    callback(false)
                 }
             }
 
             override fun onFailure(call: Call<Boolean>, t: Throwable) {
                 Log.e("DeleteUser", "Error: ${t.message}")
+                callback(false)
             }
         })
         callback(true)
@@ -501,19 +506,22 @@ class ManageHouseholdActivity : AppCompatActivity() {
                     val success = response.body() ?: false
                     if (success) {
                         Log.d("DeletePet", "Pet deleted successfully")
+                        callback(true)
                     } else {
                         Log.d("DeletePet", "Pet not found or already deleted")
+                        callback(false)
                     }
                 } else {
                     Log.e("DeletePet", "Failed with code: ${response.code()}")
+                    callback(false)
                 }
             }
 
             override fun onFailure(call: Call<Boolean>, t: Throwable) {
                 Log.e("DeletePet", "Error: ${t.message}")
+                callback(false)
             }
         })
-        callback(true)
     }
 
 }
