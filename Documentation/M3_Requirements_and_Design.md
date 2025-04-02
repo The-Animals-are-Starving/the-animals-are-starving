@@ -5,15 +5,17 @@
 1. **Reworked Interfaces (2025-03-03)**
     - Under **Designs Specification**, our old interfaces used java style formatting from frontend communication with the backend, when it should've been REST. These interfaces were converted to REST style. We also had to add/modify/remove some interfaces as we gained a better image of what it would take to actually implement them. There were many interfaces that we needed when coding that we did not account for in milestone 3 that have now been added. We also didn't consider the many different actions needed that become clear once coding.
 
-1. **Added Contributions (2025-03-03)**
+2. **Added Contributions (2025-03-03)**
     - Under **Contributions**, added the contributions made towards completing milestone 4. Reformatted milestone 3 contributions to match the look.
 
-1. **Small FR Edits (2025-03-19)**
+3. **Small FR Edits (2025-03-19)**
     - Made small adjustments to the functional requirement wordings. Removed unecessary "scrolls", changed "main page" to "home page", added more details for clairity. Changed "Add User/Pet" to "New User/Pet". Updated the way to modify restriction level to match implementation, to allow for editing. All of these changes are for clairity.
 
-1.  **NFR and numbering (2025-03-21)**
+4.  **NFR and numbering (2025-03-21)**
     - Adjusted the NFR and numbering of the failure scenarios based on TA feedback from M3
 
+5.  **NFR Justification (2025-04-01)**
+    - Added justifications for values in the NFRs based on TA feedback from M5
 
 ## 2. Project Description
 “Did you feed the animals?” “Are the animals fed?” “Anyone feed the animals?” These texts flood the family group chat every day. The kids don’t respond. Mom is still at work. No one knows if the beasts have been fed. The beasts also lie, as though they are starving and wasting away even if they already got dinner. Many task managing apps out there are WAY too complicated. TAS is straightforward app that indicates whether or not your beloved household pet has been fed. To go even further, there will be a minimal mode, for those living with grandparents, small children, or a grumpy father that does not want to be bothered with a new app. Simple, easy, convenient. 
@@ -191,7 +193,7 @@ three mouse clicks." While it may not be the end all be all, it is a sound guide
 <a name="nfr2"></a>    
 2. **Ease of use**
     - **Description**: Requests made to the backend should be retrieved within 2 seconds with up to 100 concurrent users.
-    - **Justification**: A key secondary function of any app is processing speed. Further since this is an app meant to speed up household work for the pets, it would be very problematic if the app caused more frustrations with slow API requests. The timing of 2 seconds is, again, a general rule for API calls, as referenced in [an article by OctoPerf](https://blog.octoperf.com/performance-response-times/#less-than-2-seconds), stating that "for complex activities, such as browsing products that vary along multiple dimensions, 2 seconds represents an important response-time limit," which is true of our database queries.
+    - **Justification**: A key secondary function of any app is processing speed. Further since this is an app meant to speed up household work for the pets, it would be very problematic if the app caused more frustrations with slow API requests. The timing of 2 seconds is, again, a general rule for API calls, as referenced in [an article by OctoPerf](https://blog.octoperf.com/performance-response-times/#less-than-2-seconds), stating that "for complex activities, such as browsing products that vary along multiple dimensions, 2 seconds represents an important response-time limit," which is true of our database queries. In terms of the number of users, we feel that expecting a maximum of 100 concurrent users is reasonable considering our class size and is supported by [Blazemeter's bnechmark](https://help.blazemeter.com/docs/guide/performance-kpis-higher-number-concurrent-users.htm) for small scale applications.
 
 
 ## 4. Designs Specification
@@ -328,9 +330,10 @@ three mouse clicks." While it may not be the end all be all, it is a sound guide
 ### **4.7. Non-Functional Requirements Design**
 1. [**Accessibility**](#nfr1)
     - **Validation**: 
-The app will support multiple languages, clear navigation, large readable fonts, high-contrast visuals, and intuitive icons to ensure accessibility for users with varying abilities. Key features will be easily accessible from the main screen or through shortcuts for a seamless experience.
+The app will support multiple languages, clear navigation, large readable fonts, high-contrast visuals, and intuitive icons to ensure accessibility for users with varying abilities. Any action that can be taken should take no more than 3 clicks.
 2. [**Ease of Use**](#nfr2)
-    - **Validation**: The app will have easy to access endpoints and optimized algorithms that allow concurrent requests.
+    - **Validation**: The app will have easy to access endpoints and optimized algorithms that allow up to 100 concurrent requests with response times below 2 seconds.
+See 3.5 for justification of values.
 
 
 ### **4.8. Main Project Complexity Design**
