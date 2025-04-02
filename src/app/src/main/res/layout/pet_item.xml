@@ -76,7 +76,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="by PERSON at TIME"
                 android:textSize="16sp"
                 android:visibility="gone"
                 android:textColor="@color/black"
