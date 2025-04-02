@@ -23,6 +23,8 @@ import com.example.theanimalsarestarving.helpers.NotificationHelper
 import com.example.theanimalsarestarving.activities.TranslationHelper
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.launch
+import org.apache.http.HttpException
+import java.io.IOException
 
 private const val TAG = "MainActivity"
 
@@ -102,8 +104,10 @@ class MainActivity : AppCompatActivity() {
                     setUpButtons()
                     applyWindowInsets()
                 }
-            } catch (e: Exception) {
-                Log.e(TAG, "Error during initialization: ${e.message}")
+            } catch (e: HttpException) {
+                Log.e(TAG, "HttpException fetching user: ${e.message}")
+            } catch (e: IOException) {
+                Log.e("TAG", "IOException fetching user: ${e.message}")
             }
             updateFirebaseMessagingToken(email)
         }
