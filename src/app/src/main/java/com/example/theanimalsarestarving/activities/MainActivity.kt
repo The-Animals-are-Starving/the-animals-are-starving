@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity() {
         val sharedPreferences: SharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
 
         val email = sharedPreferences.getString("userEmail", "").toString()
-        translationHelper = TranslationHelper(this)
+        translationHelper = TranslationHelper()
 
         lifecycleScope.launch {
             try {
@@ -198,7 +198,9 @@ class MainActivity : AppCompatActivity() {
 
         feedingButton.setOnClickListener {
             val intent = Intent(this, FeedingActivity::class.java)
+            intent.putExtra("translationHelperVar", translationHelper)
             startActivity(intent)
+
         }
         notifyButton.setOnClickListener {
             showNotifSend()

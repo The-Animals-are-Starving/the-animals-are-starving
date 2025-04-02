@@ -40,12 +40,16 @@ class FeedingActivity : AppCompatActivity() {
     private lateinit var petContainer: LinearLayout
     private lateinit var mainRepository: MainRepository
     private lateinit var apiService: ApiService
-    private lateinit var translationHelper: TranslationHelper  // Declare the TranslationHelper instance
+    lateinit var translationHelper: TranslationHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.feeding_activity)
-        translationHelper = TranslationHelper(this)
+        val bundle: Bundle? = intent.extras
+        if (bundle != null) {
+            translationHelper = intent.getSerializableExtra("translationHelperVar") as TranslationHelper
+        }
+
 
         petContainer = findViewById(R.id.petContainer)
 

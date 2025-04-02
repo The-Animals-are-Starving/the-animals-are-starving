@@ -19,25 +19,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.io.Serializable
 
 private const val TAG = "TranslationHelper"
 
-class TranslationHelper(private val context: Context) {
-
-    private val sharedPreferences = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
-
-    // Save the selected language to SharedPreferences
-    fun setLanguagePreference(languageCode: String) {
-        with(sharedPreferences.edit()) {
-            putString("selected_language", languageCode)
-            apply()
-        }
-    }
-
-    // Retrieve the selected language from SharedPreferences
-    fun getLanguagePreference(): String? {
-        return sharedPreferences.getString("selected_language", "en") // Default to English
-    }
+class TranslationHelper() : Serializable {
 
     // Suspend function for translating a single string
     suspend fun translateString(value: String, targetLanguage: String): String {
