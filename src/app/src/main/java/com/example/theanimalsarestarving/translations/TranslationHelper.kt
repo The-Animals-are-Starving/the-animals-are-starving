@@ -25,7 +25,7 @@ import java.io.Serializable
 
 private const val TAG = "TranslationHelper"
 
-class TranslationHelper() : Serializable {
+class TranslationHelper : Serializable {
 
     // Suspend function for translating a single string
     suspend fun translateString(value: String, targetLanguage: String): String {
