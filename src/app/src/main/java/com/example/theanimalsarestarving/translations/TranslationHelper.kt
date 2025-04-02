@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.lifecycle.LifecycleCoroutineScope
+import com.example.theanimalsarestarving.BuildConfig
 import com.example.theanimalsarestarving.R
 import com.google.cloud.translate.Translate
 import com.google.cloud.translate.TranslateOptions
@@ -17,7 +18,6 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-private val TRANSLATE_API_KEY = "AIzaSyD4ykkYCFgjq6OdthtgF_FhVWUDdbwAQtM"
 
 class TranslationHelper(private val context: Context) {
 
@@ -40,7 +40,7 @@ class TranslationHelper(private val context: Context) {
     suspend fun translateString(value: String, targetLanguage: String): String {
         return withContext(Dispatchers.IO) {
             val translate = TranslateOptions.newBuilder()
-                .setApiKey(TRANSLATE_API_KEY) // Replace with your actual API key
+                .setApiKey(BuildConfig.GOOGLE_TRANSLATE_API) // Replace with your actual API key
                 .build()
                 .service
 

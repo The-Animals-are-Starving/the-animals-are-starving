@@ -28,6 +28,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "WEB_CLIENT_ID", "\"$webClientId\"")
+        buildConfigField("String", "GOOGLE_TRANSLATE_API", "\"${project.findProperty("GOOGLE_TRANSLATE_API")}\"")
     }
 
     buildTypes {
