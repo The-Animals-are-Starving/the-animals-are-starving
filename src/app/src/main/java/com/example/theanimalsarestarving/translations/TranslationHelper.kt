@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.core.text.HtmlCompat
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
 import com.example.theanimalsarestarving.BuildConfig
@@ -38,7 +39,11 @@ class TranslationHelper() : Serializable {
                 value,
                 Translate.TranslateOption.targetLanguage(targetLanguage)
             )
-            translation.translatedText
+            val translatedText = translation.translatedText
+
+            val decodedText = HtmlCompat.fromHtml(translatedText, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
+
+            decodedText
         }
     }
 

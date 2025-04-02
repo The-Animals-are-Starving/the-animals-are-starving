@@ -54,6 +54,9 @@
     <string name="french">French</string>
     <string name="english">English</string>
     <string name="analytic">Analytics</string>
+    <string name="add_new_user">Add New User</string>
+    <string name="pet_name">Pet Name</string>
+
 
     <!-- Array to hold the keys of all strings you want to translate -->
     <string-array name="all_string_ids">

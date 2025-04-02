@@ -69,7 +69,6 @@ class ManageHouseholdActivity : AppCompatActivity() {
         refreshUsers()
         refreshPets()
 
-        translationHelper.updateLanguageUI(translationHelper, findViewById(R.id.manage_household_activity), lifecycleScope)
 
     }
 
@@ -115,6 +114,8 @@ class ManageHouseholdActivity : AppCompatActivity() {
         builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
 
         builder.show()
+        translationHelper.updateLanguageUI(translationHelper, findViewById(R.id.manage_household_activity), lifecycleScope)
+
     }
 
     private fun addUser(name: String, email: String) {
@@ -403,6 +404,8 @@ class ManageHouseholdActivity : AppCompatActivity() {
                         userListContainer.addView(userRow)
 
                     }
+                    translationHelper.updateLanguageUI(translationHelper, findViewById(R.id.manage_household_activity), lifecycleScope)
+
                 } else {
                     AppUtils.alertMessage(this, "Failed to fetch users. Please try again.")
                 }
@@ -444,6 +447,8 @@ class ManageHouseholdActivity : AppCompatActivity() {
                         petRow.addView(deleteButton)
                         petListContainer.addView(petRow)
                     }
+                    translationHelper.updateLanguageUI(translationHelper, findViewById(R.id.manage_household_activity), lifecycleScope)
+
                 } else {
                     AppUtils.alertMessage(this, "Failed to fetch pets. Please try again.")
                 }

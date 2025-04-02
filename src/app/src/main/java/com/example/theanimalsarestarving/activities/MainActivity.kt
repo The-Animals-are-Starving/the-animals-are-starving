@@ -350,7 +350,9 @@ class MainActivity : AppCompatActivity() {
 
         builder.setView(layout)
         builder.setPositiveButton("Done") { dialog, _ -> dialog.dismiss() }
+
         builder.show()
+
     }
 
     private fun sendNotif(email: String) { // May pass user as object instead

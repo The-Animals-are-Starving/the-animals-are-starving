@@ -37,7 +37,6 @@ class HistoryActivity : AppCompatActivity() {
 
         refreshHistory(householdId)
 
-        translationHelper.updateLanguageUI(translationHelper, findViewById(R.id.history_activity), lifecycleScope)
 
     }
     private fun refreshHistory(householdId: String) {
@@ -103,6 +102,8 @@ class HistoryActivity : AppCompatActivity() {
                         historyTable.addView(logRow)
                     }
                 }
+                translationHelper.updateLanguageUI(translationHelper, findViewById(R.id.history_activity), lifecycleScope)
+
             } else {
                 AppUtils.alertMessage(this, "Failed to fetch logs. Please try again.")
 

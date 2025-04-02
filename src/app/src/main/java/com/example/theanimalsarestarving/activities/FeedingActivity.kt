@@ -70,7 +70,6 @@ class FeedingActivity : AppCompatActivity() {
         loadPets(HouseholdRepository.getCurrentHousehold()?._id.toString())
 
         Log.d(TAG, "Current Language: ${LanguageRepository.language}")
-        translationHelper.updateLanguageUI(translationHelper, findViewById(R.id.feeding_activity), lifecycleScope)
     }
 
 
@@ -183,6 +182,8 @@ class FeedingActivity : AppCompatActivity() {
 
         // Add the new pet layout to the container
         petContainer.addView(petLayout)
+        translationHelper.updateLanguageUI(translationHelper, findViewById(R.id.feeding_activity), lifecycleScope)
+
     }
 
 

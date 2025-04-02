@@ -29,7 +29,6 @@ class AnalyticsActivity : AppCompatActivity() {
         val householdId = HouseholdRepository.getCurrentHousehold()?._id.toString()
 
         refreshAnalytics(householdId)
-        translationHelper.updateLanguageUI(translationHelper, findViewById(R.id.analytics_activity), lifecycleScope)
 
     }
 
@@ -45,7 +44,7 @@ class AnalyticsActivity : AppCompatActivity() {
                 setPadding(8, 8, 8, 8)
             }
 
-            listOf("Pet Name", "Feeding Amount", "Feeding Time", "Avg Amount", "Feeding Count").forEach { header ->
+            listOf(getString(R.string.pet_name), "Feeding Amount", "Feeding Time", "Avg Amount", "Feeding Count").forEach { header ->
                 val headerView = TextView(this@AnalyticsActivity).apply {
                     text = header
                     textSize = 18f
@@ -109,6 +108,8 @@ class AnalyticsActivity : AppCompatActivity() {
                     }
 
                 }
+                translationHelper.updateLanguageUI(translationHelper, findViewById(R.id.analytics_activity), lifecycleScope)
+
             } else {
                 AppUtils.alertMessage(this, "Failed to fetch analytics. Please try again.")
             }
