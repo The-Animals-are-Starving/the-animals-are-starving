@@ -1,1 +1,3 @@
-# the-animals-are-starving
+# The Animals are Starving
+
+“Did you feed the pets?” “Are the pets fed?” “Anyone feed the pets?” These texts flood the family group chat every day. The kids don’t respond. Mom is still at work. No one knows if the pets have been fed. The beasts also lie, as though they are starving and wasting away even if they already got dinner. Many task managing apps out there are WAY too complicated. TAS is straightforward app that indicates whether or not your beloved household pets have been fed. To go even further, there will be a minimal mode, for those living with grandparents, small children, or a grumpy father that does not want to be bothered with a new app. Simple, easy, convenient.
