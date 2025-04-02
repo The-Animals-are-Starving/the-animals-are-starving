@@ -262,10 +262,7 @@ three mouse clicks." While it may not be the end all be all, it is a sound guide
             - **Purpose**: Gets the feeding history for a given user.
         1. ```GET /analytics/rankings/:householdId```
             - **Purpose**: Gets the rankings of users based off feeding contributions for a given household.
-        1. ```POST /analytics/feeding-cost/:householdId```
-            - **Body**: { pricePerKg }
-            - **Purpose**: Uses feeding logs to predict the cost to feed the animals for the next month.
-        1. ```GET /analytics/anomalies/:householdId```
+        1. ```POST /analytics/anomalies/:householdId```
             - **Purpose**: Detects anomalies in feeding behavior.
         
 4. **Notifications**
@@ -337,100 +334,93 @@ See 3.5 for justification of values.
 
 
 ### **4.8. Main Project Complexity Design**
-**Feeding Data Analytics & Cost Prediction System**  
+
+**Feeding Data Analytics & Anomaly Detection System**  
+
 - **Description**:  
-  This system tracks pet feeding data, ranks users based on their feeding contributions, predicts monthly feeding costs, and detects anomalies in pet feeding patterns. The algorithm processes feeding logs, pet data, and food bag pricing to generate meaningful insights for users.  
+  This system tracks pet feeding data, ranks users based on their monthly feeding contributions, and detects anomalies in pet feeding patterns. The algorithm processes feeding logs, pet profiles, and household data to identify significant deviations in feeding amounts as well as delays relative to scheduled feeding times.
+
 - **Why complex?**:  
-  - The algorithm involves **nested loops** to calculate **weekly rankings** of users based on feeding contributions.  
-  - Uses a **moving average** over multiple weeks to predict feeding costs.  
-  - Implements **anomaly detection** using **standard deviation**, identifying unusual feeding patterns.  
-  - Processes multiple data sources (feeding logs, pet profiles, food pricing) and performs multi-step computations.  
+  - The algorithm involves **nested loops** for per-pet anomaly detection and per-user ranking aggregation.  
+  - Uses a **dynamic deviation threshold** (30% of the average feeding amount) to determine if a feeding event is abnormal.  
+  - Implements **late feeding detection** by comparing the actual feeding timestamp (adjusted to a specific time zone) against a scheduled feeding time with a 30-minute tolerance.  
+  - Integrates multiple data sources (feeding logs, pet profiles, household data) and performs multi-step computations for both anomaly detection and user ranking calculations.
+
 - **Design**:  
     - **Input**:  
       - **Feeding Log Data**:  
-        - `Pet ID`  
-        - `User ID` (who fed the pet)  
+        - `Household ID`  
+        - `Pet name`  
+        - `User name` (who fed the pet)  
         - `Amount of food fed (grams)`  
-        - `Date and time of feeding`  
+        - `Timestamp of feeding`  
       - **Pet Data**:  
-        - `Pet ID`  
-        - `Pet size (small, medium, large)`  
-      - **Food Bag Data**:  
-        - `Bag size (kg)`  
-        - `Price per bag`  
+        - `Pet name`  
+        - `Feeding time` (scheduled time, e.g., "10:00")  
+        - `Household ID`  
+      - **Household Data**:  
+        - `Household ID`  
+        - Additional household-related details  
     - **Output**:  
-      - **User rankings** based on weekly food contributions per pet.  
-      - **Total weekly food consumption** per pet.  
-      - **Predicted monthly feeding cost** based on past food consumption and bag prices.  
-      - **Anomalies** in pet feeding behavior, flagging sudden spikes or drops.  
+      - **Feeding Anomalies** for each pet:  
+         - `Large Deviation`: Boolean flag indicating if any feeding amount deviates by more than 30% from the average feeding amount.  
+         - `Significantly Late`: Boolean flag indicating if any feeding occurred more than 30 minutes after the scheduled time.  
+         - `Average Amount`: The computed average feeding amount.  
+         - `Feeding Count`: Number of feeding events recorded in the past week.  
+      - **User Rankings**: A sorted list of users with their contribution percentage relative to the total feeding amount for the current month.
+
     - **Main Computational Logic**:  
-      1. **Compute weekly food consumption per pet** by summing feeding log data.  
-      2. **Rank users** based on their relative contribution to feeding each pet.  
-      3. **Predict feeding costs** using a **4-week moving average**, adjusting for food bag sizes and prices.  
-      4. **Detect anomalies** by computing the **standard deviation** of feeding data and flagging outliers.  
+      1. **Retrieve Data**:  
+         - Fetch household details, pet profiles, and feeding logs (from the past week for anomaly detection and the current month for ranking calculations).  
+      2. **Anomaly Detection**:  
+         - For each pet in the household:  
+           - Filter logs from the past week associated with that pet.  
+           - Calculate the average feeding amount and set a deviation threshold at 30% of this average.  
+           - For each log:  
+             - Flag a **large deviation** if the log’s feeding amount differs from the average by more than the threshold.  
+             - Convert the log’s timestamp to the target time zone (e.g., Vancouver time) and compare it with the scheduled feeding time; flag the feeding as **significantly late** if the delay exceeds 30 minutes.  
+      3. **User Rankings Calculation**:  
+         - Aggregate feeding amounts per user over the current month.  
+         - Calculate each user’s contribution percentage relative to the overall feeding total and sort the results in descending order.
 
     - **Pseudo-code**:  
         ```
-        # Step 1: Compute total food consumption per pet per week
-        Initialize an empty dictionary: food_consumed_per_pet
-        For each feeding log:
-            Extract pet_id, food_amount, and week_number from the log
-            If pet_id is not in food_consumed_per_pet:
-                Initialize an empty dictionary for this pet
-
-            If week_number is not in food_consumed_per_pet[pet_id]:
-                Set food_consumed_per_pet[pet_id][week_number] to 0
+        # Step 1: Data Retrieval
+        Retrieve household, pet, and feeding log data.
+        Define oneWeekAgo as current date minus 7 days.
+        Define startOfMonth and startOfNextMonth for ranking calculation.
         
-            Add food_amount to food_consumed_per_pet[pet_id][week_number]
+        # Step 2: Anomaly Detection per Pet
+        For each pet in the household:
+            Filter logs for the pet from the past week.
+            If logs exist:
+                Sum feeding amounts and calculate average.
+                Set deviationThreshold = average * 0.3.
+                For each log:
+                    If |log.amount - average| > deviationThreshold:
+                        Mark largeDeviation = true.
+                    Convert log.timestamp to target time zone.
+                    Set scheduledDate based on pet.feedingTime.
+                    If (log timestamp - scheduledDate) > 30 minutes:
+                        Mark significantlyLate = true.
+                Record anomaly details for the pet.
+            Else:
+                Record anomaly with largeDeviation = false, significantlyLate = false, averageAmount = 0, feedingCount = 0.
         
-        # Step 2: Compute user rankings based on feeding contribution (Nested Loop)
-        Initialize an empty dictionary: user_feed_ranking
+        # Step 3: User Rankings Calculation
+        Retrieve logs for the current month.
+        If logs exist:
+            For each log:
+                Aggregate feeding amounts by user.
+            Compute overall total feeding amount.
+            For each user:
+                Calculate contribution = (user total / overall total) * 100.
+            Sort rankings by contribution descending.
+        Else:
+            Return empty rankings.
         
-        For each pet_id in food_consumed_per_pet:
-            For each week_number in food_consumed_per_pet[pet_id]:
-                Retrieve total_food_consumed for this pet in this week
-                For each feeding log:
-                    If log.pet_id matches pet_id and log's week_number matches:
-                        Extract user_id and food_amount
-                        If user_id is not in user_feed_ranking:
-                            Initialize an empty dictionary for this user
-        
-                        If pet_id is not in user_feed_ranking[user_id]:
-                            Initialize an empty list for this pet
-        
-                        Calculate contribution_percentage = (food_amount / total_food_consumed) * 100
-                        Append (week_number, contribution_percentage) to user_feed_ranking[user_id][pet_id]
-        
-        # Step 3: Compute a moving average for cost predictions (last 4 weeks)
-        Initialize an empty dictionary: pet_costs
-        
-        For each pet in pet_data:
-            Extract pet_id and pet_size
-            Retrieve bag_size and bag_price for this pet_size from food_bag_data
-        
-            Retrieve last 4 weeks of food consumption data for this pet
-            Compute avg_weekly_food as the average food consumption over the last 4 weeks
-        
-            Compute bags_needed_per_month = (avg_weekly_food * 4) / (bag_size * 1000)
-            Compute monthly_cost = bags_needed_per_month * bag_price
-            Store monthly_cost in pet_costs[pet_id]
-        
-        # Step 4: Anomaly Detection - Identify abnormal feeding behavior
-        Initialize an empty dictionary: anomalies
-        
-        For each pet_id in food_consumed_per_pet:
-            Compute average_food_consumption over all weeks
-            Compute standard_deviation of food consumption
-        
-            For each week_number in food_consumed_per_pet[pet_id]:
-                Retrieve total_food_consumed
-                If total_food_consumed deviates more than 2 * standard_deviation from the average:
-                    If pet_id is not in anomalies:
-                        Initialize an empty list for this pet
-                    Append week_number to anomalies[pet_id]
-        
-        # Output results
-        Return user_feed_ranking, food_consumed_per_pet, pet_costs, anomalies
+        # Output results:
+        Return anomalies and user rankings.
         ```
 
 ## 5. Contributions

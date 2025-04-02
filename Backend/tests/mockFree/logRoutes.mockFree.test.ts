@@ -48,7 +48,7 @@ describe("POST /:petName logFeeding(no Mock)", () => {
          };
          await new Household(household).save()
 
-        const reqBody = { userEmail: user.email, householdId: household._id };
+        const reqBody = { userEmail: user.email, householdId: household._id, feedingAmount: 25 };
         const res = await request(app).post(`/${pet.name}`).send(reqBody);
 
         expect(res.status).toBe(201);

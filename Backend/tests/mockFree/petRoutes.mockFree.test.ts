@@ -177,7 +177,7 @@ describe("DELETE /pet/:petName - removePet", () => {
         const res = await request(app).delete(`/${pet1.name}`)
 
         expect(res.status).toBe(200);
-        expect(res.body.message).toBe("Pet removed successfully");
+        expect(res.body).toBe(true);
         const pets = await Pet.find();
         expect(pets).toHaveLength(0);
     });

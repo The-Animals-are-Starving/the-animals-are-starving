@@ -172,7 +172,7 @@ describe("DELETE /:email - DeleteUser (without mocks)", () => {
     // Input: user email in URL parameter; Expected: HTTP 200 and message "User deleted successfully".
     const res = await request(app).delete(`/${userData.email}`);
     expect(res.status).toBe(200);
-    expect(res.body.message).toBe("User deleted successfully");
+    expect(res.body).toBe(true);
   });
 
   it("should return 404 if user does not exist", async () => {
