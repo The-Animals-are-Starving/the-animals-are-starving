@@ -4,7 +4,7 @@
 
 | **Change Date**   | **Modified Sections** | **Rationale** |
 | ----------------- | --------------------- | ------------- |
-| _Nothing to show_ |
+| 04/02/2025        | 2.1.1, 2.3, 2.4       | Added interface and tests|
 
 ---
 
@@ -31,7 +31,8 @@
 | **GET /log/pet/:petId** | [`tests/mockFree/logRoutes.mockFree.test.ts#L115`](#) | [`tests/mocked/logRoutes.mockFed.test.ts#L101`](#) |HouseDB                     |
 | **GET /log/household/:householdId** | [`tests/mockFree/logRoutes.mockFree.test.ts#L171`](#) | [`tests/mocked/logRoutes.mockFed.test.ts#L142`](#) |HouseDB                     |
 | **GET /log/:user/:userEmail** | [`tests/mockFree/logRoutes.mockFree.test.ts#L134`](#) | [`tests/mocked/logRoutes.mockFed.test.ts#L174`](#) | HouseDB                     |
-| **GET /analytics/rankings/:householdId** | [`tests/mockFree/analyticsRoutes.mockFree.test.ts#L32`](#) | [`tests/mocked/analyticsRoutes.mockFed.test.ts#L15`](#) | HouseDB                     |
+| **POST /analytics/anomalies/:householdId** | [`tests/mockFree/analyticsRoutes.mockFree.test.ts#L34`](#) | [`tests/mocked/analyticsRoutes.mockFed.test.ts#L25`](#) | HouseDB                     |
+| **GET /analytics/rankings/:householdId** | [`tests/mockFree/analyticsRoutes.mockFree.test.ts#L131`](#) | [`tests/mocked/analyticsRoutes.mockFed.test.ts#L101`](#) | HouseDB                     |
 | **POST /notify/:email** | [`tests/mockFree/notificationsRoutes.mockFree.test.ts#L38`](#) | [`tests/mocked/notificationsRoutes.mockFed.test.ts#L17`](#) | HouseDB, Firebase Messaging                     |
 
 #### 2.1.2. Commit Hash Where Tests Run
@@ -84,11 +85,13 @@
 
 ### 2.3. Jest Coverage Report Screenshots With Mocks
 
-![image](https://github.com/user-attachments/assets/f5e17ce0-e058-47ff-aec0-b6190b1ea92c)
+![image](https://github.com/user-attachments/assets/956a2d6f-236a-4fc1-9745-b5d717257359)
+
 
 ### 2.4. Jest Coverage Report Screenshots Without Mocks
 
-![image](https://github.com/user-attachments/assets/16f387ad-50f0-4b1a-9828-c3f68c5b35e1)
+![image](https://github.com/user-attachments/assets/e552820c-a9f1-4c37-a427-26887259998f)
+
 
 ### 2.5 Missing Coverage Justification (Without Mocks)
 
