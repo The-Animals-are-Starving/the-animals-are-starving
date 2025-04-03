@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -21,6 +22,7 @@ import com.example.theanimalsarestarving.repositories.CurrUserRepository
 import com.example.theanimalsarestarving.repositories.HouseholdRepository
 import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.activities.helper.NotificationHelper
+import com.example.theanimalsarestarving.repositories.UserRepository
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.launch
 import org.apache.http.HttpException
@@ -128,6 +130,14 @@ class MainActivity : AppCompatActivity() {
         translateFrenchButton = findViewById(R.id.translate_fr_button)
         translateEnglishButton = findViewById(R.id.translate_en_button)
 
+        val currUser = CurrUserRepository.getCurrUser()
+        if (currUser?.role == "normal") {
+            feedingButton.layoutParams.height *= 2;
+            notifyButton.layoutParams.height *= 2;
+            manageButton.visibility = View.GONE;
+            analyticsButton.visibility = View.GONE;
+            feedingHistoryButton.visibility = View.GONE;
+        }
         feedingButton.setOnClickListener {
             val intent = Intent(this, FeedingActivity::class.java)
             intent.putExtra("translationHelperVar", translationHelper)
