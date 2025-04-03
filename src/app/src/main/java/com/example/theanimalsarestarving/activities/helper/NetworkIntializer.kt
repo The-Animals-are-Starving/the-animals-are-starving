@@ -1,5 +1,9 @@
-package com.example.theanimalsarestarving.network
+package com.example.theanimalsarestarving.activities.helper
 
+import com.example.theanimalsarestarving.network.ApiService
+import com.example.theanimalsarestarving.network.NetworkManager
+import com.example.theanimalsarestarving.network.RetrofitClient
+import com.example.theanimalsarestarving.network.UserApiService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import com.example.theanimalsarestarving.repositories.MainRepository

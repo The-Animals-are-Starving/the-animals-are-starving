@@ -1,4 +1,4 @@
-package com.example.theanimalsarestarving.helpers
+package com.example.theanimalsarestarving.activities.helper
 
 import android.Manifest
 import android.app.Activity
