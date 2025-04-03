@@ -4,16 +4,20 @@ import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.hasSibling;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasToString;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.AllOf.allOf;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItem;
@@ -22,6 +26,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.Intent;
 import android.view.View;
+import android.widget.EditText;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.matcher.ViewMatchers;
@@ -96,11 +101,19 @@ public class EspressoTest {
             onView(allOf(withId(R.id.indicate_fed_button), hasSibling(withText("kitty cat"))))
                     .perform(click());
 
+            //Find the EditText and enter the value "1"
+            onView(withClassName(is(EditText.class.getName())))
+                    .perform(typeText("1"), closeSoftKeyboard());
+
+            //Click the "Feed" button
+            onView(withText("Feed")).perform(click());
+
+
             // User is prompted with a success message indicating that the log has been updated successfully.
             onView(allOf(withText("FED"), hasSibling(withText("kitty cat"))))
                     .check(matches(isDisplayed()));
 
-            // System updates the feeding log with the pet's ID, user ID, date, and amount of food.
+
             pressBack();
 
             onView(withId(R.id.feeding_history_button)).check(matches(isDisplayed()));
@@ -185,11 +198,21 @@ public class EspressoTest {
             onView(allOf(withId(R.id.indicate_fed_button), hasSibling(withText("puppy dog")))).
                     perform(click()); //click 2
 
+            //Find the EditText and enter the value "1"
+            onView(withClassName(is(EditText.class.getName())))
+                    .perform(typeText("1"), closeSoftKeyboard());
+
+            //Click the "Feed" button
+            onView(withText("Feed")).perform(click()); //click 3
+
+
             //check
             pressBack();
             onView(withId(R.id.feed_button)).perform(click());
             onView(allOf(withText("FED"), hasSibling(withText("puppy dog"))))
                     .check(matches(isDisplayed())); //make sure pet is fed
+
+
 
             //history
             pressBack();

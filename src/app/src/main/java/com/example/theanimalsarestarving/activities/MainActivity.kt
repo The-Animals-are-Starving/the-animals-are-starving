@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mainRepository: MainRepository
     private lateinit var apiService: ApiService
-    public lateinit var translationHelper: TranslationHelper  // Declare the TranslationHelper instance
+    lateinit var translationHelper: TranslationHelper  // Declare the TranslationHelper instance
 
     //buttons
     private lateinit var feedingButton: Button
