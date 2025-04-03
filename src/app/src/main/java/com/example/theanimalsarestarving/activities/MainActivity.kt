@@ -15,13 +15,12 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.models.Household
-import com.example.theanimalsarestarving.network.NetworkInitializer
+import com.example.theanimalsarestarving.activities.helper.NetworkInitializer
 import com.example.theanimalsarestarving.network.NetworkManager
 import com.example.theanimalsarestarving.repositories.CurrUserRepository
 import com.example.theanimalsarestarving.repositories.HouseholdRepository
 import com.example.theanimalsarestarving.repositories.MainRepository
-import com.example.theanimalsarestarving.helpers.NotificationHelper
-import com.example.theanimalsarestarving.activities.TranslationHelper
+import com.example.theanimalsarestarving.activities.helper.NotificationHelper
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.launch
 import org.apache.http.HttpException
