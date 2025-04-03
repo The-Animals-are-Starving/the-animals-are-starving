@@ -17,6 +17,9 @@
 5.  **NFR Justification (2025-04-01)**
     - Added justifications for values in the NFRs based on TA feedback from M5
 
+6.  **NFR Justification (2025-04-02)**
+    - Updated sequence diagrams
+
 ## 2. Project Description
 “Did you feed the animals?” “Are the animals fed?” “Anyone feed the animals?” These texts flood the family group chat every day. The kids don’t respond. Mom is still at work. No one knows if the beasts have been fed. The beasts also lie, as though they are starving and wasting away even if they already got dinner. Many task managing apps out there are WAY too complicated. TAS is straightforward app that indicates whether or not your beloved household pet has been fed. To go even further, there will be a minimal mode, for those living with grandparents, small children, or a grumpy father that does not want to be bothered with a new app. Simple, easy, convenient. 
 
