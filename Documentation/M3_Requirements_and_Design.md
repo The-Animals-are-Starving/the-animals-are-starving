@@ -17,6 +17,9 @@
 5.  **NFR Justification (2025-04-01)**
     - Added justifications for values in the NFRs based on TA feedback from M5
 
+6.  **Sequence Diagram (2025-04-02)**
+    - Updated sequence diagrams accurate to current implementation
+
 ## 2. Project Description
 “Did you feed the animals?” “Are the animals fed?” “Anyone feed the animals?” These texts flood the family group chat every day. The kids don’t respond. Mom is still at work. No one knows if the beasts have been fed. The beasts also lie, as though they are starving and wasting away even if they already got dinner. Many task managing apps out there are WAY too complicated. TAS is straightforward app that indicates whether or not your beloved household pet has been fed. To go even further, there will be a minimal mode, for those living with grandparents, small children, or a grumpy father that does not want to be bothered with a new app. Simple, easy, convenient. 
 
@@ -311,17 +314,17 @@ three mouse clicks." While it may not be the end all be all, it is a sound guide
 
 ### **4.6. Functional Requirements Sequence Diagram**
 1. [**Log Feeding**](#fr1)\
-   ![Log_Feeding_Sequence_Diagram](images/sequence-Log-Feeding.png)
+   ![sequence-Log Feeding](https://github.com/user-attachments/assets/6f6794bc-7b03-4ed4-98ed-fb8bbd8920dc)
 2. [**Requesting Others to do Feeding**](#fr2)\
-   ![Request_Notification_Sequence_Diagram](images/sequence-Request-Feed.png)
+   ![sequence-Request Feed](https://github.com/user-attachments/assets/e62bdbfe-d870-42ba-bb79-04b594a86f11)
 3. [**Manage Household**](#fr3)\
-   ![Manage_Household_Sequence_Diagram](images/sequence-Manage-Household.png)
+   ![sequence-Manage Household](https://github.com/user-attachments/assets/bb5ecb9b-108e-42b4-87b6-c26c5a70e0a3)
 4. [**History Management**](#fr4)\
-   ![History_Management_Sequence_Diagram](images/sequence-View-History.png)
+   ![sequence-View History](https://github.com/user-attachments/assets/e28f0790-9018-4c80-bbd0-b654caa89e3e)
 5. [**Feeding Time Notification**](#fr5)\
-   ![Feeding_Time_Notification_Sequence_Diagram](images/sequence-Auto-Notifications.png)
+   ![sequence-Auto Notifications](https://github.com/user-attachments/assets/3ff5e234-ae1a-4f72-a079-8eed01fdfffa)
 6. [**Login Authentication**](#fr6)\
-   ![Login_Sequence_Diagram](images/sequence-Login.png)
+   ![sequence-Login](https://github.com/user-attachments/assets/ac7b1cba-28b8-438a-afbc-671db1da9014)
 
 
 ### **4.7. Non-Functional Requirements Design**
