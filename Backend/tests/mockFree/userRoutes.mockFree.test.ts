@@ -40,7 +40,12 @@ describe("POST / - CreateUser (without mocks)", () => {
     expect(res.status).toBe(201);
     expect(res.body.message).toBe("User created successfully");
     expect(res.body.user.email).toBe(userData.email);
-  });
+
+    // Verify user exists in DB
+    const userInDb = await User.findOne({ email: userData.email });
+    expect(userInDb).not.toBeNull();
+    expect(userInDb!.householdId).toBe("house123");
+});
 
   it("should return 400 if the user already exists", async () => {
     // Setup: Insert a user directly into the database.
@@ -113,6 +118,10 @@ describe("PATCH /update-household/:email - UpdateUserHouseholdId (without mocks)
     expect(res.status).toBe(200);
     expect(res.body.message).toBe("User Household ID updated successfully");
     expect(res.body.user.householdId).toBe("newHouseId");
+
+    // Verify update in DB
+    const updatedUser = await User.findOne({ email: userData.email });
+    expect(updatedUser!.householdId).toBe("newHouseId");
   });
 
   it("should return 404 if user does not exist", async () => {
@@ -120,6 +129,7 @@ describe("PATCH /update-household/:email - UpdateUserHouseholdId (without mocks)
     const res = await request(app).patch(`/update-household/notfound@example.com`).send({ householdId: "newHouseId" });
     expect(res.status).toBe(404);
     expect(res.body.message).toBe("User not found");
+
   });
 });
 
@@ -173,6 +183,10 @@ describe("DELETE /:email - DeleteUser (without mocks)", () => {
     const res = await request(app).delete(`/${userData.email}`);
     expect(res.status).toBe(200);
     expect(res.body).toBe(true);
+
+    // Verify user is deleted
+    const userInDb = await User.findOne({ email: userData.email });
+    expect(userInDb).toBeNull();
   });
 
   it("should return 404 if user does not exist", async () => {

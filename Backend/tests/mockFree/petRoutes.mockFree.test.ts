@@ -48,6 +48,9 @@ describe("Post /pet add pet", () => {
 
         expect(res.status).toBe(201);
         expect(res.body.message).toBe("Pet added successfully");
+
+        const dbPet = await Pet.findOne({ name: "Fluffy" });
+        expect(dbPet).not.toBeNull();
     })
     it("should fail when no household", async () => {
         const household = { _id: "67cfc90a16ca0bfb944f50de", 
@@ -106,6 +109,10 @@ describe("PATCH /pet/:petName/feed update pet feeding", () => {
         expect(res.body.message).toBe("Pet feeding status updated");
         expect(res.body.pet.fed).toBe(true);
 
+        // Verify the database was updated
+        const updatedPet = await Pet.findOne({ name: "Fluffy" });
+        expect(updatedPet!.fed).toBe(true);
+
     });
 
     it("should return 400 when no fed", async () => {
@@ -141,6 +148,8 @@ describe("PATCH /pet/:petName/feed update pet feeding", () => {
 
         expect(res.status).toBe(400);
         expect(res.body.message).toBe("'fed' must be a boolean");
+
+        
 
     });
 
@@ -180,6 +189,10 @@ describe("DELETE /pet/:petName - removePet", () => {
         expect(res.body).toBe(true);
         const pets = await Pet.find();
         expect(pets).toHaveLength(0);
+
+        // Verify pet was removed from database
+        const deletedPet = await Pet.findOne({ name: "Fluffy" });
+        expect(deletedPet).toBeNull()
     });
 
     it("should return 404 when the pet is not found", async () => {
