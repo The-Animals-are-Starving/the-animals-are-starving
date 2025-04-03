@@ -6,6 +6,7 @@
 | ----------------- | --------------------- | ------------- |
 | 04/02/2025        | 2.1.1, 2.3, 2.4       | Added interface and tests|
 | 04/02/2025        | 5       | Codacy errors were fixed!|
+| 04/02/2025        | 4.1       | Seperated front end tests |
 
 ---
 
@@ -153,13 +154,16 @@
 
 ### 4.1. Location in Git of Front-end Test Suite:
 
-`src/app/src/androidTest/java/com/example/theanimalsarestarving/EspressoTest.java`
+`src/app/src/androidTest/java/com/example/theanimalsarestarving/HistoryManagementTest.java`
+`src/app/src/androidTest/java/com/example/theanimalsarestarving/LogFeedingTest.java`
+`src/app/src/androidTest/java/com/example/theanimalsarestarving/NotificationsTest.java`
+`src/app/src/androidTest/java/com/example/theanimalsarestarving/ThreeClickTest.java`
 
 #### How To Run Tests
  - Make sure the backend is running with `npm run dev` in the `backend` folder
  - Enter a `mongosh` shell in the `backend` folder
  - Type `use pet-tracker` and then `load("initdb.mongo")`
- - Run the EspressoTest class  from Android Studios while an emulator is active
+ - Run the class for the desired test from Android Studios while an emulator is active
 
 ### 4.2. Tests
 
