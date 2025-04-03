@@ -5,6 +5,7 @@
 | **Change Date**   | **Modified Sections** | **Rationale** |
 | ----------------- | --------------------- | ------------- |
 | 04/02/2025        | 2.1.1, 2.3, 2.4       | Added interface and tests|
+| 04/02/2025        | 5       | Codacy errors were fixed!|
 
 ---
 
@@ -238,16 +239,12 @@
 
 ### 5.2. Unfixed Issues per Codacy Category
 
-![image](https://github.com/user-attachments/assets/30c352c1-8e4e-4041-bb7f-1cdcc12b0be6)
+![image](https://github.com/user-attachments/assets/6417d5fe-abcc-4084-b82e-636ef76c92d2)
 
 
 ### 5.3. Unfixed Issues per Codacy Code Pattern
 
-![image](https://github.com/user-attachments/assets/384e2d52-a8be-4496-b00f-d670cd8f6659)
-
-![image](https://github.com/user-attachments/assets/bcf80270-eac1-4f23-9535-656ceb1d455a)
-
-![image](https://github.com/user-attachments/assets/946886b3-741f-4199-911c-a305dca659b3)
+![image](https://github.com/user-attachments/assets/d9ba8444-05c8-427c-852b-46d1c455aee4)
 
 
 ### 5.4. Justifications for Unfixed Issues
@@ -256,29 +253,6 @@
 
   1. **Expression with labels increase complexity and affect maintainability.**
 
-     - **Location in Git:** [`src/app/src/main/java/com/example/theanimalsarestarving/activities/MainActivity.kt#L99`](#)
-     - **Location in Git:** [`src/app/src/main/java/com/example/theanimalsarestarving/activities/MainActivity.kt#L150`](#)
-     - **Location in Git:** [`src/app/src/main/java/com/example/theanimalsarestarving/activities/MainActivity.kt#L106`](#)
+     - **Location in Git:** [`src/app/src/main/java/com/example/theanimalsarestarving/activities/MainActivity.kt#L91`](#)
+     - **Location in Git:** [`src/app/src/main/java/com/example/theanimalsarestarving/activities/MainActivity.kt#L180`](#)
      - **Justification:** Labels can reduce code redundancy by preventing duplicated logic. Kotlin provides labels as an intentional feature to handle nested control flow; for instance, to simulate a break from a higher-level loop or to return from a lambda, you can label the loop or lambda and use a return at that label. The official Kotlin docs even demonstrate that there’s “no direct equivalent for break, but it can be simulated by adding another nesting lambda and non-locally returning from it”. ([Kotlin Docs](https://kotlinlang.org/docs/returns.html#:~:text=There%20is%20no%20direct%20equivalent,locally%20returning%20from%20it)) In our case, these breaks were necessary, as they are part of onCreate, and reordering is not possible during setup.
-
-- **Code Pattern: [Too many functions inside a/an file/class/object/interface.](#)**
-
-  1. **Class 'ManageHouseholdActivity' with '12' functions detected.**
-
-     - **Location in Git:** [`src/app/src/main/java/com/example/theanimalsarestarving/activities/ManageHouseholdActivity.kt#L36`](#)
-     - **Justification:** Having a dozen functions inside ManageHouseholdActivity might superficially trigger the “large class” warning, but it can still be reasonable to keep them together. Generally, a class growing too large can hint at too many responsibilities. In this case, though, all 12 functions belong to one feature area – managing a household – which means the class still has a singular, focused responsibility. A class can have multiple methods yet remain cohesive if those methods all serve a unified purpose. ManageHouseholdActivity encapsulates various actions (adding/removing pets and users, etc.) but they all pertain to the household management feature.
-     
-        While some static analysis tools warn against classes with many methods, a high number of functions does not automatically indicate poor design. In fact, industry best practices—as outlined in [Clean Code: A Handbook of Agile Software Craftsmanship by Robert C. Martin (2008)](https://www.amazon.ca/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882)—stress that each class should have a single responsibility, grouping the proper ideas together. Our ManageHouseholdActivity groups 12 methods that all work toward the same cohesive purpose: managing household data and behavior. Thus, the number of functions is justified by their close interrelation and does not compromise maintainability or clarity.
-     
-        Furthermore, the [Kotlin coding conventions](https://kotlinlang.org/docs/coding-conventions.html) do not impose an arbitrary maximum on the number of functions per file or class—only that they are organized in a logical, readable manner. In our case, keeping 12 functions within the ManageHouseholdActivity ensures all related behavior is encapsulated in one place.
-  2. **Interface 'ApiService' with '17' functions detected'**
-
-     - **Location in Git:** [`src/app/src/main/java/com/example/theanimalsarestarving/network/ApiService.kt#L16`](#)
-     - **Justification:** For similar reasons as above, we have kept these functions together. Moreover, this is a file that is used as a list of all the exposed routes to the back-end, so it doesn't make sense to split up the file just to remove the flag. Keeping the routes together makes it simpler to reference the needed routes and avoids the extra confusion of having separate files for routes.
-     
-- **Code Pattern: [Function is too long.](#)**
-
-  1. **onCreate is too long**
-
-     - **Location in Git:** [`src/app/src/main/java/com/example/theanimalsarestarving/activities/MainActivity.kt#L71`](#)
-     - **Justification:** Given that onCreate() is a one-time setup method where all initialization tasks are tightly coupled and must occur in a specific order, the benefits of maintaining a cohesive, single-location initialization sequence outweigh the risks associated with its length. Refactoring into smaller methods could lead to fragmented logic and decreased clarity. This trade-off has been carefully considered and aligns with Android’s official guidelines and widely accepted best practices ([Android Developer Documentation](https://developer.android.com/guide/components/activities/activity-lifecycle)).
