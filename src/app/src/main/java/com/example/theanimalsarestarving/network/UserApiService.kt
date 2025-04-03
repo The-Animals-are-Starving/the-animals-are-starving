@@ -20,9 +20,6 @@ interface UserApiService {
     @POST("user")
     fun addUser(@Body user: User): Call<User>
 
-    @POST("user")
-    fun createUser(@Body body: Map<String, String>): Call<User>
-
     @PATCH("user/{email}")
     fun updateRoleManager(
         @Path("email") email: String,

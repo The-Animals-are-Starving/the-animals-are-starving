@@ -16,6 +16,9 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface ApiService {
+    @POST("user")
+    fun createUser(@Body body: Map<String, String>): Call<User>
+
     @POST("pet")
     fun addPet(@Body body: Map<String, String?>): Call<Pet> //Adds pet to db
 

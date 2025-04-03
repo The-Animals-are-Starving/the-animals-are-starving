@@ -13,7 +13,6 @@ object NetworkInitializer {
         val apiService = retrofit.create(ApiService::class.java)
         val userApiService = retrofit.create(UserApiService::class.java)
         val mainRepository = MainRepository(apiService, userApiService)
-        // Initialize your network manager or any other singletons here
         NetworkManager.initialize(apiService, mainRepository, userApiService)
         return Pair(apiService, mainRepository)
     }

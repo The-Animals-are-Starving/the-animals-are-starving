@@ -25,7 +25,7 @@ object UserRepository {
         return try {
             Log.d(TAG, "Attempting to create user with requestBody: $requestBody")
             val response = withContext(Dispatchers.IO) {
-                userApiService.createUser(requestBody).execute()  // Perform the request synchronously
+                apiService.createUser(requestBody).execute()  // Perform the request synchronously
             }
 
             if (response.isSuccessful) {
@@ -117,7 +117,7 @@ object UserRepository {
         try {
             // Make the API call in the IO thread using withContext
             val response: Response<User> = withContext(Dispatchers.IO) {
-                userApiService.updateRoleNormal(userEmail).execute() // This is a blocking call
+                userApiService.updateRoleRestricted(userEmail).execute() // This is a blocking call
             }
             if (response.isSuccessful) {
                 Log.d(TAG, "Role updated successfully for $userEmail: ${response.body()}")

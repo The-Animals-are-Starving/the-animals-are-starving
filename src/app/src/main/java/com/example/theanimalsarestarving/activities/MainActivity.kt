@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.models.Household
 import com.example.theanimalsarestarving.network.NetworkInitializer
+import com.example.theanimalsarestarving.network.NetworkManager
 import com.example.theanimalsarestarving.repositories.CurrUserRepository
 import com.example.theanimalsarestarving.repositories.HouseholdRepository
 import com.example.theanimalsarestarving.repositories.MainRepository
@@ -65,6 +66,7 @@ class MainActivity : AppCompatActivity() {
         val (api, repository) = NetworkInitializer.init()
         apiService = api
         mainRepository = repository
+        userApiService = NetworkManager.userApiService
 
         val sharedPreferences: SharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
         val email = sharedPreferences.getString("userEmail", "").toString()
@@ -115,14 +117,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpButtons() {
-        feedingButton = findViewById<Button>(R.id.feed_button)
-        notifyButton = findViewById<Button>(R.id.notify_button)
-        manageButton = findViewById<Button>(R.id.manage_button)
-        feedingHistoryButton = findViewById<Button>(R.id.feeding_history_button)
-        logoutButton = findViewById<Button>(R.id.logoutButton)
-        analyticsButton = findViewById<Button>(R.id.analytics_button)
-        translateFrenchButton = findViewById<Button>(R.id.translate_fr_button)
-        translateEnglishButton = findViewById<Button>(R.id.translate_en_button)
+        feedingButton = findViewById(R.id.feed_button)
+        notifyButton = findViewById(R.id.notify_button)
+        manageButton = findViewById(R.id.manage_button)
+        feedingHistoryButton = findViewById(R.id.feeding_history_button)
+        logoutButton = findViewById(R.id.logoutButton)
+        analyticsButton = findViewById(R.id.analytics_button)
+        translateFrenchButton = findViewById(R.id.translate_fr_button)
+        translateEnglishButton = findViewById(R.id.translate_en_button)
 
         feedingButton.setOnClickListener {
             val intent = Intent(this, FeedingActivity::class.java)

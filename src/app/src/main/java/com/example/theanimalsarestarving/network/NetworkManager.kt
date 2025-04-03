@@ -18,6 +18,8 @@ object NetworkManager {
 
     // Optional: If you want to check if it has been initialized
     fun isInitialized(): Boolean {
-        return ::apiService.isInitialized && ::mainRepository.isInitialized
+        return ::apiService.isInitialized &&
+                ::mainRepository.isInitialized &&
+                ::userApiService.isInitialized
     }
 }
