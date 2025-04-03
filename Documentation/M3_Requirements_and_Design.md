@@ -307,7 +307,7 @@ three mouse clicks." While it may not be the end all be all, it is a sound guide
 
 
 ### **4.5. Dependencies Diagram**
-![Dependency_Diagram](images/CPEN_321_Dependency_Diagram.png)
+![CPEN_321_Dependency_Diagram](https://github.com/user-attachments/assets/9dda4808-2fdc-4160-a049-a363895de756)
 
 ### **4.6. Functional Requirements Sequence Diagram**
 1. [**Log Feeding**](#fr1)\
