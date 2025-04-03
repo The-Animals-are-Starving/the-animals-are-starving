@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.models.Household
 import com.example.theanimalsarestarving.network.NetworkManager.apiService
+import com.example.theanimalsarestarving.network.NetworkManager.userApiService
 import com.example.theanimalsarestarving.repositories.HouseholdRepository
 import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.utils.AppUtils
@@ -34,27 +35,13 @@ class AnalyticsActivity : AppCompatActivity() {
 
     private fun refreshAnalytics(householdId: String) {
         val anomalyTable = findViewById<TableLayout>(R.id.analyticsBox)
-        val repository = MainRepository(apiService)
+        val repository = MainRepository(apiService, userApiService)
 
         repository.getFeedingAnomalies(householdId) { anomalies ->
             Log.d("Analytics", anomalies.toString())
             anomalyTable.removeAllViews()
 
-            val headerRow = TableRow(this).apply {
-                setPadding(8, 8, 8, 8)
-            }
-
-            listOf(getString(R.string.pet_name), "Feeding Amount", "Feeding Time", "Avg Amount", "Feeding Count").forEach { header ->
-                val headerView = TextView(this@AnalyticsActivity).apply {
-                    text = header
-                    textSize = 18f
-                    setPadding(10, 10, 10, 10)
-                    setTypeface(typeface, android.graphics.Typeface.BOLD)
-                    layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f) // Ensure equal spacing
-                }
-                headerRow.addView(headerView)
-            }
-            anomalyTable.addView(headerRow)
+            anomalyTable.addView(createAnalyticsHeader())
 
             if (anomalies != null) {
                 if (anomalies.isEmpty()) {
@@ -106,14 +93,34 @@ class AnalyticsActivity : AppCompatActivity() {
 
                         anomalyTable.addView(anomalyRow)
                     }
-
                 }
                 translationHelper.updateLanguageUI(translationHelper, findViewById(R.id.analytics_activity), lifecycleScope)
-
             } else {
                 AppUtils.alertMessage(this, "Failed to fetch analytics. Please try again.")
             }
-
         }
+    }
+
+    private fun createAnalyticsHeader(): TableRow {
+        val headerRow = TableRow(this).apply {
+            setPadding(8, 8, 8, 8)
+        }
+        listOf(
+            getString(R.string.pet_name),
+            "Feeding Amount",
+            "Feeding Time",
+            "Avg Amount",
+            "Feeding Count"
+        ).forEach { header ->
+            val headerView = TextView(this@AnalyticsActivity).apply {
+                text = header
+                textSize = 18f
+                setPadding(10, 10, 10, 10)
+                setTypeface(typeface, android.graphics.Typeface.BOLD)
+                layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
+            }
+            headerRow.addView(headerView)
+        }
+        return headerRow
     }
 }

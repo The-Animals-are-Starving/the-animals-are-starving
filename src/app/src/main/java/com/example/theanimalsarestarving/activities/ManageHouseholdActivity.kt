@@ -24,6 +24,7 @@ import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.models.Pet
 import com.example.theanimalsarestarving.models.User
 import com.example.theanimalsarestarving.network.NetworkManager.apiService
+import com.example.theanimalsarestarving.network.NetworkManager.userApiService
 import com.example.theanimalsarestarving.repositories.CurrUserRepository
 import com.example.theanimalsarestarving.repositories.HouseholdRepository
 import com.example.theanimalsarestarving.repositories.MainRepository
@@ -101,7 +102,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
             val userName = nameIn.text.toString().trim().replace("\n", "")
             val email = emailIn.text.toString().trim().replace("\n", "")
 
-            if (!isValidEmail(email)) {
+            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 AppUtils.alertMessage(this, "Please Enter a Valid Email")
             } else if (userName.isNotEmpty() && email.isNotEmpty()) {
                 addUser(userName, email)
@@ -121,7 +122,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
     private fun addUser(name: String, email: String) {
         val newUser = User(name = name, email = email, householdId = currHouseholdId.toString())
 
-        val repository = MainRepository(apiService)
+        val repository = MainRepository(apiService, userApiService)
         Log.d("AddUser", "Attempting to add user: $newUser")
         repository.addUser(newUser) { addedUser -> //adds user
             if (addedUser != null) {
@@ -202,7 +203,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
     private fun addPet(name: String, time: String) {
         val newPet = Pet(name = name, feedingTime = time, householdId = currHouseholdId.toString())
 
-        val repository = MainRepository(apiService)
+        val repository = MainRepository(apiService, userApiService)
         Log.d("AddPet", "Attempting to add new pet $newPet")
         repository.addPet(newPet) { addedPet ->
             if (addedPet != null) {
@@ -232,10 +233,6 @@ class ManageHouseholdActivity : AppCompatActivity() {
             val formattedTime = String.format("%02d:%02d", timePicker.hour, timePicker.minute)
             editText.setText(formattedTime)
         }
-    }
-
-    private fun isValidEmail(email: String): Boolean {
-        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
 
@@ -359,7 +356,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
         val userListContainer = findViewById<LinearLayout>(R.id.userListContainer)
         userListContainer.removeAllViews() // Clear existing user list
 
-        val repository = MainRepository(apiService)
+        val repository = MainRepository(apiService, userApiService)
         if (currHouseholdId != null) {
             repository.getAllUsers(currHouseholdId.toString()) { users ->
                 if (users != null) {
@@ -418,7 +415,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
         val petListContainer = findViewById<LinearLayout>(R.id.petListContainer)
         petListContainer.removeAllViews()
 
-        val repository = MainRepository(apiService)
+        val repository = MainRepository(apiService, userApiService)
         if (currHouseholdId != null) {
             repository.getAllPets(currHouseholdId.toString()) { pets ->
                 if (pets != null) {
@@ -457,7 +454,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
     }
 
     private fun updateUserRole(userId: String, newRole: String, spinner: Spinner) {
-        val repository = MainRepository(apiService)
+        val repository = MainRepository(apiService, userApiService)
         Log.d("UpdateUserRole", "Updating user role for user: $userId to role: $newRole")
 
         // Disable the spinner selection to prevent multiple selections while the request is in progress
@@ -490,7 +487,7 @@ class ManageHouseholdActivity : AppCompatActivity() {
 
     private fun deleteUser(userEmail: String, callback: (Boolean) -> Unit) {
         Log.d("ManageHousehold", "Attempting to delete user $userEmail")
-        apiService.deleteUser(userEmail).enqueue(object : retrofit2.Callback<Boolean> {
+        userApiService.deleteUser(userEmail).enqueue(object : retrofit2.Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                 if (response.isSuccessful) {
                     val success = response.body() ?: false

@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.theanimalsarestarving.models.User
 import com.example.theanimalsarestarving.models.UserRole
 import com.example.theanimalsarestarving.network.NetworkManager.apiService
+import com.example.theanimalsarestarving.network.NetworkManager.userApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -24,7 +25,7 @@ object UserRepository {
         return try {
             Log.d(TAG, "Attempting to create user with requestBody: $requestBody")
             val response = withContext(Dispatchers.IO) {
-                apiService.createUser(requestBody).execute()  // Perform the request synchronously
+                userApiService.createUser(requestBody).execute()  // Perform the request synchronously
             }
 
             if (response.isSuccessful) {
@@ -53,7 +54,7 @@ object UserRepository {
             // Make the network request asynchronously using enqueue on Dispatchers.IO
             val response = withContext(Dispatchers.IO) {
                 // Execute the request synchronously using execute()
-                apiService.updateUserHouseholdId(email, requestBody).execute()
+                userApiService.updateUserHouseholdId(email, requestBody).execute()
             }
 
             if (response.isSuccessful) {
@@ -68,38 +69,6 @@ object UserRepository {
         }
     }
 
-//    suspend fun addUserToHousehold(householdId: String, email: String): User? {
-//        val requestBody = mapOf(
-//            "householdId" to householdId,
-//            "email" to email
-//        )
-//
-//        return try {
-//            Log.d(TAG, "Attempting to add user to household with requestBody: $requestBody")
-//
-//            // Make the network request asynchronously using enqueue on Dispatchers.IO
-//            val response = withContext(Dispatchers.IO) {
-//                // Execute the request synchronously using execute()
-//                apiService.addUserToHousehold(requestBody).execute()
-//            }
-//
-//            if (response.isSuccessful) {
-//                response.body().also {
-//                    Log.d(TAG, "User added successfully: $it")
-//                }
-//            } else {
-//                Log.e(TAG, "Failed to add user to household: ${response.code()} ${response.message()}")
-//                null
-//            }
-//        } catch (e: HttpException) {
-//            Log.e(TAG, "HttpException adding user: ${e.message()}")
-//            null
-//        } catch (e: IOException) {
-//            Log.e(TAG, "IOException adding user: ${e.message}")
-//            null
-//        }
-//    }
-
     suspend fun updateUserRole(userEmail: String, newRole: UserRole) {
         when (newRole) {
             UserRole.ADMIN -> setManager(userEmail)
@@ -112,7 +81,7 @@ object UserRepository {
         try {
             // Make the API call in the IO thread using withContext
             val response: Response<User> = withContext(Dispatchers.IO) {
-                apiService.updateRoleManager(userEmail).execute() // This is a blocking call
+                userApiService.updateRoleManager(userEmail).execute() // This is a blocking call
             }
             if (response.isSuccessful) {
                 Log.d(TAG, "Role updated successfully for $userEmail: ${response.body()}")
@@ -130,7 +99,7 @@ object UserRepository {
         try {
             // Make the API call in the IO thread using withContext
             val response: Response<User> = withContext(Dispatchers.IO) {
-                apiService.updateRoleNormal(userEmail).execute() // This is a blocking call
+                userApiService.updateRoleNormal(userEmail).execute() // This is a blocking call
             }
             if (response.isSuccessful) {
                 Log.d(TAG, "Role updated successfully for $userEmail: ${response.body()}")
@@ -148,7 +117,7 @@ object UserRepository {
         try {
             // Make the API call in the IO thread using withContext
             val response: Response<User> = withContext(Dispatchers.IO) {
-                apiService.updateRoleNormal(userEmail).execute() // This is a blocking call
+                userApiService.updateRoleNormal(userEmail).execute() // This is a blocking call
             }
             if (response.isSuccessful) {
                 Log.d(TAG, "Role updated successfully for $userEmail: ${response.body()}")
@@ -161,24 +130,4 @@ object UserRepository {
             Log.e(TAG, "IOException updating role for $userEmail: ${e.message}")
         }
     }
-//
-//    // BY HOUSEHOLD
-//    suspend fun fetchAllUsersFromDB(householdId: String) {
-//        try {
-//            val response: Response<List<User>> = withContext(Dispatchers.IO) {
-//                apiService.getAllUsers(householdId).execute() // This is a blocking call
-//            }
-//
-//            if (response.isSuccessful) {
-//                currUsers = response.body() ?: emptyList()
-//                Log.d(TAG, "Fetched and stored pets: $currUsers")
-//            } else {
-//                Log.e(TAG, "Error: ${response.code()} ${response.message()}")
-//            }
-//        } catch (e: HttpException) {
-//            Log.e(TAG, "HttpException fetching users: ${e.message()}")
-//        } catch (e: IOException) {
-//            Log.e(TAG, "IOException fetching users: ${e.message}")
-//        }
-//    }
 }

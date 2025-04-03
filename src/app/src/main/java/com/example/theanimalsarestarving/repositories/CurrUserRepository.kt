@@ -3,6 +3,7 @@ package com.example.theanimalsarestarving.repositories
 import android.util.Log
 import com.example.theanimalsarestarving.models.User
 import com.example.theanimalsarestarving.network.NetworkManager.apiService
+import com.example.theanimalsarestarving.network.NetworkManager.userApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -27,7 +28,7 @@ object CurrUserRepository {
         return try {
             // Switch to the IO dispatcher for the blocking network call
             val response: Response<User> = withContext(Dispatchers.IO) {
-                apiService.getUser(userEmail).execute() // Blocking call to fetch the user
+                userApiService.getUser(userEmail).execute() // Blocking call to fetch the user
             }
 
             if (response.isSuccessful) {

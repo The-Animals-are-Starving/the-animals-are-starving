@@ -95,26 +95,20 @@ class FeedingActivity : AppCompatActivity() {
 
     // Method to add a pet to the container dynamically
     private fun loadPet(petName: String, feedingTime: String, petImageResId: Int, isFed: Boolean) {
-        Log.d(TAG, "Loading pet: (petName: $petName, feedingTime: feedingTime, isFed: $isFed)")
-        // Inflate the pet_item layout
+        Log.d(TAG, "Loading pet: (petName: $petName, feedingTime: $feedingTime, isFed: $isFed)")
         val petLayout = LayoutInflater.from(this).inflate(R.layout.pet_item, petContainer, false)
 
-        // Set the pet image
-        val petImage: ImageView = petLayout.findViewById(R.id.pet_image)
-        petImage.setImageResource(petImageResId)
+        // Set the pet image and name.
+        petLayout.findViewById<ImageView>(R.id.pet_image).setImageResource(petImageResId)
+        petLayout.findViewById<TextView>(R.id.pet_name).text = petName
 
-        // Set the pet name
-        val petNameText: TextView = petLayout.findViewById(R.id.pet_name)
-        petNameText.text = petName
+        val petCircle = petLayout.findViewById<ImageView>(R.id.pet_circle)
+        val fedStatusText = petLayout.findViewById<TextView>(R.id.fed_status)
+        val feedingButton = petLayout.findViewById<Button>(R.id.indicate_fed_button)
+        val feedingInfo = petLayout.findViewById<TextView>(R.id.feeding_info)
 
-        val petCircle: ImageView = petLayout.findViewById(R.id.pet_circle)
-        val fedStatusText: TextView = petLayout.findViewById(R.id.fed_status)
-        val feedingButton: Button = petLayout.findViewById(R.id.indicate_fed_button)
-        val feedingInfo: TextView = petLayout.findViewById(R.id.feeding_info)
-
-
+        // Update UI based on feeding status.
         if (!isFed) {
-            // Set fed status (this can be dynamic too)
             fedStatusText.text = getString(R.string.not_fed_text)
             petCircle.setColorFilter(ContextCompat.getColor(this, R.color.dark_pink))
             feedingButton.visibility = View.VISIBLE
@@ -126,64 +120,57 @@ class FeedingActivity : AppCompatActivity() {
             feedingInfo.visibility = View.VISIBLE
         }
 
-        feedingButton.setOnClickListener{
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle("Enter Feeding Amount")
-
-            val input = EditText(this)
-            input.inputType = InputType.TYPE_CLASS_NUMBER
-            input.setPadding(40, 20, 40, 20) // Add padding to make it look better
-            builder.setView(input)
-
-
-            builder.setPositiveButton("Feed") { _, _ ->
-                val feedingAmount = input.text.toString()
-                if (feedingAmount.isNotEmpty() && feedingAmount.toIntOrNull() != null) {
-                    val repository = PetRepository
-                    repository.feedPet(petName) { success ->
-                        if (success) {
-                            // Update UI after feeding the pet
-                            fedStatusText.text = getString(R.string.fed_text)
-                            petCircle.setColorFilter(
-                                ContextCompat.getColor(
-                                    this@FeedingActivity,
-                                    R.color.base_green
-                                )
-                            )
-                            feedingButton.visibility = View.GONE
-                            feedingInfo.visibility = View.VISIBLE
-                        } else {
-                            AppUtils.alertMessage(this, "Failed to feed pet. Please try again.")
-                        }
-                    }
-                    val currUser = CurrUserRepository.getCurrUser()
-                    Log.d("FeedingActivity", "Attempting to log feeding for pet $petName, from user $currUser")
-                    repository.logFeed(petName, currUser?.email.toString(), feedingAmount)
-                    { success ->
-                        if (success) {
-                            Toast.makeText(this, "Feeding logged successfully", Toast.LENGTH_SHORT).show()
-
-                        } else {
-                            Toast.makeText(this, "Failed to log feeding", Toast.LENGTH_SHORT).show()
-                        }
-
-                    }
-
-                } else {
-                    Toast.makeText(this, "Please enter a valid feeding amount", Toast.LENGTH_SHORT).show()
-                }
-            }
-            builder.setNegativeButton("Cancel") { dialog, _ ->
-                dialog.dismiss()
-            }
-
-            builder.show()
+        // Set the click listener to handle feeding.
+        feedingButton.setOnClickListener {
+            showFeedingDialog(petName, petCircle, fedStatusText, feedingButton, feedingInfo)
         }
 
-        // Add the new pet layout to the container
         petContainer.addView(petLayout)
         translationHelper.updateLanguageUI(translationHelper, findViewById(R.id.feeding_activity), lifecycleScope)
+    }
 
+    private fun showFeedingDialog(
+        petName: String,
+        petCircle: ImageView,
+        fedStatusText: TextView,
+        feedingButton: Button,
+        feedingInfo: TextView
+    ) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Enter Feeding Amount")
+
+        val input = EditText(this).apply {
+            inputType = InputType.TYPE_CLASS_NUMBER
+            setPadding(40, 20, 40, 20)
+        }
+        builder.setView(input)
+
+        builder.setPositiveButton("Feed") { _, _ ->
+            val feedingAmount = input.text.toString()
+            if (feedingAmount.isNotEmpty() && feedingAmount.toIntOrNull() != null) {
+                val repository = PetRepository
+                repository.feedPet(petName) { success ->
+                    if (success) {
+                        fedStatusText.text = getString(R.string.fed_text)
+                        petCircle.setColorFilter(ContextCompat.getColor(this@FeedingActivity, R.color.base_green))
+                        feedingButton.visibility = View.GONE
+                        feedingInfo.visibility = View.VISIBLE
+                    } else {
+                        AppUtils.alertMessage(this, "Failed to feed pet. Please try again.")
+                    }
+                }
+                val currUser = CurrUserRepository.getCurrUser()
+                Log.d("FeedingActivity", "Attempting to log feeding for pet $petName, from user $currUser")
+                repository.logFeed(petName, currUser?.email.toString(), feedingAmount) { success ->
+                    val message = if (success) "Feeding logged successfully" else "Failed to log feeding"
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(this, "Please enter a valid feeding amount", Toast.LENGTH_SHORT).show()
+            }
+        }
+        builder.setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
+        builder.show()
     }
 
 

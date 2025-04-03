@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.network.NetworkManager.apiService
+import com.example.theanimalsarestarving.network.NetworkManager.userApiService
 import com.example.theanimalsarestarving.repositories.HouseholdRepository
 import com.example.theanimalsarestarving.repositories.LanguageRepository
 import com.example.theanimalsarestarving.repositories.MainRepository
@@ -42,7 +43,7 @@ class HistoryActivity : AppCompatActivity() {
     private fun refreshHistory(householdId: String) {
 
         val historyTable = findViewById<TableLayout>(R.id.feedingsLogBox)
-        val repository = MainRepository(apiService)
+        val repository = MainRepository(apiService, userApiService)
 
         repository.getLogs(householdId) { logs ->
             Log.d("HistoryActivity", logs.toString())
