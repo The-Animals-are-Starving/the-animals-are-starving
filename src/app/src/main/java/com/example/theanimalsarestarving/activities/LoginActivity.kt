@@ -41,7 +41,7 @@ class LoginActivity : AppCompatActivity() {
 
         enableEdgeToEdge()
 
-        skipLogin("bobette@gmail.com", "Bobette")
+//        skipLogin("bobette@gmail.com", "Bobette")
 
         setContentView(R.layout.activity_login)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
