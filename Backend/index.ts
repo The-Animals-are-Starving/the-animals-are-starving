@@ -11,7 +11,7 @@ import notificationRoutes from "./routes/notificationRoutes";
 
 const app = express();
 
-// Middleware
+// Middleware 
 app.use(express.json());
 
 // Routes
