@@ -54,6 +54,7 @@ class RestrictedMainActivity : AppCompatActivity() {
         feedingButton.setOnClickListener {
             Log.d(TAG, "feedingButton: Clicked, navigating to FeedingActivity")
             val intent = Intent(this, FeedingActivity::class.java)
+            intent.putExtra("translationHelperVar", translationHelper)
             startActivity(intent)
         }
 
