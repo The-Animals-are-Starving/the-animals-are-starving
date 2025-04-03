@@ -81,13 +81,13 @@ object NotificationHelper {
             setPadding(50, 20, 50, 20)
         }
         val sharedPreferences: SharedPreferences = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
-        val currentUserName = sharedPreferences.getString("name", "").toString()
+        val currentUserEmail = sharedPreferences.getString("userEmail", "").toString()
 
         // Fetch users from the repository (this example uses a callback)
         val repository = com.example.theanimalsarestarving.repositories.MainRepository(apiService, userApiService)
         repository.getAllUsers(HouseholdRepository.getCurrentHousehold()?._id.toString()) { users ->
             if (users != null) {
-                val otherUsers = users.filter { it.name != currentUserName }
+                val otherUsers = users.filter { it.email != currentUserEmail }
                 if (otherUsers.isEmpty()) {
                     val noticeView = TextView(context).apply {
                         text = "You are alone."
