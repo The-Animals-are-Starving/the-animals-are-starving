@@ -10,8 +10,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.theanimalsarestarving.R
 import com.example.theanimalsarestarving.models.UserRole
+import com.example.theanimalsarestarving.network.NetworkManager
 import com.example.theanimalsarestarving.repositories.CurrUserRepository
 import com.example.theanimalsarestarving.repositories.HouseholdRepository
+import com.example.theanimalsarestarving.repositories.MainRepository
 import com.example.theanimalsarestarving.repositories.PetRepository
 import com.example.theanimalsarestarving.repositories.UserRepository
 import kotlinx.coroutines.launch
@@ -59,14 +61,17 @@ class CreateHouseholdActivity : AppCompatActivity() {
 
                             HouseholdRepository.setCurrentHousehold(householdCreated) //sets current household singleton
 
-                            //TODO: IMPLEMENT THE BACKEND FOR THIS
                             UserRepository.updateUserHouseholdId(
                                 managerEmail,
                                 HouseholdRepository.getCurrentHousehold()?._id.toString()
                             )
 
                             //when you create the household, the current user is automatically added. do not add again
-                            UserRepository.updateUserRole(managerEmail, UserRole.ADMIN)
+                            val MainRepo = MainRepository(NetworkManager.apiService, NetworkManager.userApiService)
+                            MainRepo.updateUserRole(managerEmail, "manager") {success ->
+                                Log.d("CreateHousehold", success.toString())
+                            }
+
 
                             // Move to the MainActivity after both tasks are done
                             val intent =
