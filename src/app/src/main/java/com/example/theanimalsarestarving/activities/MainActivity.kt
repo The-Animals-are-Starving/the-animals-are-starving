@@ -99,7 +99,10 @@ class MainActivity : AppCompatActivity() {
                 )
                 HouseholdRepository.setCurrentHousehold(currHousehold)
                 if (user.role == "restricted") {
-                    startActivity(Intent(this@MainActivity, RestrictedMainActivity::class.java))
+                    val intent = Intent(this@MainActivity, RestrictedMainActivity::class.java)
+                    intent.putExtra("translationHelperVar", translationHelper)
+                    startActivity(intent)
+
                     return@launch
                 } else {
                     setContentView(R.layout.activity_main)

@@ -11,6 +11,7 @@ import android.util.TypedValue
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.theanimalsarestarving.R
 
 class RestrictedMainActivity : AppCompatActivity() {
@@ -21,13 +22,20 @@ class RestrictedMainActivity : AppCompatActivity() {
 
     private lateinit var feedingButton: Button
     private lateinit var logoutButton: Button
+    lateinit var translationHelper: TranslationHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_restricted)
+        val bundle: Bundle? = intent.extras
+        if (bundle != null) {
+            translationHelper = intent.getSerializableExtra("translationHelperVar") as TranslationHelper
+        }
 
         Log.d(TAG, "In Restricted Main Activity")
         setupButtons()
+
+        translationHelper.updateLanguageUI(translationHelper, findViewById(R.id.activity_main_restricted), lifecycleScope)
 
         Log.d(TAG, "onCreate: Buttons are set up successfully")
     }
