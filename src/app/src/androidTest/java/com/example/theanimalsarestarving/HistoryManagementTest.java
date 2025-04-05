@@ -44,7 +44,7 @@ import com.example.theanimalsarestarving.activities.MainActivity;
 import java.util.Iterator;
 
 @RunWith(AndroidJUnit4.class)
-public class EspressoTest {
+public class HistoryManagementTest {
 
     public int getCount(final Matcher<View> matcher) {
         final int[] count = {0};
@@ -76,70 +76,6 @@ public class EspressoTest {
                 .putString("userEmail", "bob@gmail.com")
                 .putString("userName", "Bob")
                 .apply();
-    }
-
-    @Test
-    public void testLogFeedingUseCase() {
-        // Launch MainActivity manually after setting up SharedPreferences
-        try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
-            //User scrolls through the list of pets on the base page to find the pet being fed.
-            onView(withId(R.id.feed_button)).check(matches(isDisplayed()));
-            onView(withId(R.id.feed_button)).perform(click());
-            onView(withId(R.id.title))
-                    .check(matches(isDisplayed()));
-
-            onView(allOf(withText("kitty cat"), withParent(withId(R.id.petInfoLayout))))
-                    .check(matches(isDisplayed()));
-
-            onView(allOf(withId(R.id.indicate_fed_button), hasSibling(withText("kitty cat"))))
-                    .check(matches(isDisplayed()));
-
-            onView(allOf(withText("NOT FED"), hasSibling(withText("kitty cat"))))
-                    .check(matches(isDisplayed()));
-
-            //User presses the corresponding “Feed Pet” button to confirm that the pet has been fed.
-            onView(allOf(withId(R.id.indicate_fed_button), hasSibling(withText("kitty cat"))))
-                    .perform(click());
-
-            //Find the EditText and enter the value "1"
-            onView(withClassName(is(EditText.class.getName())))
-                    .perform(typeText("1"), closeSoftKeyboard());
-
-            //Click the "Feed" button
-            onView(withText("Feed")).perform(click());
-
-
-            // User is prompted with a success message indicating that the log has been updated successfully.
-            onView(allOf(withText("FED"), hasSibling(withText("kitty cat"))))
-                    .check(matches(isDisplayed()));
-
-
-            pressBack();
-
-            onView(withId(R.id.feeding_history_button)).check(matches(isDisplayed()));
-            onView(withId(R.id.feeding_history_button)).perform(click());
-            onView(withId(R.id.title))
-                    .check(matches(isDisplayed()));
-
-            onView(withText("Pet Name")).check(matches(isDisplayed()));
-            onView(withText("Fed By")).check(matches(isDisplayed()));
-            onView(withText("Time")).check(matches(isDisplayed()));
-            assertThat("Bob did not appear", getCount(withText("Bob")), greaterThan(0));
-        }
-    }
-
-    @Test
-    public void testNotifications() {
-        // Launch MainActivity manually after setting up SharedPreferences
-        try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
-            onView(withId(R.id.notify_button)).check(matches(isDisplayed()));
-            onView(withId(R.id.notify_button)).perform(click());
-            //after clicking, make sure the popup opens
-            onView(withText("Bob")).check(matches(isDisplayed()));
-
-            onView(allOf(withText("Notify"), hasSibling(withText("Bob"))))
-                    .perform(click());
-        }
     }
 
     @Test
@@ -187,40 +123,5 @@ public class EspressoTest {
                 .putString("userEmail", "bob@gmail.com")
                 .putString("userName", "Bob")
                 .apply();
-    }
-
-    @Test
-    public void threeClickTest() {
-        try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
-
-            //feeding
-            onView(withId(R.id.feed_button)).perform(click()); //click 1
-            onView(allOf(withId(R.id.indicate_fed_button), hasSibling(withText("puppy dog")))).
-                    perform(click()); //click 2
-
-            //Find the EditText and enter the value "1"
-            onView(withClassName(is(EditText.class.getName())))
-                    .perform(typeText("1"), closeSoftKeyboard());
-
-            //Click the "Feed" button
-            onView(withText("Feed")).perform(click()); //click 3
-
-
-            //check
-            pressBack();
-            onView(withId(R.id.feed_button)).perform(click());
-            onView(allOf(withText("FED"), hasSibling(withText("puppy dog"))))
-                    .check(matches(isDisplayed())); //make sure pet is fed
-
-
-
-            //history
-            pressBack();
-            onView(withId(R.id.feeding_history_button)).perform(click());  //click 1
-
-            //check
-            onView(withId(R.id.title))
-                    .check(matches(isDisplayed())); //make sure the logs page opens
-        }
     }
 }

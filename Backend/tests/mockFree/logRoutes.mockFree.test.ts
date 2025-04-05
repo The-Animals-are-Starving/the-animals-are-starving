@@ -56,6 +56,10 @@ describe("POST /:petName logFeeding(no Mock)", () => {
 
         const savedLog = await Log.findOne({ householdId: household._id });
         expect(savedLog).not.toBeNull();
+
+        const logs = await Log.find({ householdId: household._id });
+        expect(logs).toHaveLength(1);
+        expect(logs[0].amount).toBe(25)
     });
 
     it("should return 404 if user is not found", async () => {

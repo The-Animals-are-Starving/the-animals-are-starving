@@ -137,6 +137,22 @@ class MainActivity : AppCompatActivity() {
             manageButton.visibility = View.GONE;
             analyticsButton.visibility = View.GONE;
             feedingHistoryButton.visibility = View.GONE;
+        } else {
+            manageButton.setOnClickListener {
+                val intent = Intent(this, ManageHouseholdActivity::class.java)
+                intent.putExtra("translationHelperVar", translationHelper)
+                startActivity(intent)
+            }
+            feedingHistoryButton.setOnClickListener {
+                val intent = Intent(this, HistoryActivity::class.java)
+                intent.putExtra("translationHelperVar", translationHelper)
+                startActivity(intent)
+            }
+            analyticsButton.setOnClickListener {
+                val intent = Intent(this, AnalyticsActivity::class.java)
+                intent.putExtra("translationHelperVar", translationHelper)
+                startActivity(intent)
+            }
         }
         feedingButton.setOnClickListener {
             val intent = Intent(this, FeedingActivity::class.java)
@@ -145,21 +161,6 @@ class MainActivity : AppCompatActivity() {
         }
         notifyButton.setOnClickListener {
             NotificationHelper.showNotifSend(this, apiService, userApiService)
-        }
-        manageButton.setOnClickListener {
-            val intent = Intent(this, ManageHouseholdActivity::class.java)
-            intent.putExtra("translationHelperVar", translationHelper)
-            startActivity(intent)
-        }
-        feedingHistoryButton.setOnClickListener {
-            val intent = Intent(this, HistoryActivity::class.java)
-            intent.putExtra("translationHelperVar", translationHelper)
-            startActivity(intent)
-        }
-        analyticsButton.setOnClickListener {
-            val intent = Intent(this, AnalyticsActivity::class.java)
-            intent.putExtra("translationHelperVar", translationHelper)
-            startActivity(intent)
         }
         translateFrenchButton.setOnClickListener {
             val allViews = translationHelper.getAllViews(findViewById(R.id.main))
