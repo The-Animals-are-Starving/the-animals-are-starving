@@ -67,14 +67,23 @@ export const getFeedingAnomalies = async (req: Request, res: Response): Promise<
           const logDateInVan = new Date(
             log.timestamp.toLocaleString("en-US", { timeZone: "America/Vancouver" })
           );
-          const [scheduledHour, scheduledMinute] = pet.feedingTime.split(":").map(Number);
+          
+          const feedingTime = new Date(pet.feedingTime);
+          const feedingTimeInVanStr = new Intl.DateTimeFormat("en-CA", {
+            timeZone: "America/Vancouver",
+            hour12: false,
+            hour: "2-digit",
+            minute: "2-digit",
+          }).format(feedingTime);
+          
+          const [scheduledHour, scheduledMinute] = feedingTimeInVanStr.split(":").map(Number);
           const scheduledDateInVan = new Date(logDateInVan);
           scheduledDateInVan.setHours(scheduledHour, scheduledMinute, 0, 0);
           const lateThreshold = 30 * 60 * 1000; // 30 minutes in milliseconds
-
+          
           if (logDateInVan.getTime() - scheduledDateInVan.getTime() > lateThreshold) {
             significantlyLate = true;
-          }
+          }          
         }
 
         anomalies.push({

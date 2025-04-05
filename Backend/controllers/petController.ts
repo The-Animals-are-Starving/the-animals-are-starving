@@ -30,11 +30,6 @@ export const addPet = async (req: Request, res: Response): Promise<void> => {
 
         await pet.save();
 
-        /*if (household) {
-            household.pets.push(pet._id as Types.ObjectId);
-            await household.save();
-        }*/
-
         res.status(201).json({ message: "Pet added successfully", pet });
     } catch (error) {
         console.log(error)
