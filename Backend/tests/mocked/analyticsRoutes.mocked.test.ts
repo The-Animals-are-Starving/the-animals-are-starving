@@ -59,14 +59,20 @@ describe("Analytics Routes", () => {
 
     it("should compute anomalies for pets with logs", async () => {
       (Household.findById as jest.Mock).mockResolvedValue({ _id: validHouseholdId });
-      const pets = [{ _id: "pet1", name: "Fluffy", feedingTime: "10:00" }];
+    
+      // Feeding time is scheduled at 10:00 AM in Vancouver time
+      // That is 17:00 UTC on April 1, 2025 (Vancouver is UTC-7 during PDT)
+      const pets = [
+        { _id: "pet1", name: "Fluffy", feedingTime: "2025-04-01T17:00:00.000Z" }
+      ];
       (Pet.find as jest.Mock).mockResolvedValue(pets);
-
-      // Create logs for "Fluffy":
-      // log1: amount 5 at scheduled time (10:00 Vancouver time represented in UTC)
-      // log2: amount 10 at 45 minutes later (significantly late)
-      const scheduledDate = new Date("2025-04-01T17:00:00Z");
-      const lateDate = new Date("2025-04-01T17:45:00Z");
+    
+      // Logs:
+      // - First log: exactly on time (10:00 AM PDT → 17:00 UTC)
+      // - Second log: 45 minutes later (17:45 UTC)
+      const scheduledDate = new Date("2025-04-01T17:00:00.000Z");
+      const lateDate = new Date("2025-04-01T17:45:00.000Z");
+    
       const logs = [
         { petName: "Fluffy", amount: 5, householdId: new Types.ObjectId(validHouseholdId), timestamp: scheduledDate },
         { petName: "Fluffy", amount: 10, householdId: new Types.ObjectId(validHouseholdId), timestamp: lateDate },
@@ -88,7 +94,7 @@ describe("Analytics Routes", () => {
           feedingCount: 2,
         },
       ]);
-    });
+    });    
 
     it("should return 500 if an error occurs in anomalies", async () => {
       (Household.findById as jest.Mock).mockRejectedValue(new Error("DB error"));

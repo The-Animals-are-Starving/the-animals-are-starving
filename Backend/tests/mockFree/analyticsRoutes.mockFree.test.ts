@@ -58,7 +58,11 @@ describe("POST /anomalies/:householdId (Unmocked)", () => {
       managerId: new mongoose.Types.ObjectId()
     });
     await household.save();
-    const pet = new Pet({ name: "Fluffy", feedingTime: "10:00", householdId: household._id });
+    const pet = new Pet({
+      name: "Fluffy",
+      feedingTime: "2025-04-01T17:00:00.000Z",
+      householdId: household._id
+    });    
     await pet.save();
 
     const res = await request(app).post(`/anomalies/${household._id}`);
@@ -81,7 +85,11 @@ describe("POST /anomalies/:householdId (Unmocked)", () => {
       managerId: new mongoose.Types.ObjectId()
     });
     await household.save();
-    const pet = new Pet({ name: "Fluffy", feedingTime: "10:00", householdId: household._id });
+    const pet = new Pet({
+      name: "Fluffy",
+      feedingTime: "2025-04-01T17:00:00.000Z", // 10:00 PDT in UTC
+      householdId: household._id
+    });    
     await pet.save();
   
     // Assume Vancouver is UTC-7; for a feeding scheduled at 10:00 Vancouver time,
